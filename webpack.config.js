@@ -1,3 +1,4 @@
+require('dotenv').config()
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -52,7 +53,11 @@ module.exports = (env) => {
         ],
         devServer: {
             port: 8000,
-            hot: true
+            hot: true,
+            proxy: [{
+                context: ['/api', '/stats'],
+                target: process.env.PROXY
+            }]
         }
     }
 };
