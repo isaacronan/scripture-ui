@@ -35,7 +35,4 @@ onMount(() => {
 </svelte:head>
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
-<nav>
-    <a href="#/">Home</a>
-</nav>
 <svelte:component this={currentScreen} />

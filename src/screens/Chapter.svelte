@@ -1,8 +1,10 @@
 <script>
 import { onMount } from 'svelte';
 import { getShortName } from '../utils/store';
-import { chapterPattern } from '../utils/routing';
+import { chapterPattern, homeHash, booksHash, bookHash } from '../utils/routing';
 import { getChapter } from '../utils/http';
+import PatientContainer from '../components/PatientContainer.svelte';
+import Breadcrumbs from '../components/Breadcrumbs.svelte';
 
 let [ booknumber, chapternumber ] = chapterPattern.getParams();
 let verses = [];
@@ -15,13 +17,19 @@ onMount(() => {
 </script>
 <article>
     <section>
+        <Breadcrumbs crumbs={[
+            { label: 'Home', hash: homeHash },
+            { label: 'Books', hash: booksHash },
+            { label: $getShortName(booknumber), hash: bookHash(booknumber) }
+        ]}/>
         <h1>{$getShortName(booknumber)} {chapternumber}</h1>
-        <ul>
+        <PatientContainer isWaiting={verses.length === 0}>
             {#each verses as verse}
-                <li>
+                <p>
+                    <small>{verse.versenumber}</small>
                     {verse.text}
-                </li>
+                </p>
             {/each}
-        </ul>
+        </PatientContainer>
     </section>
 </article>

@@ -5,9 +5,11 @@ export let title = '';
 export let description = '';
 </script>
 <li>
-    <button on:click>{isExpanded ? '-' : '+'}</button>
+    {#if description}
+        <button on:click>{isExpanded ? '-' : '+'}</button>
+    {/if}
     <a {href}>{title}</a>
-    {#if isExpanded}
+    {#if isExpanded && description}
         <p>{description}</p>
     {/if}
 </li>

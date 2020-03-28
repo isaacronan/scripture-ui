@@ -1,5 +1,7 @@
 <script>
 import { books } from '../utils/store';
+import { booksHash, bookHash } from '../utils/routing';
+import PatientContainer from '../components/PatientContainer.svelte';
 </script>
 <article>
     <h1>Subscription</h1>
@@ -13,14 +15,16 @@ import { books } from '../utils/store';
     <section>
         <h2>Books</h2>
         <div>
-        <a href="#/books">Detail View</a>
+            <a href={booksHash}>Detail View</a>
         </div>
-        <ul>
-            {#each $books as { shortname, booknumber }}
-                <li>
-                    <a href="#/books/{booknumber}">{shortname}</a>
-                </li>
-            {/each}
-        </ul>
+        <PatientContainer isWaiting={$books.length === 0}>
+            <ul>
+                {#each $books as { shortname, booknumber }}
+                    <li>
+                        <a href={bookHash(booknumber)}>{shortname}</a>
+                    </li>
+                {/each}
+            </ul>
+        </PatientContainer>
     </section>
 </article>
