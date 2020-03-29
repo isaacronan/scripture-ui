@@ -11,3 +11,8 @@ export const getShortName = derived(books, $books => (booknumber) => {
     const match = $books.find(book => book.booknumber === Number(booknumber));
     return match ? match.shortname : '';
 });
+
+export const getBookDescription = derived(books, $books => (booknumber) => {
+    const match = $books.find(book => book.booknumber === Number(booknumber));
+    return match ? match.bookdesc : '';
+});
