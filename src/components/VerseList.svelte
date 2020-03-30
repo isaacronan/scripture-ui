@@ -1,12 +1,13 @@
 <script>
-import { onMount } from 'svelte';
 import { ExpandableItem } from '../utils/models';
 export let verses = [];
 
 let expandableVerses = [];
-onMount(() => {
-    expandableVerses = verses.map(verse => new ExpandableItem(verse));
-});
+const hydrateExpandableVerses = () => expandableVerses = verses.map(verse => new ExpandableItem(verse));
+$: {
+    verses;
+    hydrateExpandableVerses();
+}
 
 const toggleExpanded = (index) => () => {
     expandableVerses[index].toggleExpanded();

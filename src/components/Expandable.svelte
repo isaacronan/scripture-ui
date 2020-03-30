@@ -6,9 +6,11 @@ export let showLabel = '';
 export let hideLabel = '';
 
 let expandableContent = {};
-onMount(() => {
-    expandableContent = new ExpandableItem(content);
-});
+const hydrateExpandableContent = () => expandableContent = new ExpandableItem(content);
+$: {
+    content;
+    hydrateExpandableContent();
+}
 
 const toggleExpanded = () => {
     expandableContent.toggleExpanded();

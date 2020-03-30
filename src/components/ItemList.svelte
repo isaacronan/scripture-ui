@@ -1,6 +1,5 @@
 <script>
 import ListItem from './ListItem.svelte';
-import { onMount } from 'svelte';
 import { ExpandableItem } from '../utils/models'
 
 export let items = [];
@@ -9,9 +8,11 @@ export let getHref = () => '';
 export let getDescription = () => '';
 
 let expandableItems = [];
-onMount(() => {
-    expandableItems = items.map(item => new ExpandableItem(item));
-});
+const hydrateExpandableItems = () => expandableItems = items.map(item => new ExpandableItem(item));
+$: {
+    items;
+    hydrateExpandableItems();
+}
 
 const toggleExpanded = (index) => () => {
     expandableItems[index].toggleExpanded();
