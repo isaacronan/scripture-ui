@@ -9,6 +9,7 @@ import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import Expandable from '../components/Expandable.svelte';
 
 let [ booknumber ] = bookPattern.getParams();
+let invalidBooknumber = false;
 
 onMount(() => {
     initialize();
@@ -19,8 +20,11 @@ const initialize = () => {
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
+        invalidBooknumber = false;
         getChapters($currentBooknumber).then(data => {
             currentChapters.set(data);
+        }, () => {
+            invalidBooknumber = true;
         });
     }
 };
@@ -32,13 +36,13 @@ const initialize = () => {
             { label: 'Home', hash: homeHash },
             { label: 'Books', hash: booksHash }
         ]}/>
-        <PatientContainer isWaiting={!$getBookName($currentBooknumber)}>
+        <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getBookName($currentBooknumber)}>
             <h1>{$getBookName($currentBooknumber)}</h1>
             {#if $getBookDescription($currentBooknumber)}
                 <Expandable content={$getBookDescription($currentBooknumber)} showLabel="Show Description" hideLabel="Hide Description" />
             {/if}
         </PatientContainer>
-        <PatientContainer isWaiting={$currentChapters.length === 0}>
+        <PatientContainer isFailed={invalidBooknumber} isWaiting={$currentChapters.length === 0}>
             <ItemList
                 items={$currentChapters}
                 getTitle={item => `Chapter ${item.chapternumber}`}

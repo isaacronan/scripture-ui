@@ -10,6 +10,8 @@ import Expandable from '../components/Expandable.svelte';
 
 let [ booknumber, chapternumber ] = chapterPattern.getParams();
 let verses = [];
+let invalidBooknumber = false;
+let invalidChapternumber = false;
 
 onMount(() => {
     initialize();
@@ -18,16 +20,22 @@ onMount(() => {
 const initialize = () => {
     [ booknumber, chapternumber ] = chapterPattern.getParams();
     verses = [];
+    invalidChapternumber = false;
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
+        invalidBooknumber = false;
         getChapters($currentBooknumber).then(data => {
             currentChapters.set(data);
+        }, () => {
+            invalidBooknumber = true;
         });
     }
 
     getVerses($currentBooknumber, chapternumber).then(data => {
         verses = data;
+    }, () => {
+        invalidChapternumber = true;
     });
 };
 
@@ -54,13 +62,13 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
                 </a>
             {/if}
         </div>
-        <PatientContainer isWaiting={!$getShortName($currentBooknumber)}>
+        <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getShortName($currentBooknumber)}>
             <h1>{$getShortName($currentBooknumber)} {chapternumber}</h1>
             {#if $getChapterDescription(chapternumber)}
                 <Expandable content={$getChapterDescription(chapternumber)} showLabel="Show Description" hideLabel="Hide Description" />
             {/if}
         </PatientContainer>
-        <PatientContainer isWaiting={verses.length === 0}>
+        <PatientContainer isFailed={invalidBooknumber || invalidChapternumber} isWaiting={verses.length === 0}>
             <VerseList {verses} />
         </PatientContainer>
     </section>
