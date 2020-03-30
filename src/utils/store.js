@@ -26,3 +26,11 @@ export const getBookDescription = derived(books, $books => (booknumber) => {
     const match = $books.find(book => book.booknumber === Number(booknumber));
     return match ? match.bookdesc : '';
 });
+
+export const currentBooknumber = writable(null);
+export const currentChapters = writable([]);
+
+export const getChapterDescription = derived(currentChapters, $currentChapters => (chapternumber) => {
+    const match = $currentChapters.find(chapter => chapter.chapternumber === Number(chapternumber));
+    return match ? match.chapterdesc : '';
+});

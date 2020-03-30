@@ -5,17 +5,19 @@ import ItemList from '../components/ItemList.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 
-let showOld = true;
-let showNew = true;
+const ALL = 'ALL', OLD = 'OLD', NEW = 'NEW';
+
+let bookSubset = ALL;
 let visibleBooks = $books;
-$: if (showOld && showNew) {
-    visibleBooks = $books;
-} else if (showOld) {
-    visibleBooks = $oldBooks;
-} else if (showNew) {
-    visibleBooks = $newBooks;
-} else {
-    visibleBooks = [];
+$: switch (bookSubset) {
+    case ALL:
+        visibleBooks = $books; break;
+    case OLD:
+        visibleBooks = $oldBooks; break;
+    case NEW: 
+        visibleBooks = $newBooks; break;
+    default:
+        visibleBooks = $books;
 }
 </script>
 <article>
@@ -25,8 +27,9 @@ $: if (showOld && showNew) {
         ]}/>
         <h1>Books</h1>
         <div>
-            <label><input bind:checked={showOld} type="checkbox">Old Testament</label>
-            <label><input bind:checked={showNew} type="checkbox">New Testament</label>
+            <label><input type="radio" bind:group={bookSubset} value={ALL}>All</label>
+            <label><input type="radio" bind:group={bookSubset} value={OLD}>Old Testament</label>
+            <label><input type="radio" bind:group={bookSubset} value={NEW}>New Testament</label>
         </div>
         <PatientContainer isWaiting={$books.length === 0}>
             <ItemList
