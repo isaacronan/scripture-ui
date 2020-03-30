@@ -11,6 +11,11 @@ import Expandable from '../components/Expandable.svelte';
 let [ booknumber ] = bookPattern.getParams();
 
 onMount(() => {
+    initialize();
+});
+
+const initialize = () => {
+    [ booknumber ] = bookPattern.getParams();
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
@@ -18,8 +23,9 @@ onMount(() => {
             currentChapters.set(data);
         });
     }
-});
+};
 </script>
+<svelte:window on:hashchange={initialize} />
 <article>
     <section>
         <Breadcrumbs crumbs={[

@@ -12,6 +12,12 @@ let [ booknumber, chapternumber ] = chapterPattern.getParams();
 let verses = [];
 
 onMount(() => {
+    initialize();
+});
+
+const initialize = () => {
+    [ booknumber, chapternumber ] = chapterPattern.getParams();
+    verses = [];
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
@@ -20,12 +26,6 @@ onMount(() => {
         });
     }
 
-    initialize();
-});
-
-const initialize = () => {
-    [ booknumber, chapternumber ] = chapterPattern.getParams();
-    verses = [];
     getVerses($currentBooknumber, chapternumber).then(data => {
         verses = data;
     });
