@@ -7,6 +7,7 @@ import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
 import Book from './screens/Book.svelte';
 import Chapter from './screens/Chapter.svelte';
+import NotFound from './screens/NotFound.svelte';
 
 let currentScreen = null;
 const updateRoute = () => {
@@ -19,8 +20,10 @@ const updateRoute = () => {
     } else if(chapterPattern.isMatch()) {
         currentScreen = Chapter;
     } else {
-        currentScreen = null;
+        currentScreen = NotFound;
     }
+
+    window.scrollTo(0, 0);
 };
 
 onMount(() => {

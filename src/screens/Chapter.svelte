@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { getShortName, getChapterDescription, currentBooknumber, currentChapters } from '../utils/store';
-import { chapterPattern, homeHash, booksHash, bookHash } from '../utils/routing';
+import { chapterPattern, homeHash, booksHash, bookHash, chapterHash } from '../utils/routing';
 import { getChapters, getVerses } from '../utils/http';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
@@ -20,11 +20,21 @@ onMount(() => {
         });
     }
 
+    initialize();
+});
+
+const initialize = () => {
+    [ booknumber, chapternumber ] = chapterPattern.getParams();
+    verses = [];
     getVerses($currentBooknumber, chapternumber).then(data => {
         verses = data;
     });
-});
+};
+
+$: nextChapter = $currentChapters.find(chapter => chapter.chapternumber > Number(chapternumber));
+$: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < Number(chapternumber)).pop();
 </script>
+<svelte:window on:hashchange={initialize} />
 <article>
     <section>
         <Breadcrumbs crumbs={[
@@ -32,6 +42,18 @@ onMount(() => {
             { label: 'Books', hash: booksHash },
             { label: $getShortName($currentBooknumber), hash: bookHash($currentBooknumber) }
         ]}/>
+        <div>
+            {#if previousChapter}
+                <a href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
+                    {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
+                </a>
+            {/if}
+            {#if nextChapter}
+                <a href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
+                    {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
+                </a>
+            {/if}
+        </div>
         <PatientContainer isWaiting={!$getShortName($currentBooknumber)}>
             <h1>{$getShortName($currentBooknumber)} {chapternumber}</h1>
             {#if $getChapterDescription(chapternumber)}
