@@ -2,6 +2,7 @@
 import { books } from '../utils/store';
 import { booksHash, bookHash } from '../utils/routing';
 import PatientContainer from '../components/PatientContainer.svelte';
+import QuickSearch from '../components/QuickSearch.svelte';
 </script>
 <article>
     <h1>Subscription</h1>
@@ -9,7 +10,7 @@ import PatientContainer from '../components/PatientContainer.svelte';
     <section>
         <h2>Search</h2>
         <div>
-            <input type="text">
+            <QuickSearch />
         </div>
     </section>
     <section>
