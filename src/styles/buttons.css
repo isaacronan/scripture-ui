@@ -1,0 +1,23 @@
+a, button {
+    color: var(--dark);
+}
+
+.list-button {
+    background-color: var(--white);
+    border: 1px solid var(--blue);
+    border-radius: var(--radius);
+    color: var(--blue);
+    display: inline-block;
+    margin: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.link,
+.plain-button {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.link {
+    text-decoration: underline;
+}

@@ -8,24 +8,59 @@ import QuickSearch from '../components/QuickSearch.svelte';
     <h1>Subscription</h1>
     <h3>A way to do stuff</h3>
     <section>
-        <h2>Search</h2>
-        <div>
+        <h2>Quick Search</h2>
+        <div class="quick-search">
             <QuickSearch />
         </div>
     </section>
     <section>
         <h2>Books</h2>
         <div>
-            <a href={booksHash}>Detail View</a>
+            <a class="plain-button" href={booksHash}>Detail View</a>
         </div>
         <PatientContainer isWaiting={$books.length === 0}>
             <ul>
                 {#each $books as { shortname, booknumber }}
                     <li>
-                        <a href={bookHash(booknumber)}>{shortname}</a>
+                        <a  class="list-button" href={bookHash(booknumber)}>{shortname}</a>
                     </li>
                 {/each}
             </ul>
         </PatientContainer>
     </section>
 </article>
+<style>
+h1, h3 {
+    color: var(--cyan);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+}
+
+h3 {
+    margin-bottom: var(--spacing-lg);
+}
+
+section {
+    background-color: var(--beige);
+    border-radius: var(--radius);
+    color: var(--dark);
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+section + section {
+    margin-top: var(--spacing-md);
+}
+
+.plain-button {
+    margin-bottom: var(--spacing-md);
+}
+
+.quick-search {
+    margin-top: var(--spacing-md);
+}
+</style>

@@ -1,0 +1,35 @@
+:root {
+    
+    --beige: #d0b793;
+    --blue: #144e93;
+    --cyan: #51aacc;
+    --dark: #252525;
+    --light: #a9abbf;
+    --red: #650505;
+    --white: #fff;
+
+    font-size: 10px;
+    --spacing-xs: 0.2rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1.0rem;
+    --spacing-lg: 2.0rem;
+    --spacing-xl: 5.0rem;
+
+    --radius: 4px;
+}
+
+body {
+    background-color: var(--dark);
+    color: var(--white);
+    padding: var(--spacing-md);
+}
+
+input {
+    border-radius: var(--radius);
+    color: var(--dark);
+    padding: var(--spacing-md);
+}
+
+li {
+    display: inline-block;
+}
