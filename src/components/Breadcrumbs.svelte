@@ -4,7 +4,12 @@ export let crumbs = [];
 <nav>
     <ul>
         {#each crumbs as crumb}
-            <li><a href="{crumb.hash}">{crumb.label}</a></li>
+            <li class="link"><a href="{crumb.hash}">{crumb.label}</a></li>
         {/each}
     </ul>
 </nav>
+<style>
+a {
+    color: var(--smartblue);
+}
+</style>

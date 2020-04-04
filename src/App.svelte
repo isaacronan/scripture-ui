@@ -38,4 +38,20 @@ onMount(() => {
 </svelte:head>
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
-<svelte:component this={currentScreen} />
+<div class:light={currentScreen === Chapter} class="app">
+    <svelte:component this={currentScreen} />
+</div>
+
+<style>
+.app {
+    background-color: var(--dark);
+    padding: var(--spacing-md);
+    width: 100%;
+}
+
+.light {
+    background-color: var(--white);
+    --smartblue: var(--blue);
+    --smartbody: var(--dark);
+}
+</style>

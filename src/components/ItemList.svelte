@@ -26,8 +26,8 @@ const setExpandedAll = (isExpanded) => () => {
 </script>
 
 <div>
-    <button on:click={setExpandedAll(true)}>Expand All</button>
-    <button on:click={setExpandedAll(false)}>Collapse All</button>
+    <button class="plain-button" on:click={setExpandedAll(true)}>Expand All</button>
+    <button class="plain-button" on:click={setExpandedAll(false)}>Collapse All</button>
 </div>
 <ul>
     {#each expandableItems as { item, isExpanded }, index}
@@ -40,3 +40,22 @@ const setExpandedAll = (isExpanded) => () => {
         />
     {/each}
 </ul>
+<style>
+button {
+    color: var(--cyan);
+}
+
+button + button {
+    position: relative;
+}
+
+button + button::before {
+    background-color: var(--cyan);
+    content: '';
+    height: calc(100%);
+    left: calc(-1 * var(--spacing-md) / 2 - 1px);
+    position: absolute;
+    top: 0;
+    width: 1px;
+}
+</style>

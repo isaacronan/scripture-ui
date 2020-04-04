@@ -45,25 +45,27 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
 <svelte:window on:hashchange={initialize} />
 <article>
     <section>
+        <div class="chapter-navigator">
+            {#if previousChapter}
+                <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
+                    {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
+                </a>
+            {/if}
+            {#if nextChapter}
+                <div class="next-chapter">
+                    <a class="plain-button" href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
+                        {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
+                    </a>
+                </div>
+            {/if}
+        </div>
         <Breadcrumbs crumbs={[
             { label: 'Home', hash: homeHash },
             { label: 'Books', hash: booksHash },
             { label: $getShortName($currentBooknumber), hash: bookHash($currentBooknumber) }
         ]}/>
-        <div>
-            {#if previousChapter}
-                <a href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
-                    {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
-                </a>
-            {/if}
-            {#if nextChapter}
-                <a href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
-                    {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
-                </a>
-            {/if}
-        </div>
         <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getShortName($currentBooknumber)}>
-            <h1>{$getShortName($currentBooknumber)} {chapternumber}</h1>
+            <h2>{$getShortName($currentBooknumber)} {chapternumber}</h2>
             {#if $getChapterDescription(chapternumber)}
                 <Expandable content={$getChapterDescription(chapternumber)} showLabel="Show Description" hideLabel="Hide Description" />
             {/if}
@@ -73,3 +75,27 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
         </PatientContainer>
     </section>
 </article>
+<style>
+h2 {
+    color: var(--dark);
+}
+
+.chapter-navigator {
+    background-color: var(--blue);
+    display: flex;
+    margin-bottom: var(--spacing-md);
+    margin-left: calc(-1 * var(--spacing-md));
+    margin-top: calc(-1 * var(--spacing-md));
+    padding: var(--spacing-md);
+    width: 100%;
+}
+
+.next-chapter {
+    flex-grow: 1;
+    text-align: right;
+}
+
+a {
+    color: var(--white);
+}
+</style>

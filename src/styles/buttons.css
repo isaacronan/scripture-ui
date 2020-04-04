@@ -15,9 +15,13 @@ a, button {
 .link,
 .plain-button {
     display: inline-block;
-    padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .link {
     text-decoration: underline;
+}
+
+.link + .link,
+.plain-button + .plain-button {
+    margin-left: var(--spacing-md);
 }

@@ -106,8 +106,12 @@ ul {
 .search-results li {
     background-color: var(--white);
     display: block;
+}
+
+.search-results button {
     padding: var(--spacing-md);
     text-align: left;
+    width: 100%;
 }
 
 .search-results li:last-of-type {

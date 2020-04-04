@@ -1,4 +1,4 @@
-body, h1, h2, h3, p {
+body, h1, h2, h3, h4, p {
     margin: 0;
 }
 
@@ -15,6 +15,7 @@ button {
     background-color: transparent;
     border: none;
     color: unset;
+    outline: none;
     padding: 0;
 }
 

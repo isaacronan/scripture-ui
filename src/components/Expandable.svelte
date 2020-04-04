@@ -22,6 +22,17 @@ const toggleExpanded = () => {
         <p>{content}</p>
     {/if}
     <div>
-        <button on:click={toggleExpanded}>{expandableContent.isExpanded ? hideLabel : showLabel}</button>
+        <button class="plain-button" on:click={toggleExpanded}>{expandableContent.isExpanded ? hideLabel : showLabel}</button>
     </div>
 </div>
+<style>
+button {
+    color: var(--smartblue);
+    margin-bottom: var(--spacing-lg);
+}
+
+p {
+    color: var(--smartbody);
+    margin-bottom: var(--spacing-sm);
+}
+</style>

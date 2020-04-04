@@ -1,4 +1,7 @@
 :root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     
     --beige: #d0b793;
     --blue: #144e93;
@@ -7,6 +10,9 @@
     --light: #a9abbf;
     --red: #650505;
     --white: #fff;
+
+    --smartblue: var(--cyan);
+    --smartbody: var(--white);
 
     font-size: 10px;
     --spacing-xs: 0.2rem;
@@ -19,9 +25,9 @@
 }
 
 body {
-    background-color: var(--dark);
-    color: var(--white);
-    padding: var(--spacing-md);
+    color: var(--smartbody);
+    display: flex;;
+    flex-grow: 1;
 }
 
 input {
