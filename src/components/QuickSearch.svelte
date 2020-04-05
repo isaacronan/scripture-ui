@@ -57,7 +57,6 @@ const handleChapterSelect = (chapternumber) => {
 };
 
 const handleSubmit = (event) => {
-    event.preventDefault();
     if (booknumberQuery && chapternumberQuery) {
         window.location.hash = chapterHash(booknumberQuery, chapternumberQuery);
     } else if (booknumberQuery) {
@@ -67,9 +66,9 @@ const handleSubmit = (event) => {
 </script>
 <div>
     <div class="container">
-        <form on:submit={handleSubmit}>
+        <form on:submit|preventDefault={handleSubmit}>
             <input class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
-            <!-- <button type="submit">Go</button> -->
+            <button disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
         </form>
         {#if showSearchResults && matchingBooks.length}
             <ul class="search-results">
@@ -101,6 +100,24 @@ const handleSubmit = (event) => {
 form,
 ul {
     width: 80%;
+}
+
+form {
+    position: relative;
+}
+
+form button {
+    color: var(--light);
+    font-size: 2rem;
+    height: 100%;
+    padding: 0 var(--spacing-md);
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.active {
+    color: var(--cyan);
 }
 
 .search-results li {

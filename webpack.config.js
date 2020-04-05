@@ -28,7 +28,6 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.css$/,
-                    exclude: /node_modules/,
                     use: [
                         isProduction ? {
                             loader: MiniCssExtractPlugin.loader,
@@ -40,6 +39,10 @@ module.exports = (env) => {
                             }
                         }
                     ]
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2)$/i,
+                    use: 'url-loader'
                 }
             ]
         },

@@ -2,6 +2,10 @@ a, button {
     color: var(--dark);
 }
 
+button:not(:disabled) {
+    cursor: pointer;
+}
+
 .list-button {
     background-color: var(--white);
     border: 1px solid var(--blue);

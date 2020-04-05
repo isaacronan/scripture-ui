@@ -16,7 +16,7 @@ import QuickSearch from '../components/QuickSearch.svelte';
     <section>
         <h2>Books</h2>
         <div>
-            <a class="plain-button" href={booksHash}>Detail View</a>
+            <a class="link" href={booksHash}>Detail View</a>
         </div>
         <PatientContainer isWaiting={$books.length === 0}>
             <ul>
@@ -56,7 +56,8 @@ section + section {
     margin-top: var(--spacing-md);
 }
 
-.plain-button {
+.link {
+    color: var(--blue);
     margin-bottom: var(--spacing-md);
 }
 

@@ -6,10 +6,12 @@ export let description = '';
 </script>
 <li>
     {#if description}
-        <button on:click />
+        <button on:click>
+            <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
+        </button>
     {/if}
     <h4>{title}</h4>
-    <a {href}>Go</a>
+    <a {href}><i class="fas fa-arrow-right"/></a>
     {#if isExpanded && description}
         <p>{description}</p>
     {/if}
@@ -26,17 +28,20 @@ li {
 
 h4 {
     color: var(--dark);
+    margin-left: calc(2rem + var(--spacing-md));
 }
 
 button {
-    height: 100%;
-    left: 0;
+    color: var(--light);
+    font-size: 2rem;
+    left: var(--spacing-md);
     position: absolute;
-    top: 0;
-    width: 100%;
+    top: calc(var(--spacing-md) + 2.7rem / 2 - 1.8rem / 2 - 1px);
 }
 
 a {
+    color: var(--cyan);
+    font-size: 2rem;
     position: absolute;
     right: var(--spacing-md);
     top: calc(var(--spacing-md) + 2.7rem / 2 - 1.8rem / 2);

@@ -4,6 +4,8 @@ import './src/styles/base.css';
 import './src/styles/typography.css';
 import './src/styles/buttons.css';
 
+import '@fortawesome/fontawesome-free/css/all.css';
+
 new App({
     target: document.body
 });
