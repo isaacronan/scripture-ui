@@ -41,6 +41,12 @@ const setExpandedAll = (isExpanded) => () => {
     {/each}
 </ul>
 <style>
+ul {
+    display: grid;
+    grid-gap: var(--spacing-md);
+    grid-template-columns: 1fr;
+}
+
 button {
     color: var(--cyan);
 }
@@ -57,5 +63,11 @@ button + button::before {
     position: absolute;
     top: 0;
     width: 1px;
+}
+
+@media screen and (min-width: 600px) {
+    ul {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 </style>

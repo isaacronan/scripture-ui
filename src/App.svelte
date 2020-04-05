@@ -45,6 +45,8 @@ onMount(() => {
 <style>
 .app {
     background-color: var(--dark);
+    max-height: 100%;
+    overflow-y: auto;
     padding: var(--spacing-md);
     width: 100%;
 }

@@ -31,24 +31,22 @@ const initialize = () => {
 </script>
 <svelte:window on:hashchange={initialize} />
 <article>
-    <section>
-        <Breadcrumbs crumbs={[
-            { label: 'Home', hash: homeHash },
-            { label: 'Books', hash: booksHash }
-        ]}/>
-        <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getBookName($currentBooknumber)}>
-            <h2>{$getBookName($currentBooknumber)}</h2>
-            {#if $getBookDescription($currentBooknumber)}
-                <Expandable content={$getBookDescription($currentBooknumber)} showLabel="Show Description" hideLabel="Hide Description" />
-            {/if}
-        </PatientContainer>
-        <PatientContainer isFailed={invalidBooknumber} isWaiting={$currentChapters.length === 0}>
-            <ItemList
-                items={$currentChapters}
-                getTitle={item => `Chapter ${item.chapternumber}`}
-                getDescription={item => item.chapterdesc}
-                getHref={item => chapterHash($currentBooknumber, item.chapternumber)}
-            />
-        </PatientContainer>
-    </section>
+    <Breadcrumbs crumbs={[
+        { label: 'Home', hash: homeHash },
+        { label: 'Books', hash: booksHash }
+    ]}/>
+    <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getBookName($currentBooknumber)}>
+        <h2>{$getBookName($currentBooknumber)}</h2>
+        {#if $getBookDescription($currentBooknumber)}
+            <Expandable content={$getBookDescription($currentBooknumber)} showLabel="Show Description" hideLabel="Hide Description" />
+        {/if}
+    </PatientContainer>
+    <PatientContainer isFailed={invalidBooknumber} isWaiting={$currentChapters.length === 0}>
+        <ItemList
+            items={$currentChapters}
+            getTitle={item => `Chapter ${item.chapternumber}`}
+            getDescription={item => item.chapterdesc}
+            getHref={item => chapterHash($currentBooknumber, item.chapternumber)}
+        />
+    </PatientContainer>
 </article>

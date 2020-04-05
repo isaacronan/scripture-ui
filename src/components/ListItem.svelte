@@ -20,8 +20,7 @@ export let description = '';
 li {
     background-color: var(--white);
     border-radius: var(--radius);
-    display: block;
-    margin: var(--spacing-md) 0;
+    height: fit-content;
     padding: var(--spacing-md);
     position: relative;
 }
@@ -44,7 +43,7 @@ a {
     font-size: 2rem;
     position: absolute;
     right: var(--spacing-md);
-    top: calc(var(--spacing-md) + 2.7rem / 2 - 1.8rem / 2);
+    top: calc(var(--spacing-md) + 2.7rem / 2 - 1.8rem / 2 - 1px);
 }
 
 p {

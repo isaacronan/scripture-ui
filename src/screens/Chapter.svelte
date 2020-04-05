@@ -44,7 +44,6 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
 </script>
 <svelte:window on:hashchange={initialize} />
 <article>
-    <section>
         <div class="chapter-navigator">
             {#if previousChapter}
                 <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
@@ -75,7 +74,6 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
         <PatientContainer isFailed={invalidBooknumber || invalidChapternumber} isWaiting={verses.length === 0}>
             <VerseList {verses} />
         </PatientContainer>
-    </section>
 </article>
 <style>
 h2 {
