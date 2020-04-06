@@ -45,21 +45,28 @@ const updateMatchingBooks = () => {
     matchingBooks = queryIsValid ? $books.filter(book => new RegExp(query, 'i').test(book.shortname)).slice(0, 5) : [];
 };
 
+const setSelectedBook = (booknumber) => {
+    if (booknumber !== selectedBooknumber) {
+        selectedBooknumber = booknumber;
+        chapterOptions = [];
+        getChapters(selectedBooknumber).then(data => {
+            chapterOptions = data;
+        });
+    }
+    query = $getShortName(selectedBooknumber);
+};
+
 const handleBookSelect = (booknumber) => () => {
     showSearchResults = false;
-    selectedBooknumber = booknumber;
-    query = $getShortName(selectedBooknumber);
     searchInput.focus();
-    chapterOptions = [];
-    getChapters(selectedBooknumber).then(data => {
-        chapterOptions = data;
-    });
+    setSelectedBook(booknumber);
 };
 
 const handleChapterSelect = (chapternumber) => {
     selectedChapternumber = chapternumber;
     query = [$getShortName(selectedBooknumber), selectedChapternumber].join(' ');
     searchInput.focus();
+    updateMatchingBooks();
 };
 
 const handleSubmit = (event) => {
@@ -82,6 +89,7 @@ const handleKeyDown = (event) => {
             }
             if (matchingBooks[focusedResultElementIndex]) {
                 query = matchingBooks[focusedResultElementIndex].shortname;
+                setSelectedBook(matchingBooks[focusedResultElementIndex].booknumber);
             }
             break;
         case 'ArrowDown':
@@ -94,6 +102,7 @@ const handleKeyDown = (event) => {
             }
             if (matchingBooks[focusedResultElementIndex]) {
                 query = matchingBooks[focusedResultElementIndex].shortname;
+                setSelectedBook(matchingBooks[focusedResultElementIndex].booknumber);
             }
             break;
         default:
@@ -118,11 +127,11 @@ const handleKeyDown = (event) => {
                 {/each}
             </ul>
         {/if}
-        {#if chapterOptions.length}
+        {#if chapterOptions.length && bookGuess && bookGuess.booknumber === selectedBooknumber}
             <ul class="chapter-options">
                 {#each chapterOptions as { chapternumber }}
                     <li>
-                        <button class="list-button" on:click={handleChapterSelect(chapternumber)}>{chapternumber}</button>
+                        <button class="list-button small" class:selected={chapternumber === Number(chapternumberQuery)} on:click={handleChapterSelect(chapternumber)}>{chapternumber}</button>
                     </li>
                 {/each}
             </ul>
@@ -155,7 +164,7 @@ form button {
     top: 0;
 }
 
-.active {
+form .active {
     color: var(--cyan);
 }
 
