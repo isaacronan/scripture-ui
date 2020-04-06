@@ -44,21 +44,23 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
 </script>
 <svelte:window on:hashchange={initialize} />
 <article>
-        <div class="chapter-navigator">
-            {#if previousChapter}
-                <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
-                    <i class="fas fa-arrow-left" />
-                    {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
-                </a>
-            {/if}
-            {#if nextChapter}
-                <div class="next-chapter">
-                    <a class="plain-button" href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
-                        {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
-                        <i class="fas fa-arrow-right" />
+        <div>
+            <div class="chapter-navigator">
+                {#if previousChapter}
+                    <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
+                        <i class="fas fa-arrow-left" />
+                        {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
                     </a>
-                </div>
-            {/if}
+                {/if}
+                {#if nextChapter}
+                    <div class="next-chapter">
+                        <a class="plain-button" href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
+                            {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
+                            <i class="fas fa-arrow-right" />
+                        </a>
+                    </div>
+                {/if}
+            </div>
         </div>
         <Breadcrumbs crumbs={[
             { label: 'Home', hash: homeHash },

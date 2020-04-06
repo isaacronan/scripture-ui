@@ -2,6 +2,7 @@
 import { ExpandableItem } from '../utils/models';
 export let verses = [];
 
+let container = null;
 let expandableVerses = [];
 const hydrateExpandableVerses = () => expandableVerses = verses.map(verse => new ExpandableItem(verse));
 $: {
@@ -13,8 +14,13 @@ const toggleExpanded = (index) => () => {
     expandableVerses[index].toggleExpanded();
     expandableVerses = expandableVerses;    
 };
+
+const handleWheel = (event) => {
+    event.preventDefault();
+    container.scrollBy(event.deltaY, 0);
+};
 </script>
-<div class="container">
+<div on:wheel={handleWheel} bind:this={container} class="container">
     <div class="columns">
         {#each expandableVerses as { item, isExpanded }, index}
             <p>
