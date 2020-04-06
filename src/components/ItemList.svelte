@@ -29,22 +29,26 @@ const setExpandedAll = (isExpanded) => () => {
     <button class="plain-button" on:click={setExpandedAll(true)}>Expand All</button>
     <button class="plain-button" on:click={setExpandedAll(false)}>Collapse All</button>
 </div>
-<ul>
-    {#each expandableItems as { item, isExpanded }, index}
-        <ListItem
-            on:click={toggleExpanded(index)}
-            {isExpanded}
-            href={getHref(item)}
-            title={getTitle(item)}
-            description={getDescription(item)}
-        />
-    {/each}
-</ul>
+<div>
+    <ul>
+        {#each expandableItems as { item, isExpanded }, index}
+            <ListItem
+                on:click={toggleExpanded(index)}
+                {isExpanded}
+                href={getHref(item)}
+                title={getTitle(item)}
+                description={getDescription(item)}
+            />
+        {/each}
+    </ul>
+</div>
 <style>
 ul {
     display: grid;
     grid-gap: var(--spacing-md);
     grid-template-columns: 1fr;
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-sm);
 }
 
 button {

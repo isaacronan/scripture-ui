@@ -25,10 +25,12 @@ $: switch (bookSubset) {
         { label: 'Home', hash: homeHash }
     ]}/>
     <h2>Books</h2>
-    <div class="book-controls">
-        <span><input id={ALL} type="radio" bind:group={bookSubset} value={ALL}><label for={ALL}>All</label></span>
-        <span><input id={OLD} type="radio" bind:group={bookSubset} value={OLD}><label for={OLD}>Old Testament</label></span>
-        <span><input id={NEW} type="radio" bind:group={bookSubset} value={NEW}><label for={NEW}>New Testament</label></span>
+    <div>
+        <div class="book-controls">
+            <span><input id={ALL} type="radio" bind:group={bookSubset} value={ALL}><label for={ALL}>All</label></span>
+            <span><input id={OLD} type="radio" bind:group={bookSubset} value={OLD}><label for={OLD}>Old Testament</label></span>
+            <span><input id={NEW} type="radio" bind:group={bookSubset} value={NEW}><label for={NEW}>New Testament</label></span>
+        </div>
     </div>
     <PatientContainer isWaiting={$books.length === 0}>
         <ItemList
