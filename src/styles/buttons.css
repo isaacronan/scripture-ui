@@ -28,7 +28,7 @@ button:not(:disabled) {
 }
 
 .list-button:focus:not(:active) {
-    border-width: 2px;
+    box-shadow: 1px 1px;
 }
 
 .list-button:hover {

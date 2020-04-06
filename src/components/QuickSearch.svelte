@@ -119,7 +119,7 @@ const handleKeyDown = (event) => {
 <div>
     <div class="container">
         <form on:submit|preventDefault={handleSubmit}>
-            <input on:blur={hideSearchResults} on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
+            <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
             <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
         </form>
         {#if showSearchResults && matchingBooks.length}
