@@ -16,8 +16,10 @@ const toggleExpanded = (index) => () => {
 };
 
 const handleWheel = (event) => {
-    event.preventDefault();
-    container.scrollBy(event.deltaY, 0);
+    if (window.innerWidth >= 600) {
+        event.preventDefault();
+        container.scrollBy(event.deltaY, 0);
+    }
 };
 </script>
 <div on:wheel={handleWheel} bind:this={container} class="container">
