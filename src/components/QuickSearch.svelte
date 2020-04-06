@@ -5,13 +5,14 @@ import { chapterHash, bookHash } from '../utils/routing';
 let searchInput = null;
 let query = '';
 let queryPattern = /^((\d*\s)?(\w+))(\s(\d+))?/;
+let matchingBooks = [];
 let selectedBooknumber = null;
 let selectedChapternumber = null;
 let chapterOptions = [];
 let showSearchResults = false;
+let focusedResultElementIndex = 0;
 
 $: queryIsValid = queryPattern.test(query);
-$: matchingBooks = queryIsValid ? $books.filter(book => new RegExp(query, 'i').test(book.shortname)).slice(0, 5) : [];
 $: booknameGuess = queryIsValid ? queryPattern.exec(query)[1] : null;
 $: chapternumberGuess = queryIsValid ? queryPattern.exec(query)[5] : null;
 $: bookGuess = booknameGuess ? $books.find(book => new RegExp(booknameGuess, 'i').test(book.shortname)) : null;
@@ -35,8 +36,13 @@ $: chapternumberQuery = (() => {
 })();
 
 const handleInput = () => {
+    setTimeout(() => updateMatchingBooks());
     showSearchResults = true;
     selectedChapternumber = null;
+};
+
+const updateMatchingBooks = () => {
+    matchingBooks = queryIsValid ? $books.filter(book => new RegExp(query, 'i').test(book.shortname)).slice(0, 5) : [];
 };
 
 const handleBookSelect = (booknumber) => () => {
@@ -63,18 +69,51 @@ const handleSubmit = (event) => {
         window.location.hash = bookHash(booknumberQuery);
     }
 };
+
+const handleKeyDown = (event) => {
+    switch (event.code) {
+        case 'ArrowUp':
+            event.preventDefault();
+            if (focusedResultElementIndex === null) {
+                focusedResultElementIndex = matchingBooks.length - 1;
+            } else {
+                focusedResultElementIndex += matchingBooks.length - 1;
+                focusedResultElementIndex = focusedResultElementIndex % matchingBooks.length;
+            }
+            if (matchingBooks[focusedResultElementIndex]) {
+                query = matchingBooks[focusedResultElementIndex].shortname;
+            }
+            break;
+        case 'ArrowDown':
+            event.preventDefault();
+            if (focusedResultElementIndex === null) {
+                focusedResultElementIndex = 0;
+            } else {
+                focusedResultElementIndex += 1;
+                focusedResultElementIndex = focusedResultElementIndex % matchingBooks.length;
+            }
+            if (matchingBooks[focusedResultElementIndex]) {
+                query = matchingBooks[focusedResultElementIndex].shortname;
+            }
+            break;
+        default:
+            updateMatchingBooks();
+            focusedResultElementIndex = null;
+            
+    }
+};
 </script>
 <div>
     <div class="container">
         <form on:submit|preventDefault={handleSubmit}>
-            <input class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
+            <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
             <button disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
         </form>
         {#if showSearchResults && matchingBooks.length}
             <ul class="search-results">
-                {#each matchingBooks as { shortname, booknumber }}
+                {#each matchingBooks as { shortname, booknumber }, index}
                     <li>
-                        <button on:click={handleBookSelect(booknumber)}>{shortname}</button>
+                        <button class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
                     </li>
                 {/each}
             </ul>
@@ -97,7 +136,7 @@ const handleSubmit = (event) => {
     align-items: center;
 }
 
-form,
+form,   
 ul {
     width: 80%;
 }
@@ -125,13 +164,18 @@ form button {
     display: block;
 }
 
+.search-results .focused {
+    background-color: var(--lighter);
+}
+
 .search-results button {
     padding: var(--spacing-md);
     text-align: left;
     width: 100%;
 }
 
-.search-results li:last-of-type {
+.search-results li:last-of-type,
+.search-results li:last-of-type button {
     border-radius: 0 0 var(--radius) var(--radius);
 }
 
