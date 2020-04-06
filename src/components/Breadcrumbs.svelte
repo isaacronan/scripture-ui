@@ -4,8 +4,8 @@ export let crumbs = [];
 <nav>
     <ul>
         {#each crumbs as crumb}
-            <li class="link">
-                <a href="{crumb.hash}"><i class="fas fa-chevron-left" />{crumb.label}</a>
+            <li>
+                <a class="link" href="{crumb.hash}"><i class="fas fa-chevron-left" />{crumb.label}</a>
             </li>
         {/each}
     </ul>
@@ -17,5 +17,9 @@ a {
 
 i {
     padding-right: var(--spacing-sm);
+}
+
+li + li {
+    margin-left: var(--spacing-md);
 }
 </style>

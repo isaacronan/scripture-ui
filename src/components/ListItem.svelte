@@ -6,12 +6,12 @@ export let description = '';
 </script>
 <li>
     {#if description}
-        <button on:click>
+        <button class="plain-button" on:click>
             <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
         </button>
     {/if}
     <h4>{title}</h4>
-    <a {href}><i class="fas fa-arrow-right"/></a>
+    <a class="link" {href}><i class="fas fa-arrow-right"/></a>
     {#if isExpanded && description}
         <p>{description}</p>
     {/if}

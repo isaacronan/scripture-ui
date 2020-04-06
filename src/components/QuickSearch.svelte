@@ -56,8 +56,12 @@ const setSelectedBook = (booknumber) => {
     query = $getShortName(selectedBooknumber);
 };
 
-const handleBookSelect = (booknumber) => () => {
+const hideSearchResults = () => {
     showSearchResults = false;
+};
+
+const handleBookSelect = (booknumber) => () => {
+    hideSearchResults();
     searchInput.focus();
     setSelectedBook(booknumber);
 };
@@ -115,14 +119,14 @@ const handleKeyDown = (event) => {
 <div>
     <div class="container">
         <form on:submit|preventDefault={handleSubmit}>
-            <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
-            <button disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
+            <input on:blur={hideSearchResults} on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
+            <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
         </form>
         {#if showSearchResults && matchingBooks.length}
             <ul class="search-results">
                 {#each matchingBooks as { shortname, booknumber }, index}
                     <li>
-                        <button class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
+                        <button tabindex="-1" class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
                     </li>
                 {/each}
             </ul>

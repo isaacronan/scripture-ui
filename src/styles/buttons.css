@@ -27,6 +27,14 @@ button:not(:disabled) {
     color: var(--white);
 }
 
+.list-button:focus:not(:active) {
+    border-width: 2px;
+}
+
+.list-button:hover {
+    background-color: var(--lighter);
+}
+
 .link,
 .plain-button {
     display: inline-block;
@@ -36,7 +44,6 @@ button:not(:disabled) {
     text-decoration: underline;
 }
 
-.link + .link,
 .plain-button + .plain-button {
     margin-left: var(--spacing-md);
 }
