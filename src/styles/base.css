@@ -16,6 +16,18 @@
     --smartbody: var(--white);
 
     font-size: 10px;
+    
+    --fs-small: 1.0rem;
+    --fs-normal: 1.2rem;
+    --fs-big: 1.8rem;
+    --fs-bigger: 3.0rem;
+    --fs-biggest: 4.2rem;
+
+    --lh-normal: calc(1.5 * var(--fs-normal));
+    --lh-big: calc(1.5 * var(--fs-big));
+    --lh-bigger: calc(1.5 * var(--fs-bigger));
+    --lh-biggest: calc(1.5 * var(--fs-biggest));
+
     --spacing-xs: 0.2rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1.0rem;

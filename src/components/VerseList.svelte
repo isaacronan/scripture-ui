@@ -29,7 +29,7 @@ const handleWheel = (event) => {
             <p>
                 <small>{item.versenumber}</small> {item.text}
                 {#if item.notes}
-                    <button class="link" on:click={toggleExpanded(index)}>Notes</button>
+                    <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
                 {/if}
             </p>
             {#if isExpanded}

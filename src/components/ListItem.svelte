@@ -35,7 +35,7 @@ button {
     font-size: 2rem;
     left: var(--spacing-md);
     position: absolute;
-    top: calc(var(--spacing-md) + 2.7rem / 2 - 1.8rem / 2 - 1px);
+    top: calc(var(--spacing-md) + var(--lh-big) / 2 - var(--lh-normal) / 2 - 1px);
 }
 
 a {
@@ -43,7 +43,7 @@ a {
     font-size: 2rem;
     position: absolute;
     right: var(--spacing-md);
-    top: calc(var(--spacing-md) + 2.7rem / 2 - 1.8rem / 2 - 1px);
+    top: calc(var(--spacing-md) + var(--lh-big) / 2 - var(--lh-normal) / 2 - 1px);
 }
 
 p {
