@@ -14,11 +14,12 @@ let chapterOptions = [];
 let showSearchResults = false;
 let focusedResultElementIndex = 0;
 
-$: showChapterOptions = chapterOptions.length && bookGuess && bookGuess.booknumber === selectedBooknumber;
+$: showChapterOptions = chapterOptions.length;
 $: queryIsValid = queryPattern.test(query);
 $: booknameGuess = queryIsValid ? queryPattern.exec(query)[1] : null;
 $: chapternumberGuess = queryIsValid ? queryPattern.exec(query)[5] : null;
 $: bookGuess = booknameGuess ? $books.find(book => new RegExp(booknameGuess, 'i').test(book.shortname)) : null;
+$: bookGuessMatchesSelected = bookGuess && bookGuess.booknumber === selectedBooknumber;
 $: booknumberQuery = (() => {
     if (selectedBooknumber && new RegExp(`^${booknameGuess}`, 'i').test($getShortName(selectedBooknumber))) {
         return selectedBooknumber;
@@ -139,13 +140,16 @@ const handleKeyDown = (event) => {
             {/if}
         </div>
         {#if showChapterOptions}
-            <ul class="chapter-options">
-                {#each chapterOptions as { chapternumber }}
-                    <li>
-                        <button class="list-button small" class:selected={chapternumber === Number(chapternumberQuery)} on:click={handleChapterSelect(chapternumber)}>{chapternumber}</button>
-                    </li>
-                {/each}
-            </ul>
+            <div class="chapter-options">
+                <small>{$getShortName(selectedBooknumber)}</small>
+                <ul>
+                    {#each chapterOptions as { chapternumber }}
+                        <li>
+                            <button class="list-button small" class:selected={chapternumber === Number(chapternumberQuery) && bookGuessMatchesSelected} on:click={handleChapterSelect(chapternumber)}>{chapternumber}</button>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         {/if}
     </div>
 </div>
@@ -161,13 +165,15 @@ const handleKeyDown = (event) => {
     display: flex;
     flex-basis: 100%;
     flex-direction: column;
-    max-width: 100%;
-    width: 400px;
+}
+
+.chapter-options small {
+    text-transform: uppercase;
 }
 
 form,
 .search-results {
-    width: 100%;
+    width: 400px;
 }
 
 form {
@@ -249,6 +255,11 @@ input {
 
     .with-options .search-form {
         margin-right: var(--spacing-sm);
+    }
+
+    .with-options form,
+    .with-options .search-results {
+        width: 100%;
     }
 }
 </style>
