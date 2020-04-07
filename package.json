@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
+    "lodash": "^4.17.15",
     "svelte": "^3.18.2"
   }
 }

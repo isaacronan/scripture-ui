@@ -1,4 +1,5 @@
 <script>
+import { SCREENWIDTH } from '../utils/constants';
 import { ExpandableItem } from '../utils/models';
 export let verses = [];
 
@@ -16,7 +17,7 @@ const toggleExpanded = (index) => () => {
 };
 
 const handleWheel = (event) => {
-    if (window.innerWidth >= 600) {
+    if (window.innerWidth >= SCREENWIDTH) {
         event.preventDefault();
         container.scrollBy(event.deltaY, 0);
     }

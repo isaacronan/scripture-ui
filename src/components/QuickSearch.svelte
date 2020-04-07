@@ -1,4 +1,6 @@
 <script>
+import debounce from 'lodash/debounce';
+import { TIMEOUT } from '../utils/constants';
 import { books, getShortName } from '../utils/store';
 import { getChapters } from '../utils/http';
 import { chapterHash, bookHash } from '../utils/routing';
@@ -45,13 +47,16 @@ const updateMatchingBooks = () => {
     matchingBooks = queryIsValid ? $books.filter(book => new RegExp(query, 'i').test(book.shortname)).slice(0, 5) : [];
 };
 
+const getSelectedBooknumberChapters = debounce(() => {
+    getChapters(selectedBooknumber).then(data => {
+        chapterOptions = data;
+    });
+}, TIMEOUT, { leading: true });
+
 const setSelectedBook = (booknumber) => {
     if (booknumber !== selectedBooknumber) {
         selectedBooknumber = booknumber;
-        chapterOptions = [];
-        getChapters(selectedBooknumber).then(data => {
-            chapterOptions = data;
-        });
+        getSelectedBooknumberChapters();
     }
     query = $getShortName(selectedBooknumber);
 };
@@ -110,7 +115,6 @@ const handleKeyDown = (event) => {
             }
             break;
         default:
-            updateMatchingBooks();
             focusedResultElementIndex = null;
             
     }

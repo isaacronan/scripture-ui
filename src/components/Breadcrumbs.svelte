@@ -5,7 +5,9 @@ export let crumbs = [];
     <ul>
         {#each crumbs as crumb}
             <li>
-                <a class="link" href="{crumb.hash}"><i class="fas fa-chevron-left" />{crumb.label}</a>
+                {#if crumb.label}
+                    <a class="link" href="{crumb.hash}"><i class="fas fa-chevron-left" />{crumb.label}</a>
+                {/if}
             </li>
         {/each}
     </ul>

@@ -88,6 +88,7 @@ h2 {
     margin-bottom: var(--spacing-md);
     margin-left: calc(-1 * var(--spacing-md));
     margin-top: calc(-1 * var(--spacing-md));
+    min-height: 1.8rem;
     padding: var(--spacing-md);
     width: 100%;
 }
