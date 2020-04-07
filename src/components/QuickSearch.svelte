@@ -14,6 +14,7 @@ let chapterOptions = [];
 let showSearchResults = false;
 let focusedResultElementIndex = 0;
 
+$: showChapterOptions = chapterOptions.length && bookGuess && bookGuess.booknumber === selectedBooknumber;
 $: queryIsValid = queryPattern.test(query);
 $: booknameGuess = queryIsValid ? queryPattern.exec(query)[1] : null;
 $: chapternumberGuess = queryIsValid ? queryPattern.exec(query)[5] : null;
@@ -121,21 +122,23 @@ const handleKeyDown = (event) => {
 };
 </script>
 <div>
-    <div class="container">
-        <form on:submit|preventDefault={handleSubmit}>
-            <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
-            <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
-        </form>
-        {#if showSearchResults && matchingBooks.length}
-            <ul class="search-results">
-                {#each matchingBooks as { shortname, booknumber }, index}
-                    <li>
-                        <button tabindex="-1" class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
-                    </li>
-                {/each}
-            </ul>
-        {/if}
-        {#if chapterOptions.length && bookGuess && bookGuess.booknumber === selectedBooknumber}
+    <div class:with-options={showChapterOptions} class="container">
+        <div class="search-form">
+            <form on:submit|preventDefault={handleSubmit}>
+                <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
+                <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
+            </form>
+            {#if showSearchResults && matchingBooks.length}
+                <ul class="search-results">
+                    {#each matchingBooks as { shortname, booknumber }, index}
+                        <li>
+                            <button tabindex="-1" class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
+                        </li>
+                    {/each}
+                </ul>
+            {/if}
+        </div>
+        {#if showChapterOptions}
             <ul class="chapter-options">
                 {#each chapterOptions as { chapternumber }}
                     <li>
@@ -148,19 +151,32 @@ const handleKeyDown = (event) => {
 </div>
 <style>
 .container {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
-form,   
-ul {
-    width: 400px;
+.search-form {
+    align-items: center;
+    display: flex;
+    flex-basis: 100%;
+    flex-direction: column;
     max-width: 100%;
+    width: 400px;
+}
+
+form,
+.search-results {
+    width: 100%;
 }
 
 form {
     position: relative;
+}
+
+form input {
+    height: 100%;
+    width: 100%;
 }
 
 form button {
@@ -210,7 +226,29 @@ input {
     border-bottom-right-radius: 0;
 }
 
-.chapter-options {
+.chapter-options,
+.search-form {
     margin-top: var(--spacing-md);
+}
+
+@media screen and (min-width: 768px) {
+    .container.with-options {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .with-options .chapter-options,
+    .with-options .search-form {
+        flex-basis: 50%;
+    }
+
+    .with-options .chapter-options {
+        margin-left: var(--spacing-sm);
+    }
+
+    .with-options .search-form {
+        margin-right: var(--spacing-sm);
+    }
 }
 </style>

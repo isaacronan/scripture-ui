@@ -9,9 +9,7 @@ import QuickSearch from '../components/QuickSearch.svelte';
     <h3>A way to do stuff</h3>
     <section>
         <h2>Quick Search</h2>
-        <div class="quick-search">
-            <QuickSearch />
-        </div>
+        <QuickSearch />
     </section>
     <section>
         <h2>Books</h2>
@@ -63,9 +61,5 @@ section:last-of-type {
 .link {
     color: var(--blue);
     margin-bottom: var(--spacing-md);
-}
-
-.quick-search {
-    margin-top: var(--spacing-md);
 }
 </style>

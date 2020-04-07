@@ -69,13 +69,13 @@ button + button::before {
     width: 1px;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 768px) {
     ul {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 1024px) {
     ul {
         grid-template-columns: 1fr 1fr 1fr;
     }

@@ -59,7 +59,7 @@ button {
     margin: var(--spacing-md) var(--spacing-lg);
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 768px) {
     .container {
         overflow-y: hidden;
     }
