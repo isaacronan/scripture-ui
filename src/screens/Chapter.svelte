@@ -43,6 +43,13 @@ $: nextChapter = $currentChapters.find(chapter => chapter.chapternumber > Number
 $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < Number(chapternumber)).pop();
 </script>
 <svelte:window on:hashchange={initialize} />
+<svelte:head>
+<style>
+    :root {
+        height: 100%;
+    }
+</style>
+</svelte:head>
 <article>
         <div>
             <div class="chapter-navigator">

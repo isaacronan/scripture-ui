@@ -1,7 +1,7 @@
 :root {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
     
     --beige: #d0b793;
     --blue: #144e93;
@@ -22,10 +22,13 @@
     --spacing-lg: 2.0rem;
     --spacing-xl: 5.0rem;
 
+    --maxwidth: 1000px;
+
     --radius: 4px;
 }
 
 body {
+    background-color: var(--dark);
     color: var(--smartbody);
     display: flex;;
     flex-grow: 1;
@@ -37,7 +40,6 @@ article {
     flex-direction: column;
     margin: auto;
     max-height: 100%;
-    max-width: 1000px;
 }
 
 input {

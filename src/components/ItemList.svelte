@@ -74,4 +74,10 @@ button + button::before {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+@media screen and (min-width: 800px) {
+    ul {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
 </style>
