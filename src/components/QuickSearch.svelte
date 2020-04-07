@@ -155,7 +155,8 @@ const handleKeyDown = (event) => {
 
 form,   
 ul {
-    width: 80%;
+    width: 400px;
+    max-width: 100%;
 }
 
 form {

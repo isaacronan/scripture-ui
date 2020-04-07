@@ -35,7 +35,9 @@ body {
 article {
     display: flex;
     flex-direction: column;
+    margin: auto;
     max-height: 100%;
+    max-width: 1000px;
 }
 
 input {
