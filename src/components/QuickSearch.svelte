@@ -209,6 +209,7 @@ form .active {
 }
 
 .search-results button {
+    height: 100%;
     padding: var(--spacing-md);
     text-align: left;
     width: 100%;

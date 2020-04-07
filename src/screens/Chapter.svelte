@@ -74,7 +74,7 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
             { label: 'Books', hash: booksHash },
             { label: $getShortName($currentBooknumber), hash: bookHash($currentBooknumber) }
         ]}/>
-        <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getShortName($currentBooknumber)}>
+        <PatientContainer isShort={true} isFailed={invalidBooknumber} isWaiting={!$getShortName($currentBooknumber)}>
             <h2>{$getShortName($currentBooknumber)} {chapternumber}</h2>
             {#if $getChapterDescription(chapternumber)}
                 <Expandable content={$getChapterDescription(chapternumber)} showLabel="Show Description" hideLabel="Hide Description" />

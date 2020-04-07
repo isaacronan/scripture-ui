@@ -16,11 +16,11 @@ import QuickSearch from '../components/QuickSearch.svelte';
         <div>
             <a class="link" href={booksHash}>Detail View</a>
         </div>
-        <PatientContainer isWaiting={$books.length === 0}>
+        <PatientContainer isDark={true} isWaiting={$books.length === 0}>
             <ul>
                 {#each $books as { shortname, booknumber }}
                     <li>
-                        <a  class="list-button" href={bookHash(booknumber)}>{shortname}</a>
+                        <a class="list-button" href={bookHash(booknumber)}>{shortname}</a>
                     </li>
                 {/each}
             </ul>

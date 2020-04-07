@@ -35,7 +35,7 @@ const initialize = () => {
         { label: 'Home', hash: homeHash },
         { label: 'Books', hash: booksHash }
     ]}/>
-    <PatientContainer isFailed={invalidBooknumber} isWaiting={!$getBookName($currentBooknumber)}>
+    <PatientContainer isShort={true} isFailed={invalidBooknumber} isWaiting={!$getBookName($currentBooknumber)}>
         <h2>{$getBookName($currentBooknumber)}</h2>
         {#if $getBookDescription($currentBooknumber)}
             <Expandable content={$getBookDescription($currentBooknumber)} showLabel="Show Description" hideLabel="Hide Description" />
