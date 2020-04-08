@@ -165,6 +165,7 @@ const handleKeyDown = (event) => {
     display: flex;
     flex-basis: 100%;
     flex-direction: column;
+    max-width: 100%;
 }
 
 .chapter-options small {
@@ -173,6 +174,7 @@ const handleKeyDown = (event) => {
 
 form,
 .search-results {
+    max-width: 100%;
     width: 400px;
 }
 
