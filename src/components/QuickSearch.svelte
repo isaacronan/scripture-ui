@@ -5,7 +5,6 @@ import { books, getShortName } from '../utils/store';
 import { getChapters } from '../utils/http';
 import { chapterHash, bookHash } from '../utils/routing';
 
-let searchInput = null;
 let query = '';
 let queryPattern = /^((\d*\s)?(\w+))(\s(\d+))?/;
 let matchingBooks = [];
@@ -72,14 +71,12 @@ const hideSearchResults = () => {
 
 const handleBookSelect = (booknumber) => () => {
     hideSearchResults();
-    searchInput.focus();
     setSelectedBook(booknumber);
 };
 
 const handleChapterSelect = (chapternumber) => {
     selectedChapternumber = chapternumber;
     query = [$getShortName(selectedBooknumber), selectedChapternumber].join(' ');
-    searchInput.focus();
     updateMatchingBooks();
 };
 
@@ -129,7 +126,7 @@ const handleKeyDown = (event) => {
     <div class:with-options={showChapterOptions} class="container">
         <div class="search-form">
             <form on:submit|preventDefault={handleSubmit}>
-                <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} bind:this={searchInput} on:input={handleInput} bind:value={query} type="text">
+                <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} on:input={handleInput} bind:value={query} type="text">
                 <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
             </form>
             {#if showSearchResults && matchingBooks.length}
