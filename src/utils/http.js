@@ -1,6 +1,6 @@
 const checkStatusAndRespond = (res) => {
     if (res.status !== 200) {
-        return Promise.reject();
+        return res.json().then(json => Promise.reject(json.error));
     }
     return res.json();
 };

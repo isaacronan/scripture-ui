@@ -4,6 +4,7 @@ import { TIMEOUT } from '../utils/constants';
 import { books, getShortName } from '../utils/store';
 import { getChapters } from '../utils/http';
 import { chapterHash, bookHash } from '../utils/routing';
+
 let searchInput = null;
 let query = '';
 let queryPattern = /^((\d*\s)?(\w+))(\s(\d+))?/;
@@ -11,6 +12,7 @@ let matchingBooks = [];
 let selectedBooknumber = null;
 let selectedChapternumber = null;
 let chapterOptions = [];
+let chapterOptionsBooknumber = null;
 let showSearchResults = false;
 let focusedResultElementIndex = 0;
 
@@ -49,8 +51,9 @@ const updateMatchingBooks = () => {
     matchingBooks = queryIsValid ? $books.filter(book => new RegExp(query, 'i').test(book.shortname)).slice(0, 5) : [];
 };
 
-const getSelectedBooknumberChapters = debounce(() => {
-    getChapters(selectedBooknumber).then(data => {
+const fetchChapters = debounce((booknumber) => {
+    getChapters(booknumber).then(data => {
+        chapterOptionsBooknumber = booknumber;
         chapterOptions = data;
     });
 }, TIMEOUT, { leading: true });
@@ -58,7 +61,7 @@ const getSelectedBooknumberChapters = debounce(() => {
 const setSelectedBook = (booknumber) => {
     if (booknumber !== selectedBooknumber) {
         selectedBooknumber = booknumber;
-        getSelectedBooknumberChapters();
+        fetchChapters(selectedBooknumber);
     }
     query = $getShortName(selectedBooknumber);
 };
@@ -141,7 +144,7 @@ const handleKeyDown = (event) => {
         </div>
         {#if showChapterOptions}
             <div class="chapter-options">
-                <small>{$getShortName(selectedBooknumber)}</small>
+                <small>{$getShortName(chapterOptionsBooknumber)}</small>
                 <ul>
                     {#each chapterOptions as { chapternumber }}
                         <li>
