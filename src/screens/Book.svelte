@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import { getBookName, getBookDescription, currentChapters, currentBooknumber } from '../utils/store';
+import { getBookName, getBookDescription, currentChapters, currentBooknumber, invalidBooknumberError } from '../utils/store';
 import { bookPattern, homeHash, booksHash, chapterHash } from '../utils/routing';
 import { getChapters } from '../utils/http';
 import ItemList from '../components/ItemList.svelte';
@@ -9,7 +9,6 @@ import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import Expandable from '../components/Expandable.svelte';
 
 let [ booknumber ] = bookPattern.getParams();
-let invalidBooknumber = false;
 
 onMount(() => {
     initialize();
@@ -20,11 +19,11 @@ const initialize = () => {
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
-        invalidBooknumber = false;
+        invalidBooknumberError.set('');
         getChapters($currentBooknumber).then(data => {
             currentChapters.set(data);
-        }, () => {
-            invalidBooknumber = true;
+        }, (error) => {
+            invalidBooknumberError.set(error);
         });
     }
 };
@@ -35,13 +34,13 @@ const initialize = () => {
         { label: 'Home', hash: homeHash },
         { label: 'Books', hash: booksHash }
     ]}/>
-    <PatientContainer isShort={true} isFailed={invalidBooknumber} isWaiting={!$getBookName($currentBooknumber)}>
+    <PatientContainer isShort={true} isFailed={$invalidBooknumberError} isWaiting={!$getBookName($currentBooknumber)}>
         <h2>{$getBookName($currentBooknumber)}</h2>
         {#if $getBookDescription($currentBooknumber)}
             <Expandable content={$getBookDescription($currentBooknumber)} showLabel="Show Description" hideLabel="Hide Description" />
         {/if}
     </PatientContainer>
-    <PatientContainer isFailed={invalidBooknumber} isWaiting={$currentChapters.length === 0}>
+    <PatientContainer isFailed={$invalidBooknumberError} errorMessage={$invalidBooknumberError} isWaiting={$currentChapters.length === 0}>
         <ItemList
             items={$currentChapters}
             getTitle={item => `Chapter ${item.chapternumber}`}

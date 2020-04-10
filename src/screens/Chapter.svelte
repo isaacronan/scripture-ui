@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import { getShortName, getChapterDescription, currentBooknumber, currentChapters } from '../utils/store';
+import { getShortName, getChapterDescription, currentBooknumber, currentChapters, invalidBooknumberError } from '../utils/store';
 import { chapterPattern, homeHash, booksHash, bookHash, chapterHash } from '../utils/routing';
 import { getChapters, getVerses } from '../utils/http';
 import PatientContainer from '../components/PatientContainer.svelte';
@@ -10,8 +10,7 @@ import Expandable from '../components/Expandable.svelte';
 
 let [ booknumber, chapternumber ] = chapterPattern.getParams();
 let verses = [];
-let invalidBooknumber = false;
-let invalidChapternumber = false;
+let invalidChapternumberError = '';
 
 onMount(() => {
     initialize();
@@ -20,22 +19,22 @@ onMount(() => {
 const initialize = () => {
     [ booknumber, chapternumber ] = chapterPattern.getParams();
     verses = [];
-    invalidChapternumber = false;
+    invalidChapternumberError = '';
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
-        invalidBooknumber = false;
+        invalidBooknumberError.set('');
         getChapters($currentBooknumber).then(data => {
             currentChapters.set(data);
-        }, () => {
-            invalidBooknumber = true;
+        }, (error) => {
+            invalidBooknumberError.set(error);
         });
     }
 
     getVerses($currentBooknumber, chapternumber).then(data => {
         verses = data;
-    }, () => {
-        invalidChapternumber = true;
+    }, (error) => {
+        invalidChapternumberError = error;
     });
 };
 
@@ -74,13 +73,13 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
             { label: 'Books', hash: booksHash },
             { label: $getShortName($currentBooknumber), hash: bookHash($currentBooknumber) }
         ]}/>
-        <PatientContainer isShort={true} isFailed={invalidBooknumber} isWaiting={!$getShortName($currentBooknumber)}>
+        <PatientContainer isShort={true} isFailed={$invalidBooknumberError} isWaiting={!$getShortName($currentBooknumber)}>
             <h2>{$getShortName($currentBooknumber)} {chapternumber}</h2>
             {#if $getChapterDescription(chapternumber)}
                 <Expandable content={$getChapterDescription(chapternumber)} showLabel="Show Description" hideLabel="Hide Description" />
             {/if}
         </PatientContainer>
-        <PatientContainer isFailed={invalidBooknumber || invalidChapternumber} isWaiting={verses.length === 0}>
+        <PatientContainer isFailed={$invalidBooknumberError || invalidChapternumberError} errorMessage={$invalidBooknumberError || invalidChapternumberError} isWaiting={verses.length === 0}>
             <VerseList {verses} />
         </PatientContainer>
 </article>

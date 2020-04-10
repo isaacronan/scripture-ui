@@ -27,6 +27,7 @@ export const getBookDescription = derived(books, $books => (booknumber) => {
     return match ? match.bookdesc : '';
 });
 
+export const invalidBooknumberError = writable(null);
 export const currentBooknumber = writable(null);
 export const currentChapters = writable([]);
 
