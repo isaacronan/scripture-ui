@@ -50,8 +50,9 @@ body {
 article {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    max-height: 100%;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    width: calc(100% - 2 * var(--spacing-md));
 }
 
 input {

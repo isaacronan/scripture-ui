@@ -8,6 +8,7 @@ import Books from './screens/Books.svelte';
 import Book from './screens/Book.svelte';
 import Chapter from './screens/Chapter.svelte';
 import NotFound from './screens/NotFound.svelte';
+import ChapterNavigator from './components/ChapterNavigator.svelte';
 
 let currentScreen = null;
 const updateRoute = () => {
@@ -40,17 +41,19 @@ onMount(() => {
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
 <div class:light={currentScreen === Chapter} class="app">
+    {#if currentScreen === Chapter}
+        <ChapterNavigator />
+    {/if}
     <svelte:component this={currentScreen} />
 </div>
 
 <style>
 .app {
     background-color: var(--dark);
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
-    max-height: 100%;
     max-width: var(--maxwidth);
-    overflow-y: auto;
-    padding: var(--spacing-md);
     width: 100%;
 }
 

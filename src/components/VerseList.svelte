@@ -43,7 +43,6 @@ const handleWheel = (event) => {
 <style>
 .container {
     display: flex;
-    overflow-x: auto;
 }
 
 p {
@@ -61,11 +60,17 @@ button {
 
 @media screen and (min-width: 768px) {
     .container {
+        left: calc(-1 * var(--spacing-md));
         overflow-y: hidden;
+        position: relative;
+        top: calc(var(--spacing-md));
+        width: calc(100% + 2 * var(--spacing-md));
     }
 
     .columns {
         column-width: 300px;
+        left: var(--spacing-md);
+        position: relative;
     }
 }
 </style>
