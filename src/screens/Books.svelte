@@ -54,10 +54,13 @@ span {
 }
 
 label {
+    align-items: center;
     color: var(--cyan);
-    display: block;
-    padding: var(--spacing-sm);
-    text-align: center;
+    display: flex;
+    height: 100%;
+    justify-content: space-around;
+    min-height: calc(var(--lh-normal) + 2 * var(--spacing-sm));
+    padding: 0 var(--spacing-sm);
 }
 
 input:checked + label {

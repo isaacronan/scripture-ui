@@ -5,8 +5,8 @@ import PatientContainer from '../components/PatientContainer.svelte';
 import QuickSearch from '../components/QuickSearch.svelte';
 </script>
 <article>
-    <h1>Subscription</h1>
-    <h3>A way to do stuff</h3>
+    <h1>Scripture</h1>
+    <h3>A digital transcription of the Douay-Rheims translation</h3>
     <section>
         <h2>Quick Search</h2>
         <QuickSearch />
