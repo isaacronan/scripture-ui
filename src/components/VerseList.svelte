@@ -25,24 +25,30 @@ const handleWheel = (event) => {
 </script>
 <div on:wheel={handleWheel} bind:this={container} class="container">
     <div class="columns">
-        {#each expandableVerses as { item, isExpanded }, index}
-            <p>
-                <small>{item.versenumber}</small> {item.text}
-                {#if item.notes}
-                    <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
+        <div class="shifted">
+            {#each expandableVerses as { item, isExpanded }, index}
+                <p>
+                    <small>{item.versenumber}</small> {item.text}
+                    {#if item.notes}
+                        <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
+                    {/if}
+                </p>
+                {#if isExpanded}
+                    {#each item.notes as note}
+                        <p class="note">{note}</p>
+                    {/each}
                 {/if}
-            </p>
-            {#if isExpanded}
-                {#each item.notes as note}
-                    <p class="note">{note}</p>
-                {/each}
-            {/if}
-        {/each}
+            {/each}
+        </div>
     </div>
 </div>
 <style>
 .container {
     display: flex;
+}
+
+.shifted {
+    padding-bottom: var(--spacing-md);
 }
 
 p {
@@ -69,8 +75,12 @@ button {
 
     .columns {
         column-width: 300px;
-        left: var(--spacing-md);
-        position: relative;
+        padding-left: var(--spacing-md);
+    }
+
+    .shifted {
+        padding-bottom: 0;
+        padding-right: var(--spacing-md)
     }
 }
 </style>
