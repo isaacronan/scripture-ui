@@ -41,9 +41,11 @@ const initialize = () => {
 <svelte:window on:hashchange={initialize} />
 <svelte:head>
 <style>
+@media screen and (min-width: 768px) {
     :root {
         height: 100%;
     }
+}
 </style>
 </svelte:head>
 <article>

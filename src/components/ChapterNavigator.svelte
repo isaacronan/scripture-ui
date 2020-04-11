@@ -17,7 +17,7 @@ $: nextChapter = $currentChapters.find(chapter => chapter.chapternumber > Number
 $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < Number(chapternumber)).pop();
 </script>
 <svelte:window on:hashchange={initialize} />
-<div>
+<nav>
     <div class="chapter-navigator">
         {#if previousChapter}
             <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
@@ -34,12 +34,17 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
             </div>
         {/if}
     </div>
-</div>
+</nav>
 <style>
+nav {
+    position: sticky;
+    top: 0;
+}
+
 .chapter-navigator {
     background-color: var(--blue);
     display: flex;
-    min-height: var(--lh-normal);
+    height: var(--lh-normal);
     padding: var(--spacing-md);
 }
 
