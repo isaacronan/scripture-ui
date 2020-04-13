@@ -55,12 +55,12 @@ span {
 
 label {
     align-items: center;
+    box-sizing: border-box;
     color: var(--cyan);
     display: flex;
     height: 100%;
     justify-content: space-around;
-    min-height: calc(var(--lh-normal) + 2 * var(--spacing-sm));
-    padding: 0 var(--spacing-sm);
+    padding: var(--spacing-sm);
 }
 
 input:checked + label {

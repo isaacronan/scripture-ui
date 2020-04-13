@@ -254,15 +254,11 @@ input {
 
     .with-options .chapter-options {
         margin-left: var(--spacing-sm);
+        margin-top: 0;
     }
 
     .with-options .search-form {
         margin-right: var(--spacing-sm);
-    }
-
-    .with-options form,
-    .with-options .search-results {
-        width: 100%;
     }
 }
 </style>

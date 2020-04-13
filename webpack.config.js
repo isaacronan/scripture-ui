@@ -48,7 +48,7 @@ module.exports = (env) => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                title: 'Web App'
+                title: 'Scripture'
             }),
             new MiniCssExtractPlugin({
                 filename: '[hash].styles.css'
