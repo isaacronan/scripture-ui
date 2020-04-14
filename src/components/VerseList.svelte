@@ -25,7 +25,7 @@ const handleWheel = (event) => {
 </script>
 <div on:wheel={handleWheel} bind:this={container} class="container">
     <div class="columns">
-        <div class="shifted">
+        <div>
             {#each expandableVerses as { item, isExpanded }, index}
                 <p>
                     <small>{item.versenumber}</small> {item.text}
@@ -47,10 +47,6 @@ const handleWheel = (event) => {
     display: flex;
 }
 
-.shifted {
-    padding-bottom: var(--spacing-md);
-}
-
 p {
     color: var(--dark);
     margin: var(--spacing-sm) 0;
@@ -66,8 +62,10 @@ button {
 
 @media screen and (min-width: 768px) {
     .container {
+        box-sizing: border-box;
         left: calc(-1 * var(--spacing-md));
         overflow-y: hidden;
+        padding-left: var(--spacing-md);
         position: relative;
         top: calc(var(--spacing-md));
         width: calc(100% + 2 * var(--spacing-md));
@@ -75,11 +73,9 @@ button {
 
     .columns {
         column-width: 300px;
-        padding-left: var(--spacing-md);
     }
 
-    .shifted {
-        padding-bottom: 0;
+    .columns > div {
         padding-right: var(--spacing-md)
     }
 }

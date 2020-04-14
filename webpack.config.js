@@ -59,7 +59,8 @@ module.exports = (env) => {
             hot: true,
             proxy: [{
                 context: ['/api', '/stats'],
-                target: process.env.PROXY
+                target: process.env.PROXY,
+                secure: false
             }]
         }
     }
