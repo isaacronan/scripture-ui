@@ -14,25 +14,22 @@ button:not(:disabled) {
     display: inline-block;
     margin: var(--spacing-xs);
     padding: var(--spacing-sm) var(--spacing-md);
+    position: relative;
 }
 
 .list-button.small {
-    border: 1px solid var(--dark);
-    color: var(--dark);
     padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .list-button.small.selected {
-    background-color: var(--dark);
+    background-color: var(--blue);
     color: var(--white);
 }
 
-.list-button:focus:not(:active) {
-    box-shadow: 1px 1px;
-}
-
-.list-button:hover {
-    background-color: var(--lighter);
+.list-button:focus:not(:active):not(.selected),
+.list-button:hover:not(:active) {
+    box-shadow: 0 2px;
+    top: -2px;
 }
 
 .link,
@@ -46,4 +43,25 @@ button:not(:disabled) {
 
 .plain-button + .plain-button {
     margin-left: var(--spacing-md);
+}
+
+.button {
+    background-color: var(--button-color);
+    border-radius: var(--radius);
+    color: var(--white);
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.alt {
+    background-color: transparent;
+    border: 1px solid var(--button-color);
+    color: var(--button-color);
+}
+
+.button[disabled] {
+    background-color: var(--light);
+}
+
+.negative {
+    --button-color: var(--red);
 }
