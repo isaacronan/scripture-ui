@@ -35,3 +35,5 @@ export const getChapterDescription = derived(currentChapters, $currentChapters =
     const match = $currentChapters.find(chapter => chapter.chapternumber === Number(chapternumber));
     return match ? match.chapterdesc : '';
 });
+
+export const accessToken = writable(null);

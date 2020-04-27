@@ -14,8 +14,12 @@ export const homePattern = new HashPattern(/^#?\/?$/);
 export const booksPattern = new HashPattern(/^#\/books$/);
 export const bookPattern = new HashPattern(/^#\/books\/(\d+)$/);
 export const chapterPattern = new HashPattern(/^#\/books\/(\d+)\/chapters\/(\d+)$/);
+export const createAccountPattern = new HashPattern(/^#\/create$/);
+export const loginPattern = new HashPattern(/^#\/login$/);
 
 export const homeHash = '#/';
 export const booksHash = '#/books';
 export const bookHash = booknumber => `#/books/${booknumber}`;
 export const chapterHash = (booknumber, chapternumber) => `#/books/${booknumber}/chapters/${chapternumber}`;
+export const createAccountHash = '#/create';
+export const loginHash = '#/login';

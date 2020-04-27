@@ -1,13 +1,15 @@
 <script>
 import { onMount } from 'svelte';
 import { books } from './utils/store';
-import { homePattern, booksPattern, bookPattern, chapterPattern } from './utils/routing';
+import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern } from './utils/routing';
 import { getBooks } from './utils/http';
 import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
 import Book from './screens/Book.svelte';
 import Chapter from './screens/Chapter.svelte';
 import NotFound from './screens/NotFound.svelte';
+import CreateAccount from './screens/CreateAccount.svelte';
+import Login from './screens/Login.svelte';
 import ChapterNavigator from './components/ChapterNavigator.svelte';
 
 let currentScreen = null;
@@ -20,6 +22,10 @@ const updateRoute = () => {
         currentScreen = Book;
     } else if(chapterPattern.isMatch()) {
         currentScreen = Chapter;
+    } else if(createAccountPattern.isMatch()) {
+        currentScreen = CreateAccount;
+    } else if(loginPattern.isMatch()) {
+        currentScreen = Login;
     } else {
         currentScreen = NotFound;
     }
