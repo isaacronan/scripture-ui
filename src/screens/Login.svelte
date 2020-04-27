@@ -2,6 +2,7 @@
 import { login } from '../utils/http';
 import { accessToken } from '../utils/store';
 import { createAccountHash } from '../utils/routing';
+import Alert from '../components/Alert.svelte';
 
 let username = '';
 let password = '';
@@ -18,12 +19,12 @@ const handleLogin = () => {
 <article>
     <h2>Login</h2>
     {#if errorMessage}
-        <h3>{errorMessage}</h3>
+        <Alert isError message={errorMessage} />
     {/if}
     <form on:submit|preventDefault={handleLogin}>
         <div>
             <label for="username">Username</label>
-            <input bind:value={username} id="username" type="text">
+            <input on:input={errorMessage = ''} bind:value={username} id="username" type="text">
         </div>
         <div>
             <label for="password">Password</label>
@@ -42,7 +43,7 @@ article {
     flex-direction: column;
 }
 
-h2, h3 {
+h2 {
     margin-bottom: var(--spacing-md);
 }
 

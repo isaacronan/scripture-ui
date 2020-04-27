@@ -2,6 +2,7 @@
 import { homeHash, loginHash } from '../utils/routing';
 import { createAccount, login } from '../utils/http';
 import { accessToken } from '../utils/store';
+import Alert from '../components/Alert.svelte';
 
 let username = '';
 let password = '';
@@ -29,13 +30,13 @@ const handleLogin = () => {
 <article>
     <h2>Create Account</h2>
     {#if errorMessage}
-        <h3>{errorMessage}</h3>
+        <Alert isError message={errorMessage} />
     {/if}
     {#if !isCreated}
         <form on:submit|preventDefault={handleSubmit}>
             <div>
                 <label for="username">Username</label>
-                <input bind:value={username} id="username" type="text">
+                <input on:input={errorMessage = ''} bind:value={username} id="username" type="text">
             </div>
             <div>
                 <label for="password">Password</label>
@@ -51,7 +52,7 @@ const handleLogin = () => {
         </form>
         <a href={loginHash} class="link">Login</a>
     {:else}
-        <h3>Account Created!</h3>
+        <Alert message="Account Created!" />
         <div>
             <button on:click={handleLogin} class="button">Login</button>
         </div>
@@ -67,7 +68,7 @@ article {
     flex-direction: column;
 }
 
-h2, h3 {
+h2 {
     margin-bottom: var(--spacing-md);
 }
 
