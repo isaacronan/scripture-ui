@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { books } from './utils/store';
-import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern } from './utils/routing';
+import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern } from './utils/routing';
 import { getBooks } from './utils/http';
 import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
@@ -10,6 +10,7 @@ import Chapter from './screens/Chapter.svelte';
 import NotFound from './screens/NotFound.svelte';
 import CreateAccount from './screens/CreateAccount.svelte';
 import Login from './screens/Login.svelte';
+import Dashboard from './screens/Dashboard.svelte';
 import ChapterNavigator from './components/ChapterNavigator.svelte';
 
 let currentScreen = null;
@@ -26,6 +27,8 @@ const updateRoute = () => {
         currentScreen = CreateAccount;
     } else if(loginPattern.isMatch()) {
         currentScreen = Login;
+    } else if(dashboardPattern.isMatch()) {
+        currentScreen = Dashboard;
     } else {
         currentScreen = NotFound;
     }
@@ -46,7 +49,7 @@ onMount(() => {
 </svelte:head>
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
-<div class:light={currentScreen === Chapter} class="app">
+<div class:light={currentScreen === Chapter} class:light-alt={currentScreen === Dashboard} class="app">
     {#if currentScreen === Chapter}
         <ChapterNavigator />
     {/if}
@@ -67,5 +70,9 @@ onMount(() => {
     background-color: var(--white);
     --smartblue: var(--blue);
     --smartbody: var(--dark);
+}
+
+.light-alt {
+    background-color: var(--beige);
 }
 </style>

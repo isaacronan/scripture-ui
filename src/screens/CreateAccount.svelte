@@ -23,8 +23,8 @@ const handleSubmit = () => {
 };
 
 const handleLogin = () => {
-    login(username, password).then(({ token, refresh }) => {
-        $accessToken = token;
+    login(username, password).then(() => {
+        window.location.href = dashboardHash;
     });
 };
 </script>

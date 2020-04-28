@@ -1,7 +1,7 @@
 <script>
 import { login } from '../utils/http';
 import { accessToken } from '../utils/store';
-import { createAccountHash } from '../utils/routing';
+import { createAccountHash, dashboardHash } from '../utils/routing';
 import Alert from '../components/Alert.svelte';
 
 let username = '';
@@ -9,8 +9,8 @@ let password = '';
 let errorMessage = '';
 
 const handleLogin = () => {
-    login(username, password).then(({ token, refresh }) => {
-        $accessToken = token;
+    login(username, password).then(() => {
+        window.location.href = dashboardHash;
     }, (error) => {
         errorMessage = error;
     });
