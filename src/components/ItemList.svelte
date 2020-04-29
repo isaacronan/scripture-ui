@@ -30,12 +30,12 @@ const setExpandedAll = (isExpanded) => () => {
     <button class="plain-button" on:click={setExpandedAll(false)}>Collapse All</button>
 </div>
 <div>
-    <ul>
+    <ul class="grid-list">
         {#each expandableItems as { item, isExpanded }, index}
             <ListItem
                 on:click={toggleExpanded(index)}
                 {isExpanded}
-                href={getHref(item)}
+                destinationHref={getHref(item)}
                 title={getTitle(item)}
                 description={getDescription(item)}
             />
@@ -43,14 +43,6 @@ const setExpandedAll = (isExpanded) => () => {
     </ul>
 </div>
 <style>
-ul {
-    display: grid;
-    grid-gap: var(--spacing-md);
-    grid-template-columns: 1fr;
-    margin-bottom: var(--spacing-md);
-    margin-top: var(--spacing-sm);
-}
-
 button {
     color: var(--cyan);
 }
@@ -67,17 +59,5 @@ button + button::before {
     position: absolute;
     top: 0;
     width: 1px;
-}
-
-@media screen and (min-width: 768px) {
-    ul {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media screen and (min-width: 1024px) {
-    ul {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
 }
 </style>

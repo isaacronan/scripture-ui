@@ -1,17 +1,22 @@
 <script>
 export let isExpanded = false;
-export let href = '';
+export let primaryHref = '';
+export let destinationHref = '';
 export let title = '';
 export let description = '';
 </script>
 <li>
-    {#if description}
-        <button class="plain-button" on:click>
+    {#if primaryHref}
+        <a class="plain-button primary" href={primaryHref}>
+            <i class="fas fa-cog"/>
+        </a>
+    {:else if description}
+        <button class="plain-button primary" on:click>
             <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
         </button>
     {/if}
     <h4>{title}</h4>
-    <a class="link" {href}><i class="fas fa-arrow-right"/></a>
+    <a class="link destination" href={destinationHref}><i class="fas fa-arrow-right"/></a>
     {#if isExpanded && description}
         <p>{description}</p>
     {/if}
@@ -30,7 +35,7 @@ h4 {
     margin-left: calc(2rem + var(--spacing-md));
 }
 
-button {
+.primary {
     color: var(--light);
     font-size: 2rem;
     left: var(--spacing-md);
@@ -38,7 +43,7 @@ button {
     top: calc(var(--spacing-md) + var(--lh-big) / 2 - var(--lh-normal) / 2 - 1px);
 }
 
-a {
+.destination {
     color: var(--cyan);
     font-size: 2rem;
     position: absolute;

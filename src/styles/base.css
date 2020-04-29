@@ -67,3 +67,23 @@ input {
 li {
     display: inline-block;
 }
+
+.grid-list {
+    display: grid;
+    grid-gap: var(--spacing-md);
+    grid-template-columns: 1fr;
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+@media screen and (min-width: 768px) {
+    .grid-list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .grid-list {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

@@ -1,5 +1,6 @@
 <script>
 import { getSubscriptions } from '../utils/http';
+import ListItem from '../components/ListItem.svelte';
 import { onMount } from 'svelte';
 
 let subscriptions = [];
@@ -20,9 +21,9 @@ onMount(() => {
 <article>
     <section>
         <h2>Subscriptions</h2>
-        <ul>
+        <ul class="grid-list">
             {#each subscriptions as subscription}
-                <li>{subscription.name}</li>
+                <ListItem primaryHref="#" destinationHref="#" title={subscription.name} />
             {/each}
         </ul>
     </section>
