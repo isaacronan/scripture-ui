@@ -32,59 +32,45 @@ const refresh = () => {
 
     const refresh = refreshPattern.exec(document.cookie)[1];
     const username = usernamePattern.exec(document.cookie)[1];
-    return fetch('/api/user/refresh', {
-        method: 'POST',
-        body: JSON.stringify({
-            refresh,
-            username
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(checkStatusAndRespond).then(({ token, refresh }) => {
-        accessToken.set(token);
-        document.cookie = `refresh=${refresh}`;
-        document.cookie = `username=${username}`;
-        return token;
-    });
+    return fetch(constructPostRequest('/api/user/refresh', {
+        refresh,
+        username
+    })).then(checkStatusAndRespond).then(storeTokens(username));
 };
 
-export const login = (username, password) => fetch('/api/user/login', {
+export const login = (username, password) => fetch(constructPostRequest('/api/user/login', {
+    username,
+    password
+})).then(checkStatusAndRespond).then(storeTokens(username));
+
+export const getSubscriptions = () => fetchWithAuth(new Request('/api/subscriptions'));
+
+const fetchWithAuth = (request) => {
+    const fetchRequestWithAuth = token => fetch(request, {
+        headers: {
+            'X-Authorization': `Bearer ${token}`
+        }
+    });
+    const retrieveToken = get(accessToken) ? Promise.resolve(get(accessToken)) : refresh();
+    return retrieveToken.then(token => fetchRequestWithAuth(token)).then(response => {
+        if (response.status === 401) {
+            return refresh().then(token => fetchRequestWithAuth(token));
+        }
+        return response;
+    }).then(checkStatusAndRespond);
+};
+
+const constructPostRequest = (url, body) => new Request(url, {
     method: 'POST',
-    body: JSON.stringify({
-        username,
-        password
-    }),
+    body: JSON.stringify(body),
     headers: {
         'Content-Type': 'application/json'
     }
-}).then(checkStatusAndRespond).then(({ token, refresh }) => {
+});
+
+const storeTokens = username => ({ token, refresh }) => {
     accessToken.set(token);
     document.cookie = `refresh=${refresh}`;
     document.cookie = `username=${username}`;
-    return;
-});
-
-export const getSubscriptions = () => withAuth(new Request('/api/subscriptions'));
-
-export const withAuth = async (request) => {
-    if (!get(accessToken)) {
-        await refresh();
-    }
-
-    const response = await fetch(request, {
-        headers: {
-            'X-Authorization': `Bearer ${get(accessToken)}`
-        }
-    });
-    
-    if (response.status === 401) {
-        return refresh().then(() => fetch(request, {
-            headers: {
-                'X-Authorization': `Bearer ${get(accessToken)}`
-            }
-        })).then(checkStatusAndRespond);
-    }
-
-    return checkStatusAndRespond(response);
+    return token;
 };

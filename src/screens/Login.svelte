@@ -1,6 +1,5 @@
 <script>
 import { login } from '../utils/http';
-import { accessToken } from '../utils/store';
 import { createAccountHash, dashboardHash } from '../utils/routing';
 import Alert from '../components/Alert.svelte';
 

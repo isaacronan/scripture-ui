@@ -1,7 +1,6 @@
 <script>
 import { homeHash, loginHash } from '../utils/routing';
 import { createAccount, login } from '../utils/http';
-import { accessToken } from '../utils/store';
 import Alert from '../components/Alert.svelte';
 
 let username = '';
