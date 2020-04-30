@@ -1,11 +1,10 @@
 <script>
 import { books, oldBooks, newBooks } from '../utils/store';
 import { homeHash, bookHash } from '../utils/routing';
+import { ALL, OLD, NEW } from '../utils/constants';
 import ItemList from '../components/ItemList.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
-
-const ALL = 'ALL', OLD = 'OLD', NEW = 'NEW';
 
 let bookSubset = ALL;
 let visibleBooks = $books;

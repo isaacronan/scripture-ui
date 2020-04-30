@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { books } from './utils/store';
-import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern } from './utils/routing';
+import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern, createSubscriptionPattern } from './utils/routing';
 import { getBooks } from './utils/http';
 import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
@@ -11,9 +11,13 @@ import NotFound from './screens/NotFound.svelte';
 import CreateAccount from './screens/CreateAccount.svelte';
 import Login from './screens/Login.svelte';
 import Dashboard from './screens/Dashboard.svelte';
+import CreateSubscription from './screens/CreateSubscription.svelte';
 import ChapterNavigator from './components/ChapterNavigator.svelte';
 
 let currentScreen = null;
+$: isLight = currentScreen === Chapter;
+$: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription;
+
 const updateRoute = () => {
     if (homePattern.isMatch()) {
         currentScreen = Home;
@@ -29,6 +33,8 @@ const updateRoute = () => {
         currentScreen = Login;
     } else if(dashboardPattern.isMatch()) {
         currentScreen = Dashboard;
+    } else if(createSubscriptionPattern.isMatch()) {
+        currentScreen = CreateSubscription;
     } else {
         currentScreen = NotFound;
     }
@@ -49,7 +55,7 @@ onMount(() => {
 </svelte:head>
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
-<div class:light={currentScreen === Chapter} class:light-alt={currentScreen === Dashboard} class="app">
+<div class:light={isLight} class:light-alt={isLightAlt} class="app">
     {#if currentScreen === Chapter}
         <ChapterNavigator />
     {/if}

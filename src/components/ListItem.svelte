@@ -16,7 +16,12 @@ export let description = '';
         </button>
     {/if}
     <h4>{title}</h4>
-    <a class="link destination" href={destinationHref}><i class="fas fa-arrow-right"/></a>
+    <div class="destination">
+        <slot>
+            <a class="link" href={destinationHref}><i class="fas fa-arrow-right"/></a>
+        </slot>
+    </div>
+    
     {#if isExpanded && description}
         <p>{description}</p>
     {/if}
@@ -44,11 +49,15 @@ h4 {
 }
 
 .destination {
-    color: var(--cyan);
-    font-size: 2rem;
     position: absolute;
     right: var(--spacing-md);
     top: calc(var(--spacing-md) + var(--lh-big) / 2 - var(--lh-normal) / 2 - 1px);
+}
+
+.destination,
+.destination .link {
+    color: var(--cyan);
+    font-size: 2rem;
 }
 
 p {
