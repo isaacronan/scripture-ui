@@ -64,34 +64,33 @@ const preset = type => () => {
             <div>Verses per day</div>
             <NumericInput on:change={handleVerseDosageChange} value={verseDosage} />
         </div>
-        <div class="search">
-            <input type="text" placeholder="Search">
-            <div class="presets">
-                <button on:click={preset(ALL)} class="button alt">All</button>
-                <button on:click={preset()} class="button alt">None</button>
-                <button on:click={preset(OLD)} class="button alt">Old Testament</button>
-                <button on:click={preset(NEW)} class="button alt">New Testament</button>
-            </div>
-            <div class="actions">
-                <button class="button alt negative">Cancel</button>
-                <button disabled={!isValid} class="button">Create</button>
-            </div>
+    </div>
+    <div class="flex-container">
+        <div class="presets">
+            <button on:click={preset(ALL)} class="button alt">All</button>
+            <button on:click={preset()} class="button alt">None</button>
+            <button on:click={preset(OLD)} class="button alt">Old Testament</button>
+            <button on:click={preset(NEW)} class="button alt">New Testament</button>
         </div>
-        <div class="selected-books">
-            {#if !selectedBooknumbers.length}
-                <div>
-                    <Alert isError message="No books selected." />
-                </div>
-            {:else}
-                <ul>
-                    {#each selectedBooknumbers as booknumber (booknumber)}
-                        <li>
-                            <button on:click={handleRemove(booknumber)} class="list-button"><i class="fas fa-times" />{$getShortName(booknumber)}</button>
-                        </li>
-                    {/each}
-                </ul>
-            {/if}
+        <div class="actions">
+            <button class="button alt negative">Cancel</button>
+            <button disabled={!isValid} class="button">Create</button>
         </div>
+    </div>
+    <div class="selected-books">
+        {#if !selectedBooknumbers.length}
+            <div>
+                <Alert isError message="No books selected." />
+            </div>
+        {:else}
+            <ul>
+                {#each selectedBooknumbers as booknumber (booknumber)}
+                    <li>
+                        <button on:click={handleRemove(booknumber)} class="list-button"><i class="fas fa-times" />{$getShortName(booknumber)}</button>
+                    </li>
+                {/each}
+            </ul>
+        {/if}
     </div>
     <PatientContainer isDark={true} isWaiting={$books.length === 0}>
         <ul class="grid-list">
@@ -116,6 +115,7 @@ article {
 }
 
 .flex-container {
+    align-items: flex-end;
     display: flex;
     flex-wrap: wrap;
 }
@@ -128,12 +128,6 @@ article {
 
 .verses {
     max-width: 100%;
-}
-
-.search {
-    align-items: flex-start;
-    display: flex;
-    flex-wrap: wrap;
 }
 
 input {
@@ -154,16 +148,13 @@ input {
     margin-left: var(--spacing-sm);
 }
 
-.search input {
-    flex-basis: 100%;
-    margin-bottom: var(--spacing-md);
-}
-
 .presets {
     display: flex;
-    flex-grow: 1;
+    flex-basis: 100%;
     flex-wrap: wrap;
     margin: 0 calc(-1 * var(--spacing-xs)) var(--spacing-md);
+    position: relative;
+    top: var(--spacing-xs);
 }
 
 .presets .button {
@@ -198,34 +189,16 @@ input {
 
 @media screen and (min-width: 768px) {
     .flex-container .name,
-    .flex-container .verses {
+    .flex-container .verses,
+    .flex-container .presets,
+    .flex-container .actions {
         flex-basis: 0;
         flex-grow: 1;
     }
 
-    .verses {
+    .verses,
+    .actions {
         margin-left: var(--spacing-md);
     }
-
-    .search input {
-        flex-basis: 0;
-        flex-grow: 1;
-        margin-bottom: 0;
-    }
-
-    .search .presets {
-        flex-grow: 0;
-        margin: calc(-1 * var(--spacing-xs));
-    }
-
-    .search .presets,
-    .search .actions {
-        flex-basis: auto;
-        margin-left: var(--spacing-md);
-    }
-}
-
-@media screen and (min-width: 1024px) {
-    
 }
 </style>
