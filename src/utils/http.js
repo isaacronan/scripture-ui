@@ -72,6 +72,18 @@ const constructPostRequest = (url, body) => new Request(url, {
     }
 });
 
+const constructPutRequest = (url, body) => new Request(url, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+const constructDeleteRequest = (url) => new Request(url, {
+    method: 'DELETE'
+});
+
 const storeTokens = username => ({ token, refresh }) => {
     accessToken.set(token);
     document.cookie = `refresh=${refresh}`;
@@ -84,3 +96,12 @@ export const createSubscription = (name, verseDosage, bookPool) => fetchWithAuth
     verseDosage,
     bookPool
 }));
+
+export const updateSubscription = (id, name, verseDosage, bookPool, currentIssue) => fetchWithAuth(constructPutRequest(`/api/subscriptions/${id}`, {
+    name,
+    verseDosage,
+    bookPool,
+    currentIssue
+}));
+
+export const deleteSubscription = (id) => fetchWithAuth(constructDeleteRequest(`/api/subscriptions/${id}`));

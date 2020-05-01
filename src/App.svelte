@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { books } from './utils/store';
-import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern, createSubscriptionPattern } from './utils/routing';
+import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern, createSubscriptionPattern, editSubscriptionPattern } from './utils/routing';
 import { getBooks } from './utils/http';
 import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
@@ -12,11 +12,12 @@ import CreateAccount from './screens/CreateAccount.svelte';
 import Login from './screens/Login.svelte';
 import Dashboard from './screens/Dashboard.svelte';
 import CreateSubscription from './screens/CreateSubscription.svelte';
+import EditSubscription from './screens/EditSubscription.svelte';
 import ChapterNavigator from './components/ChapterNavigator.svelte';
 
 let currentScreen = null;
 $: isLight = currentScreen === Chapter;
-$: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription;
+$: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription;
 
 const updateRoute = () => {
     if (homePattern.isMatch()) {
@@ -35,6 +36,8 @@ const updateRoute = () => {
         currentScreen = Dashboard;
     } else if(createSubscriptionPattern.isMatch()) {
         currentScreen = CreateSubscription;
+    } else if(editSubscriptionPattern.isMatch()) {
+        currentScreen = EditSubscription;
     } else {
         currentScreen = NotFound;
     }

@@ -1,13 +1,15 @@
 <script>
 import { getSubscriptions } from '../utils/http';
+import { editSubscriptionHash } from '../utils/routing';
+import { subscriptions } from '../utils/store';
+import PatientContainer from '../components/PatientContainer.svelte';
 import ListItem from '../components/ListItem.svelte';
 import { onMount } from 'svelte';
 
-let subscriptions = [];
-
 onMount(() => {
+    subscriptions.set(null);
     getSubscriptions().then(data => {
-        subscriptions = data;
+        subscriptions.set(data);
     });
 });
 </script>
@@ -21,11 +23,13 @@ onMount(() => {
 <article>
     <section>
         <h2>Subscriptions</h2>
-        <ul class="grid-list">
-            {#each subscriptions as subscription}
-                <ListItem primaryHref="#" destinationHref="#" title={subscription.name} />
-            {/each}
-        </ul>
+        <PatientContainer isDark={true} isWaiting={!$subscriptions}>
+            <ul class="grid-list">
+                {#each $subscriptions as subscription}
+                    <ListItem primaryHref={editSubscriptionHash(subscription.id)} destinationHref="#" title={subscription.name} />
+                {/each}
+            </ul>
+        </PatientContainer>
     </section>
 </article>
 <style>

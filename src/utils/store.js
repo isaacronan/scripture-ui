@@ -37,3 +37,5 @@ export const getChapterDescription = derived(currentChapters, $currentChapters =
 });
 
 export const accessToken = writable(null);
+
+export const subscriptions = writable(null);

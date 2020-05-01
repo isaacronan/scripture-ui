@@ -2,17 +2,30 @@
 import { ExpandableItem } from '../utils/models';
 import { books, oldBooks, newBooks, getShortName } from '../utils/store';
 import { ALL, OLD, NEW } from '../utils/constants';
-import { createSubscription } from '../utils/http';
+import { createSubscription, updateSubscription, deleteSubscription } from '../utils/http';
 import { dashboardHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 
+export let subscription = null;
+export let isEdit = false;
+
 let name = '';
 let verseDosage = 10;
-let expandableBooks = [];
 let selectedBooknumbers = [];
+
+const hydrateForm = () => {
+    name = subscription.name;
+    verseDosage = subscription.verseDosage;
+    selectedBooknumbers = subscription.bookPool;
+};
+$: if (subscription) {
+    hydrateForm();
+}
+
+let expandableBooks = [];
 
 $: isValid = name && verseDosage > 0 && selectedBooknumbers.length;
 
@@ -48,11 +61,19 @@ const preset = type => () => {
     }
 };
 
-const handleCreate = () => {
-    createSubscription(name, verseDosage, selectedBooknumbers).then(() => {
-        window.location.href = dashboardHash;
-    });
+const goToDashboard = () => window.location.href = dashboardHash;
+
+const handleSave = () => {
+    if (isEdit) {
+        updateSubscription(subscription.id, name, verseDosage, selectedBooknumbers).then(goToDashboard)
+    } else {
+        createSubscription(name, verseDosage, selectedBooknumbers).then(goToDashboard)
+    }
 };
+
+const handleDelete = () => {
+    deleteSubscription(subscription.id).then(goToDashboard)
+}
 </script>
 <svelte:head>
 <style>
@@ -62,44 +83,49 @@ const handleCreate = () => {
 </style>
 </svelte:head>
 <article>
-    <h2>New Subscription</h2>
-    <div class="flex-container">
-        <div class="name">
-            <div for="name">Name</div>
-            <input bind:value={name} id="name" type="text">
-        </div>
-        <div class="verses">
-            <div>Verses per day</div>
-            <NumericInput on:change={handleVerseDosageChange} value={verseDosage} />
-        </div>
-    </div>
-    <div class="flex-container">
-        <div class="presets">
-            <button on:click={preset(ALL)} class="button alt">All</button>
-            <button on:click={preset()} class="button alt">None</button>
-            <button on:click={preset(OLD)} class="button alt">Old Testament</button>
-            <button on:click={preset(NEW)} class="button alt">New Testament</button>
-        </div>
-        <div class="actions">
-            <button class="button alt negative">Cancel</button>
-            <button on:click={handleCreate} disabled={!isValid} class="button">Create</button>
-        </div>
-    </div>
-    <div class="selected-books">
-        {#if !selectedBooknumbers.length}
-            <div>
-                <Alert isError message="No books selected." />
+    <h2>{isEdit ? 'Edit': 'New'} Subscription</h2>
+    <PatientContainer isDark={true} isWaiting={isEdit && !subscription}>
+        <div class="flex-container">
+            <div class="name">
+                <div for="name">Name</div>
+                <input bind:value={name} id="name" type="text">
             </div>
-        {:else}
-            <ul>
-                {#each selectedBooknumbers as booknumber (booknumber)}
-                    <li>
-                        <button on:click={handleRemove(booknumber)} class="list-button"><i class="fas fa-times" />{$getShortName(booknumber)}</button>
-                    </li>
-                {/each}
-            </ul>
-        {/if}
-    </div>
+            <div class="verses">
+                <div>Verses per day</div>
+                <NumericInput on:change={handleVerseDosageChange} value={verseDosage} />
+            </div>
+        </div>
+        <div class="flex-container">
+            <div class="presets">
+                <button on:click={preset(ALL)} class="button alt">All</button>
+                <button on:click={preset()} class="button alt">None</button>
+                <button on:click={preset(OLD)} class="button alt">Old Testament</button>
+                <button on:click={preset(NEW)} class="button alt">New Testament</button>
+            </div>
+            <div class="actions">
+                {#if isEdit}
+                    <button on:click={handleDelete} class="button negative"><i class="fas fa-trash-alt" /></button>
+                {/if}
+                <a class="button alt negative" href={dashboardHash}>Cancel</a>
+                <button on:click={handleSave} disabled={!isValid} class="button">{isEdit ? 'Save' : 'Create'}</button>
+            </div>
+        </div>
+        <div class="selected-books">
+            {#if !selectedBooknumbers.length}
+                <div>
+                    <Alert isError message="No books selected." />
+                </div>
+            {:else}
+                <ul>
+                    {#each selectedBooknumbers as booknumber (booknumber)}
+                        <li>
+                            <button on:click={handleRemove(booknumber)} class="list-button"><i class="fas fa-times" />{$getShortName(booknumber)}</button>
+                        </li>
+                    {/each}
+                </ul>
+            {/if}
+        </div>
+    </PatientContainer>
     <PatientContainer isDark={true} isWaiting={$books.length === 0}>
         <ul class="grid-list">
             {#each expandableBooks as { item, isExpanded }, index}
@@ -134,6 +160,10 @@ article {
     margin-bottom: var(--spacing-md);
 }
 
+.flex-container .presets {
+    flex-basis: calc(100% + 2 * var(--spacing-sm));
+}
+
 .verses {
     max-width: 100%;
 }
@@ -145,20 +175,22 @@ input {
 
 .actions {
     display: flex;
-    flex-basis: 100%;
 }
 
-.actions button {
+.actions > * {
     flex-grow: 1;
 }
 
-.actions button:last-child {
+.actions i {
+    font-size: 2rem;
+}
+
+.actions .button + .button {
     margin-left: var(--spacing-sm);
 }
 
 .presets {
     display: flex;
-    flex-basis: 100%;
     flex-wrap: wrap;
     margin: 0 calc(-1 * var(--spacing-xs)) var(--spacing-md);
     position: relative;
