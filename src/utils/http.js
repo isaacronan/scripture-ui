@@ -46,11 +46,15 @@ export const login = (username, password) => fetch(constructPostRequest('/api/us
 export const getSubscriptions = () => fetchWithAuth(new Request('/api/subscriptions'));
 
 const fetchWithAuth = (request) => {
-    const fetchRequestWithAuth = token => fetch(request, {
-        headers: {
+    const fetchRequestWithAuth = token => {
+        const headers = new Headers({
             'X-Authorization': `Bearer ${token}`
+        });
+        for (let key of request.headers.keys()) {
+            headers.append(key, request.headers.get(key));
         }
-    });
+        return fetch(request, { headers })
+    }
     const retrieveToken = get(accessToken) ? Promise.resolve(get(accessToken)) : refresh();
     return retrieveToken.then(token => fetchRequestWithAuth(token)).then(response => {
         if (response.status === 401) {
@@ -74,3 +78,9 @@ const storeTokens = username => ({ token, refresh }) => {
     document.cookie = `username=${username}`;
     return token;
 };
+
+export const createSubscription = (name, verseDosage, bookPool) => fetchWithAuth(constructPostRequest('/api/subscriptions', {
+    name,
+    verseDosage,
+    bookPool
+}));

@@ -2,6 +2,8 @@
 import { ExpandableItem } from '../utils/models';
 import { books, oldBooks, newBooks, getShortName } from '../utils/store';
 import { ALL, OLD, NEW } from '../utils/constants';
+import { createSubscription } from '../utils/http';
+import { dashboardHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
@@ -45,6 +47,12 @@ const preset = type => () => {
             selectedBooknumbers = [];
     }
 };
+
+const handleCreate = () => {
+    createSubscription(name, verseDosage, selectedBooknumbers).then(() => {
+        window.location.href = dashboardHash;
+    });
+};
 </script>
 <svelte:head>
 <style>
@@ -74,7 +82,7 @@ const preset = type => () => {
         </div>
         <div class="actions">
             <button class="button alt negative">Cancel</button>
-            <button disabled={!isValid} class="button">Create</button>
+            <button on:click={handleCreate} disabled={!isValid} class="button">Create</button>
         </div>
     </div>
     <div class="selected-books">
