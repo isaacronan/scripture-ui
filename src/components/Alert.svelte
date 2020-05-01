@@ -14,7 +14,6 @@ export let isError = false;
         border-radius: var(--radius);
         color: var(--green);
         display: flex;
-        margin-bottom: var(--spacing-md);
         padding: var(--spacing-md);
     }
 

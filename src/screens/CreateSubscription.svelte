@@ -55,40 +55,44 @@ const preset = type => () => {
 </svelte:head>
 <article>
     <h2>New Subscription</h2>
-    <div class="form">
-        <div>
+    <div class="flex-container">
+        <div class="name">
             <div for="name">Name</div>
             <input bind:value={name} id="name" type="text">
         </div>
-        <div>
+        <div class="verses">
             <div>Verses per day</div>
             <NumericInput on:change={handleVerseDosageChange} value={verseDosage} />
         </div>
-        <div class="actions">
-            <button class="button alt negative">Cancel</button>
-            <button disabled={!isValid} class="button">Create</button>
-        </div>
-        <div>
-            <div>Presets</div>
+        <div class="search">
+            <input type="text" placeholder="Search">
             <div class="presets">
                 <button on:click={preset(ALL)} class="button alt">All</button>
                 <button on:click={preset()} class="button alt">None</button>
                 <button on:click={preset(OLD)} class="button alt">Old Testament</button>
                 <button on:click={preset(NEW)} class="button alt">New Testament</button>
             </div>
+            <div class="actions">
+                <button class="button alt negative">Cancel</button>
+                <button disabled={!isValid} class="button">Create</button>
+            </div>
+        </div>
+        <div class="selected-books">
+            {#if !selectedBooknumbers.length}
+                <div>
+                    <Alert isError message="No books selected." />
+                </div>
+            {:else}
+                <ul>
+                    {#each selectedBooknumbers as booknumber (booknumber)}
+                        <li>
+                            <button on:click={handleRemove(booknumber)} class="list-button"><i class="fas fa-times" />{$getShortName(booknumber)}</button>
+                        </li>
+                    {/each}
+                </ul>
+            {/if}
         </div>
     </div>
-    {#if !selectedBooknumbers.length}
-        <Alert isError message="No books selected." />
-    {:else}
-        <ul class="selected-books">
-            {#each selectedBooknumbers as booknumber (booknumber)}
-                <li>
-                    <button on:click={handleRemove(booknumber)} class="list-button"><i class="fas fa-times" />{$getShortName(booknumber)}</button>
-                </li>
-            {/each}
-        </ul>
-    {/if}
     <PatientContainer isDark={true} isWaiting={$books.length === 0}>
         <ul class="grid-list">
             {#each expandableBooks as { item, isExpanded }, index}
@@ -111,45 +115,67 @@ article {
     color: var(--dark);
 }
 
-.form > div {
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-container > div {
+    box-sizing: border-box;
+    flex-basis: 100%;
     margin-bottom: var(--spacing-md);
 }
+
+.verses {
+    max-width: 100%;
+}
+
+.search {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+}
+
 input {
     box-sizing: border-box;
     width: 100%;
 }
 
 .actions {
-    align-items: flex-end;
     display: flex;
+    flex-basis: 100%;
 }
 
 .actions button {
-    flex-basis: 50%;
-}
-
-.actions button:first-child {
-    margin-right: var(--spacing-xs);
+    flex-grow: 1;
 }
 
 .actions button:last-child {
-    margin-left: var(--spacing-xs);
+    margin-left: var(--spacing-sm);
+}
+
+.search input {
+    flex-basis: 100%;
+    margin-bottom: var(--spacing-md);
 }
 
 .presets {
     display: flex;
+    flex-grow: 1;
     flex-wrap: wrap;
-    margin-bottom: var(--spacing-md);
+    margin: 0 calc(-1 * var(--spacing-xs)) var(--spacing-md);
 }
 
 .presets .button {
     flex-grow: 1;
-    margin: 0 var(--spacing-sm) var(--spacing-sm) 0;
 }
 
-.selected-books {
+.presets .button {
+    margin: var(--spacing-xs);
+}
+
+.selected-books ul {
     left: calc(-1 * var(--spacing-xs));
-    margin-bottom: var(--spacing-md);
     position: relative;
 }
 
@@ -168,5 +194,38 @@ input {
 
 .book-check input:checked + label .fa-circle {
     display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .flex-container .name,
+    .flex-container .verses {
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .verses {
+        margin-left: var(--spacing-md);
+    }
+
+    .search input {
+        flex-basis: 0;
+        flex-grow: 1;
+        margin-bottom: 0;
+    }
+
+    .search .presets {
+        flex-grow: 0;
+        margin: calc(-1 * var(--spacing-xs));
+    }
+
+    .search .presets,
+    .search .actions {
+        flex-basis: auto;
+        margin-left: var(--spacing-md);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    
 }
 </style>
