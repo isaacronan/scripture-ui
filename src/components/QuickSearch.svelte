@@ -74,12 +74,6 @@ const handleBookSelect = (booknumber) => () => {
     setSelectedBook(booknumber);
 };
 
-const handleChapterSelect = (chapternumber) => {
-    selectedChapternumber = chapternumber;
-    query = [$getShortName(selectedBooknumber), selectedChapternumber].join(' ');
-    updateMatchingBooks();
-};
-
 const handleSubmit = (event) => {
     if (booknumberQuery && chapternumberQuery) {
         window.location.hash = chapterHash(booknumberQuery, chapternumberQuery);
@@ -145,7 +139,7 @@ const handleKeyDown = (event) => {
                 <ul>
                     {#each chapterOptions as { chapternumber }}
                         <li>
-                            <button class="list-button small" class:selected={chapternumber === Number(chapternumberQuery) && bookGuessMatchesSelected} on:click={handleChapterSelect(chapternumber)}>{chapternumber}</button>
+                            <a href={chapterHash(chapterOptionsBooknumber, chapternumber)} class="list-button small" class:selected={chapternumber === Number(chapternumberQuery) && bookGuessMatchesSelected}>{chapternumber}</a>
                         </li>
                     {/each}
                 </ul>

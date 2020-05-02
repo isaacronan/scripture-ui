@@ -21,12 +21,8 @@ button:not(:disabled) {
     padding: var(--spacing-xs) var(--spacing-sm);
 }
 
-.list-button.small.selected {
-    box-shadow: inset 0 2px;
-}
-
-.list-button:focus:not(:active):not(.selected),
-.list-button:hover:not(:active):not(.selected) {
+.list-button:focus:not(:active),
+.list-button:hover:not(:active) {
     box-shadow: 0 2px;
     top: -2px;
 }
