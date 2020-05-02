@@ -87,8 +87,8 @@ const handleDelete = () => {
     <PatientContainer isDark={true} isWaiting={isEdit && !subscription}>
         <div class="flex-container">
             <div class="name">
-                <div for="name">Name</div>
-                <input bind:value={name} id="name" type="text">
+                <div>Name</div>
+                <input bind:value={name} type="text">
             </div>
             <div class="verses">
                 <div>Verses per day</div>
@@ -168,9 +168,14 @@ article {
     max-width: 100%;
 }
 
+.name {
+    max-width: 100%;
+}
+
 input {
     box-sizing: border-box;
-    width: 100%;
+    max-width: 100%;
+    width: 400px;
 }
 
 .actions {
@@ -231,15 +236,12 @@ input {
 }
 
 @media screen and (min-width: 768px) {
-    .flex-container .name,
-    .flex-container .verses,
     .flex-container .presets,
     .flex-container .actions {
         flex-basis: 0;
         flex-grow: 1;
     }
 
-    .verses,
     .actions {
         margin-left: var(--spacing-md);
     }

@@ -28,6 +28,8 @@ const handleInput = (event) => {
 <style>
 div {
     display: flex;
+    max-width: 100%;
+    width: 400px;
 }
 
 button {
