@@ -16,21 +16,37 @@ let name = '';
 let verseDosage = 10;
 let selectedBooknumbers = [];
 
+let currentBook = null;
+let currentChapter = null;
+let currentVerse = null;
+
 const hydrateForm = () => {
     name = subscription.name;
     verseDosage = subscription.verseDosage;
     selectedBooknumbers = subscription.bookPool;
+    currentBook = subscription.currentIssue.currentBook;
+    currentChapter = subscription.currentIssue.currentChapter;
+    currentVerse = subscription.currentIssue.currentVerse;
 };
+
 $: if (subscription) {
     hydrateForm();
+}
+
+$: if (selectedBooknumbers.length && !selectedBooknumbers.find(booknumber => booknumber === currentBook)) {
+    currentBook = selectedBooknumbers[0];
 }
 
 let expandableBooks = [];
 
 $: isValid = name && verseDosage > 0 && selectedBooknumbers.length;
 
-const handleVerseDosageChange = (event) => {
-    verseDosage = event.detail.value;
+const handleNumericInputChange = field => (event) => {
+    switch (field) {
+        case 'verseDosage': verseDosage = event.detail.value; break;
+        case 'currentChapter': currentChapter = event.detail.value; break;
+        case 'currentVerse': currentVerse = event.detail.value; break;
+    }
 };
 
 const hydrateExpandableBooks = () => expandableBooks = $books.map(book => new ExpandableItem(book));
@@ -65,7 +81,11 @@ const goToDashboard = () => window.location.href = dashboardHash;
 
 const handleSave = () => {
     if (isEdit) {
-        updateSubscription(subscription.id, name, verseDosage, selectedBooknumbers).then(goToDashboard)
+        updateSubscription(subscription.id, name, verseDosage, selectedBooknumbers, {
+            currentBook,
+            currentChapter,
+            currentVerse
+        }).then(goToDashboard)
     } else {
         createSubscription(name, verseDosage, selectedBooknumbers).then(goToDashboard)
     }
@@ -84,7 +104,7 @@ const handleDelete = () => {
 </svelte:head>
 <article>
     <h2>{isEdit ? 'Edit': 'New'} Subscription</h2>
-    <PatientContainer isDark={true} isWaiting={isEdit && !subscription}>
+    <PatientContainer isDark={true} isWaiting={isEdit && !subscription || $books.length === 0}>
         <div class="flex-container">
             <div class="name">
                 <div>Name</div>
@@ -92,9 +112,29 @@ const handleDelete = () => {
             </div>
             <div class="verses">
                 <div>Verses per day</div>
-                <NumericInput on:change={handleVerseDosageChange} value={verseDosage} />
+                <NumericInput on:change={handleNumericInputChange('verseDosage')} value={verseDosage} />
             </div>
         </div>
+        {#if isEdit}
+            <div class="flex-container">
+                <div class="name">
+                    <div>Current Book</div>
+                    <select bind:value={currentBook} class="form-control">
+                        {#each selectedBooknumbers as booknumber}
+                            <option value={booknumber}>{$getShortName(booknumber)}</option>
+                        {/each}
+                    </select>
+                </div>
+                <div>
+                    <div>Current Chapter</div>
+                    <NumericInput on:change={handleNumericInputChange('currentChapter')} value={currentChapter} />
+                </div>
+                <div>
+                    <div>Current Verse</div>
+                    <NumericInput on:change={handleNumericInputChange('currentVerse')} value={currentVerse} />
+                </div>
+            </div>
+        {/if}
         <div class="flex-container">
             <div class="presets">
                 <button on:click={preset(ALL)} class="button alt">All</button>
