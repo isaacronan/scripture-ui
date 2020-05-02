@@ -72,8 +72,6 @@ li {
     display: grid;
     grid-gap: var(--spacing-md);
     grid-template-columns: 1fr;
-    margin-bottom: var(--spacing-md);
-    margin-top: var(--spacing-sm);
 }
 
 @media screen and (min-width: 768px) {
@@ -86,4 +84,8 @@ li {
     .grid-list {
         grid-template-columns: 1fr 1fr 1fr;
     }
+}
+
+.spacing-bottom {
+    margin-bottom: var(--spacing-md);
 }

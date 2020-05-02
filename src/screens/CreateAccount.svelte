@@ -31,7 +31,9 @@ const handleLogin = () => {
     <h2>Create Account</h2>
     {#if !isCreated}
         {#if serverMessage}
-            <Alert isError message={serverMessage} />
+            <div class="spacing-bottom">
+                <Alert isError message={serverMessage} />
+            </div>
         {/if}
         <form on:submit|preventDefault={handleSubmit}>
             <div>
@@ -49,10 +51,15 @@ const handleLogin = () => {
             <div>
                 <button type="submit" disabled={!usernameIsValid || !passwordIsValid} class="button">Create Account</button>
             </div>
+            <div>
+                <a href={homeHash} class="button alt">Home</a>
+            </div>
         </form>
         <a href={loginHash} class="link">Login</a>
     {:else}
-        <Alert message={serverMessage} />
+        <div class="spacing-bottom">
+            <Alert message={serverMessage} />
+        </div>
         <div class="next-steps">
             <div>
                 <button on:click={handleLogin} class="button">Login</button>

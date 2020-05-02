@@ -2,7 +2,7 @@
 import { createEventDispatcher } from 'svelte';
 export let value = 0;
 export let min = 1;
-export let max = 10;
+export let max = null;
 
 const dispatch = createEventDispatcher();
 

@@ -1,6 +1,6 @@
 <script>
 import { login } from '../utils/http';
-import { createAccountHash, dashboardHash } from '../utils/routing';
+import { createAccountHash, dashboardHash, homeHash } from '../utils/routing';
 import Alert from '../components/Alert.svelte';
 
 let username = '';
@@ -18,7 +18,9 @@ const handleLogin = () => {
 <article>
     <h2>Login</h2>
     {#if errorMessage}
-        <Alert isError message={errorMessage} />
+        <div class="spacing-bottom">
+            <Alert isError message={errorMessage} />
+        </div>
     {/if}
     <form on:submit|preventDefault={handleLogin}>
         <div>
@@ -31,6 +33,9 @@ const handleLogin = () => {
         </div>
         <div>
             <button type="submit" class="button" disabled={!username || !password}>Login</button>
+        </div>
+        <div>
+            <a href={homeHash} class="button alt">Home</a>
         </div>
     </form>
     <a href={createAccountHash} class="link">Create an account</a>

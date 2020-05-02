@@ -60,4 +60,9 @@ button + button::before {
     top: 0;
     width: 1px;
 }
+
+ul {
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
 </style>

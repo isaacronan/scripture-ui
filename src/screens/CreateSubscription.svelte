@@ -206,8 +206,11 @@ input {
 }
 
 .selected-books ul {
-    left: calc(-1 * var(--spacing-xs));
-    position: relative;
+    margin: calc(-1 * var(--spacing-xs));
+}
+
+.grid-list {
+    margin: var(--spacing-md) 0;;
 }
 
 .fa-times {

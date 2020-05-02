@@ -55,7 +55,7 @@ const fetchChapters = debounce((booknumber) => {
         chapterOptionsBooknumber = booknumber;
         chapterOptions = data;
     });
-}, TIMEOUT, { leading: true });
+}, TIMEOUT);
 
 const setSelectedBook = (booknumber) => {
     if (booknumber !== selectedBooknumber) {
