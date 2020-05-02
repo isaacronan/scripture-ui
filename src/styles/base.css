@@ -89,3 +89,8 @@ li {
 .spacing-bottom {
     margin-bottom: var(--spacing-md);
 }
+
+.form-control {
+    max-width: 100%;
+    width: 400px;
+}

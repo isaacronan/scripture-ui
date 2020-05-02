@@ -14,6 +14,7 @@ import Dashboard from './screens/Dashboard.svelte';
 import CreateSubscription from './screens/CreateSubscription.svelte';
 import EditSubscription from './screens/EditSubscription.svelte';
 import ChapterNavigator from './components/ChapterNavigator.svelte';
+import UserNavigator from './components/UserNavigator.svelte';
 
 let currentScreen = null;
 $: isLight = currentScreen === Chapter;
@@ -59,6 +60,7 @@ onMount(() => {
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
 <div class:light={isLight} class:light-alt={isLightAlt} class="app">
+    <UserNavigator isUserScreen={isLightAlt} />
     {#if currentScreen === Chapter}
         <ChapterNavigator />
     {/if}

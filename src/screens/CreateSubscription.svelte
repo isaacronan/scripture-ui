@@ -88,7 +88,7 @@ const handleDelete = () => {
         <div class="flex-container">
             <div class="name">
                 <div>Name</div>
-                <input bind:value={name} type="text">
+                <input class="form-control" bind:value={name} type="text">
             </div>
             <div class="verses">
                 <div>Verses per day</div>
@@ -174,8 +174,6 @@ article {
 
 input {
     box-sizing: border-box;
-    max-width: 100%;
-    width: 400px;
 }
 
 .actions {

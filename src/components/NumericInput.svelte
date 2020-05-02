@@ -20,7 +20,7 @@ const handleInput = (event) => {
     }
 };
 </script>
-<div>
+<div class="form-control">
     <button disabled={value <= min} on:click={handleDecrement} class="button decrement"><i class="fas fa-minus" /></button>
     <input type="number" on:input={handleInput} {value}>
     <button disabled={max !== null && value >= max} on:click={handleIncrement} class="button increment"><i class="fas fa-plus" /></button>
@@ -28,8 +28,6 @@ const handleInput = (event) => {
 <style>
 div {
     display: flex;
-    max-width: 100%;
-    width: 400px;
 }
 
 button {

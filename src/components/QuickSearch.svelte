@@ -119,12 +119,12 @@ const handleKeyDown = (event) => {
 <div>
     <div class:with-options={showChapterOptions} class="container">
         <div class="search-form">
-            <form on:submit|preventDefault={handleSubmit}>
+            <form class="form-control" on:submit|preventDefault={handleSubmit}>
                 <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} on:input={handleInput} bind:value={query} type="text">
                 <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
             </form>
             {#if showSearchResults && matchingBooks.length}
-                <ul class="search-results">
+                <ul class="search-results form-control">
                     {#each matchingBooks as { shortname, booknumber }, index}
                         <li>
                             <button tabindex="-1" class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
@@ -164,12 +164,6 @@ const handleKeyDown = (event) => {
 
 .chapter-options small {
     text-transform: uppercase;
-}
-
-form,
-.search-results {
-    max-width: 100%;
-    width: 400px;
 }
 
 form {

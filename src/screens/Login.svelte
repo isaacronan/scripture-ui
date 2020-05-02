@@ -22,7 +22,7 @@ const handleLogin = () => {
             <Alert isError message={errorMessage} />
         </div>
     {/if}
-    <form on:submit|preventDefault={handleLogin}>
+    <form class="form-control" on:submit|preventDefault={handleLogin}>
         <div>
             <label for="username">Username</label>
             <input on:input={errorMessage = ''} bind:value={username} id="username" type="text">
@@ -55,11 +55,6 @@ div {
     display: flex;
     flex-direction: column;
     margin-bottom: var(--spacing-md);
-}
-
-form {
-    max-width: 100%;
-    width: 400px;
 }
 
 a {

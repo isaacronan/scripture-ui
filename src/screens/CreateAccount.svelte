@@ -35,7 +35,7 @@ const handleLogin = () => {
                 <Alert isError message={serverMessage} />
             </div>
         {/if}
-        <form on:submit|preventDefault={handleSubmit}>
+        <form class="form-control" on:submit|preventDefault={handleSubmit}>
             <div>
                 <label for="username">Username</label>
                 <input on:input={serverMessage = ''} bind:value={username} id="username" type="text">
@@ -60,7 +60,7 @@ const handleLogin = () => {
         <div class="spacing-bottom">
             <Alert message={serverMessage} />
         </div>
-        <div class="next-steps">
+        <div class="next-steps form-control">
             <div>
                 <button on:click={handleLogin} class="button">Login</button>
             </div>
@@ -85,12 +85,6 @@ div {
     display: flex;
     flex-direction: column;
     margin-bottom: var(--spacing-md);
-}
-
-form,
-.next-steps {
-    max-width: 100%;
-    width: 400px;
 }
 
 a {
