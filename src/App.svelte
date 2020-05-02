@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 import { books } from './utils/store';
 import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern, createSubscriptionPattern, editSubscriptionPattern } from './utils/routing';
-import { getBooks } from './utils/http';
+import { getBooks, refresh } from './utils/http';
 import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
 import Book from './screens/Book.svelte';
@@ -50,6 +50,8 @@ onMount(() => {
     getBooks().then((data) => {
         books.set(data);
     });
+
+    refresh();
 });
 </script>
 

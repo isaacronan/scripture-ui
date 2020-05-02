@@ -23,7 +23,21 @@ export const createAccount = (username, password) => fetch('/api/user/create', {
     }
 }).then(checkStatusAndRespond);
 
-const refresh = () => {
+let pendingRefresh = null;
+export const refresh =  () => {
+    if (!pendingRefresh) {
+        pendingRefresh = _refresh();
+    }
+    return pendingRefresh.then((...data) => {
+        pendingRefresh = null;
+        return Promise.resolve(...data);
+    }, (...data) => {
+        pendingRefresh = null;
+        return Promise.reject(...data);
+    });
+};
+
+const _refresh = () => {
     const refreshPattern = /refresh=(\w+)/;
     const usernamePattern = /username=(\w+)/;
     if (!refreshPattern.test(document.cookie) || !usernamePattern.test(document.cookie)) {
