@@ -1,18 +1,35 @@
 <script>
-import { dashboardHash, homeHash } from '../utils/routing';
+import { dashboardHash, homeHash, loginHash } from '../utils/routing';
+import { logout } from '../utils/http';
+import { accessToken } from '../utils/store';
 
 export let isUserScreen = false;
+
+const handleLogout = () => {
+    logout().then(() => {
+        window.location.href = homeHash;
+    });
+};
 </script>
 <nav class:user={isUserScreen}>
     <div class="user-navigator">
-        <a class="plain-button" href={isUserScreen ? homeHash : dashboardHash}>
-            {isUserScreen ? 'Home' : 'Dashboard'}
-        </a>
+        {#if $accessToken}
+            <a class="plain-button" href={isUserScreen ? homeHash : dashboardHash}>
+                {isUserScreen ? 'Home' : 'Dashboard'}
+            </a>
+        {/if}
         <div class="logout">
-            <button class="plain-button">
-                Log Out
-                <i class="fas fa-sign-out-alt" />
-            </button>
+            {#if $accessToken}
+                <button on:click={handleLogout} class="plain-button">
+                    Log Out
+                    <i class="fas fa-sign-out-alt" />
+                </button>
+            {:else}
+                <a href={loginHash} class="plain-button">
+                    Log In
+                    <i class="fas fa-sign-in-alt" />
+                </a>
+            {/if}
         </div>
     </div>
 </nav>
