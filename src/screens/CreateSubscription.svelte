@@ -116,8 +116,8 @@ const handleDelete = () => {
             </div>
         </div>
         {#if isEdit}
-            <div class="flex-container">
-                <div class="name">
+            <div class="flex-container edit">
+                <div>
                     <div>Current Book</div>
                     <select bind:value={currentBook} class="form-control">
                         {#each selectedBooknumbers as booknumber}
@@ -209,6 +209,10 @@ article {
 }
 
 .name {
+    max-width: 100%;
+}
+
+.edit > div {
     max-width: 100%;
 }
 

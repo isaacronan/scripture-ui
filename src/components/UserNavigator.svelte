@@ -15,6 +15,7 @@ const handleLogout = () => {
     <div class="user-navigator">
         {#if $accessToken}
             <a class="plain-button" href={isUserScreen ? homeHash : dashboardHash}>
+                <i class="fas fa-home" />
                 {isUserScreen ? 'Home' : 'Dashboard'}
             </a>
         {/if}
@@ -42,7 +43,7 @@ const handleLogout = () => {
 }
 
 .user .user-navigator {
-    background-color: var(--beige);
+    background-color: var(--blue);
 }
 
 i {
@@ -62,10 +63,5 @@ i {
 a,
 button {
     color: var(--white);
-}
-
-.user a,
-.user button {
-    color: var(--dark);
 }
 </style>

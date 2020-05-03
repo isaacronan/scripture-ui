@@ -6,7 +6,7 @@ import QuickSearch from '../components/QuickSearch.svelte';
 </script>
 <article>
     <h1>Scripture</h1>
-    <h3>A digital transcription of the Douay-Rheims translation</h3>
+    <h3>A digital transcription of the <span>Douay-Rheims</span> translation</h3>
     <section>
         <h2>Quick Search</h2>
         <QuickSearch />
@@ -34,12 +34,15 @@ h1, h3 {
 }
 
 h1 {
-    margin-bottom: var(--spacing-sm);
-    margin-top: var(--spacing-lg);
+    margin: var(--spacing-sm) 0;
 }
 
 h3 {
     margin-bottom: var(--spacing-lg);
+}
+
+h3 span {
+    white-space: nowrap;
 }
 
 section {
