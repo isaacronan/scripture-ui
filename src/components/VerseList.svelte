@@ -1,7 +1,9 @@
 <script>
+import { createEventDispatcher} from 'svelte';
 import { SCREENWIDTH } from '../utils/constants';
 import { ExpandableItem } from '../utils/models';
 export let verses = [];
+export let actionButtonLabel = '';
 
 let container = null;
 let expandableVerses = [];
@@ -10,6 +12,12 @@ $: {
     verses;
     hydrateExpandableVerses();
 }
+
+const dispatch = createEventDispatcher();
+
+const handleAction = () => {
+    dispatch('action');
+};
 
 const toggleExpanded = (index) => () => {
     expandableVerses[index].toggleExpanded();
@@ -27,18 +35,30 @@ const handleWheel = (event) => {
     <div class="columns">
         <div>
             {#each expandableVerses as { item, isExpanded }, index}
-                <p>
-                    <small>{item.versenumber}</small> {item.text}
-                    {#if item.notes}
-                        <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
+                {#if item.title}
+                    <h3>
+                        {item.title}
+                        {#if item.isContinued}
+                            <small>cont'd</small>
+                        {/if}
+                    </h3>
+                {:else}
+                    <p>
+                        <small>{item.versenumber}</small> {item.text}
+                        {#if item.notes}
+                            <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
+                        {/if}
+                    </p>
+                    {#if isExpanded}
+                        {#each item.notes as note}
+                            <p class="note">{note}</p>
+                        {/each}
                     {/if}
-                </p>
-                {#if isExpanded}
-                    {#each item.notes as note}
-                        <p class="note">{note}</p>
-                    {/each}
                 {/if}
             {/each}
+            {#if actionButtonLabel}
+                <button on:click={handleAction} class="button alt action">{actionButtonLabel}</button>
+            {/if}
         </div>
     </div>
 </div>
@@ -47,17 +67,22 @@ const handleWheel = (event) => {
     display: flex;
 }
 
-p {
+p,
+h3 {
     color: var(--dark);
     margin: var(--spacing-sm) 0;
 }
 
-button {
+p button {
     color: var(--blue);
 }
 
 .note {
     margin: var(--spacing-md) var(--spacing-lg);
+}
+
+.action {
+    width: 100%;
 }
 
 @media screen and (min-width: 768px) {

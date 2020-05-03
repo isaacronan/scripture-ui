@@ -19,6 +19,7 @@ export const loginPattern = new HashPattern(/^#\/login$/);
 export const dashboardPattern = new HashPattern(/^#\/dashboard$/);
 export const createSubscriptionPattern = new HashPattern(/^#\/subscription\/create$/);
 export const editSubscriptionPattern = new HashPattern(/^#\/subscription\/edit\/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})$/);
+export const issuePattern = new HashPattern(/^#\/subscription\/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})$/);
 
 export const homeHash = '#/';
 export const booksHash = '#/books';
@@ -29,3 +30,4 @@ export const loginHash = '#/login';
 export const dashboardHash = '#/dashboard';
 export const createSubscriptionHash = '#/subscription/create';
 export const editSubscriptionHash = (id) => `#/subscription/edit/${id}`;
+export const issueHash = (id) => `#/subscription/${id}`;

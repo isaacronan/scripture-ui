@@ -1,7 +1,18 @@
 <script>
 import { onMount } from 'svelte';
 import { books } from './utils/store';
-import { homePattern, booksPattern, bookPattern, chapterPattern, createAccountPattern, loginPattern, dashboardPattern, createSubscriptionPattern, editSubscriptionPattern } from './utils/routing';
+import {
+    homePattern,
+    booksPattern,
+    bookPattern,
+    chapterPattern,
+    createAccountPattern,
+    loginPattern,
+    dashboardPattern,
+    createSubscriptionPattern,
+    editSubscriptionPattern,
+    issuePattern
+} from './utils/routing';
 import { getBooks, refresh } from './utils/http';
 import Home from './screens/Home.svelte';
 import Books from './screens/Books.svelte';
@@ -13,18 +24,19 @@ import Login from './screens/Login.svelte';
 import Dashboard from './screens/Dashboard.svelte';
 import CreateSubscription from './screens/CreateSubscription.svelte';
 import EditSubscription from './screens/EditSubscription.svelte';
+import Issue from './screens/Issue.svelte';
 import ChapterNavigator from './components/ChapterNavigator.svelte';
 import UserNavigator from './components/UserNavigator.svelte';
 
 let currentScreen = null;
-$: isLight = currentScreen === Chapter;
+$: isLight = currentScreen === Chapter || currentScreen === Issue;
 $: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription;
 
 const updateRoute = () => {
     if (homePattern.isMatch()) {
         currentScreen = Home;
     } else if (booksPattern.isMatch()) {
-        currentScreen = Books   ;
+        currentScreen = Books;
     } else if (bookPattern.isMatch()) {
         currentScreen = Book;
     } else if(chapterPattern.isMatch()) {
@@ -39,6 +51,8 @@ const updateRoute = () => {
         currentScreen = CreateSubscription;
     } else if(editSubscriptionPattern.isMatch()) {
         currentScreen = EditSubscription;
+    } else if(issuePattern.isMatch()) {
+        currentScreen = Issue;
     } else {
         currentScreen = NotFound;
     }
