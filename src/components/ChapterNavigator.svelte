@@ -42,7 +42,7 @@ nav {
 }
 
 .chapter-navigator {
-    background-color: var(--blue);
+    background-color: var(--white);
     display: flex;
     height: var(--lh-normal);
     padding: var(--spacing-md);
@@ -63,6 +63,6 @@ i {
 }
 
 a {
-    color: var(--white);
+    color: var(--blue);
 }
 </style>

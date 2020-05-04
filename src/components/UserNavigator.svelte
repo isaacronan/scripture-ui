@@ -4,6 +4,7 @@ import { logout } from '../utils/http';
 import { accessToken } from '../utils/store';
 
 export let isUserScreen = false;
+export let isLight = false;
 
 const handleLogout = () => {
     logout().then(() => {
@@ -11,7 +12,7 @@ const handleLogout = () => {
     });
 };
 </script>
-<nav class:user={isUserScreen}>
+<nav class:light={isLight}>
     <div class="user-navigator">
         {#if $accessToken}
             <a class="plain-button" href={isUserScreen ? homeHash : dashboardHash}>
@@ -42,7 +43,7 @@ const handleLogout = () => {
     padding: var(--spacing-md);
 }
 
-.user .user-navigator {
+.light .user-navigator {
     background-color: var(--blue);
 }
 

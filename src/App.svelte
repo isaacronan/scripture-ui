@@ -31,6 +31,7 @@ import UserNavigator from './components/UserNavigator.svelte';
 let currentScreen = null;
 $: isLight = currentScreen === Chapter || currentScreen === Issue;
 $: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription;
+$: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue;
 
 const updateRoute = () => {
     if (homePattern.isMatch()) {
@@ -76,7 +77,7 @@ onMount(() => {
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
 <div class:light={isLight} class:light-alt={isLightAlt} class="app">
-    <UserNavigator isUserScreen={isLightAlt} />
+    <UserNavigator isLight={isLight || isLightAlt} isUserScreen={isUserScreen} />
     {#if currentScreen === Chapter}
         <ChapterNavigator />
     {/if}
