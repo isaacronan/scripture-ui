@@ -3,7 +3,7 @@ import { ExpandableItem } from '../utils/models';
 import { books, oldBooks, newBooks, getShortName } from '../utils/store';
 import { ALL, OLD, NEW } from '../utils/constants';
 import { createSubscription, updateSubscription, deleteSubscription } from '../utils/http';
-import { dashboardHash, homeHash } from '../utils/routing';
+import { dashboardHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
@@ -105,7 +105,6 @@ const handleDelete = () => {
 </svelte:head>
 <article>
     <Breadcrumbs crumbs={[
-        { label: 'Home', hash: homeHash },
         { label: 'Dashboard', hash: dashboardHash }
     ]}/>
     <h2>{isEdit ? 'Edit': 'New'} Subscription</h2>

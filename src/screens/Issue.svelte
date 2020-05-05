@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { getShortName } from '../utils/store';
-import { issuePattern, homeHash, dashboardHash } from '../utils/routing';
+import { issuePattern, dashboardHash } from '../utils/routing';
 import { getSubscription, updateSubscription } from '../utils/http';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
@@ -48,6 +48,13 @@ const handleIssueUpdate = () => {
 </script>
 <svelte:window on:hashchange={initialize} />
 <svelte:head>
+{#if verses.length === 0}
+    <style>
+        :root {
+            height: 100%;
+        }
+    </style>
+{/if}
 <style>
 @media screen and (min-width: 768px) {
     :root {
@@ -58,7 +65,6 @@ const handleIssueUpdate = () => {
 </svelte:head>
 <article>
     <Breadcrumbs crumbs={[
-        { label: 'Home', hash: homeHash },
         { label: 'Dashboard', hash: dashboardHash }
     ]}/>
     <PatientContainer isShort={true} isWaiting={!subscription}>
