@@ -1,4 +1,4 @@
-import { accessToken } from './store';
+import { accessToken, TOKEN_DNE } from './store';
 import { get } from 'svelte/store';
 
 const checkStatusAndRespond = (res) => {
@@ -32,6 +32,7 @@ export const refresh =  () => {
         pendingRefresh = null;
         return Promise.resolve(...data);
     }, (...data) => {
+        accessToken.set(TOKEN_DNE);
         pendingRefresh = null;
         return Promise.reject(...data);
     });
@@ -106,7 +107,7 @@ const storeTokens = username => ({ token, refresh }) => {
 };
 
 const removeTokens = () => {
-    accessToken.set(null);
+    accessToken.set(TOKEN_DNE);
     document.cookie = `refresh=; expires=${new Date(0).toUTCString()}`;
     document.cookie = `username=; expires=${new Date(0).toUTCString()}`;
 };

@@ -36,6 +36,8 @@ export const getChapterDescription = derived(currentChapters, $currentChapters =
     return match ? match.chapterdesc : '';
 });
 
-export const accessToken = writable(null);
+const TOKEN_NOT_FETCHED = null;
+export const TOKEN_DNE = '';
+export const accessToken = writable(TOKEN_NOT_FETCHED);
 
 export const subscriptions = writable(null);

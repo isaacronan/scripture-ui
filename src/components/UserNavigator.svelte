@@ -1,7 +1,7 @@
 <script>
 import { dashboardHash, homeHash, loginHash } from '../utils/routing';
 import { logout } from '../utils/http';
-import { accessToken } from '../utils/store';
+import { accessToken, TOKEN_DNE } from '../utils/store';
 
 export let isUserScreen = false;
 export let isLight = false;
@@ -26,7 +26,7 @@ const handleLogout = () => {
                     Log Out
                     <i class="fas fa-sign-out-alt" />
                 </button>
-            {:else}
+            {:else if $accessToken === TOKEN_DNE}
                 <a href={loginHash} class="plain-button">
                     Log In
                     <i class="fas fa-sign-in-alt" />

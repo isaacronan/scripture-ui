@@ -3,11 +3,12 @@ import { ExpandableItem } from '../utils/models';
 import { books, oldBooks, newBooks, getShortName } from '../utils/store';
 import { ALL, OLD, NEW } from '../utils/constants';
 import { createSubscription, updateSubscription, deleteSubscription } from '../utils/http';
-import { dashboardHash } from '../utils/routing';
+import { dashboardHash, homeHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
+import Breadcrumbs from '../components/Breadcrumbs.svelte';
 
 export let subscription = null;
 export let isEdit = false;
@@ -103,6 +104,10 @@ const handleDelete = () => {
 </style>
 </svelte:head>
 <article>
+    <Breadcrumbs crumbs={[
+        { label: 'Home', hash: homeHash },
+        { label: 'Dashboard', hash: dashboardHash }
+    ]}/>
     <h2>{isEdit ? 'Edit': 'New'} Subscription</h2>
     <PatientContainer isDark={true} isWaiting={isEdit && !subscription || $books.length === 0}>
         <div class="flex-container">
