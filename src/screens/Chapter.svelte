@@ -7,6 +7,7 @@ import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import VerseList from '../components/VerseList.svelte';
 import Expandable from '../components/Expandable.svelte';
+import ChapterNavigator from '../components/ChapterNavigator.svelte';
 
 let [ booknumber, chapternumber ] = chapterPattern.getParams();
 let verses = [];
@@ -40,6 +41,13 @@ const initialize = () => {
 </script>
 <svelte:window on:hashchange={initialize} />
 <svelte:head>
+{#if verses.length === 0}
+    <style>
+        :root {
+            height: 100%;
+        }
+    </style>
+{/if}
 <style>
 @media screen and (min-width: 768px) {
     :root {
@@ -60,6 +68,7 @@ const initialize = () => {
             <Expandable content={$getChapterDescription(chapternumber)} showLabel="Show Description" hideLabel="Hide Description" />
         {/if}
     </PatientContainer>
+    <ChapterNavigator />
     <PatientContainer isFailed={$invalidBooknumberError || invalidChapternumberError} errorMessage={$invalidBooknumberError || invalidChapternumberError} isWaiting={verses.length === 0}>
         <VerseList {verses} />
     </PatientContainer>
@@ -67,5 +76,15 @@ const initialize = () => {
 <style>
 h2 {
     color: var(--dark);
+}
+
+article {
+    overflow-y: unset;
+}
+
+@media screen and (min-width: 768px) {
+    article {
+        overflow-y: auto;
+    }
 }
 </style>

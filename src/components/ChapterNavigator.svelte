@@ -45,7 +45,7 @@ nav {
     background-color: var(--white);
     display: flex;
     height: var(--lh-normal);
-    padding: var(--spacing-md);
+    padding: var(--spacing-md) 0;
 }
 
 i {

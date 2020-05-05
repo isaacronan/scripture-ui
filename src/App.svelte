@@ -78,9 +78,6 @@ onMount(() => {
 
 <div class:light={isLight} class:light-alt={isLightAlt} class="app">
     <UserNavigator isLight={isLight || isLightAlt} isUserScreen={isUserScreen} />
-    {#if currentScreen === Chapter}
-        <ChapterNavigator />
-    {/if}
     <svelte:component this={currentScreen} />
 </div>
 

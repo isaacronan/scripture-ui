@@ -1,4 +1,4 @@
-import { accessToken, TOKEN_DNE } from './store';
+import { accessToken, TOKEN_DNE, subscriptions } from './store';
 import { get } from 'svelte/store';
 
 const checkStatusAndRespond = (res) => {
@@ -108,6 +108,7 @@ const storeTokens = username => ({ token, refresh }) => {
 
 const removeTokens = () => {
     accessToken.set(TOKEN_DNE);
+    subscriptions.set(null);
     document.cookie = `refresh=; expires=${new Date(0).toUTCString()}`;
     document.cookie = `username=; expires=${new Date(0).toUTCString()}`;
 };
