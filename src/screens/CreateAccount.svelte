@@ -1,5 +1,5 @@
 <script>
-import { homeHash, loginHash } from '../utils/routing';
+import { homeHash, loginHash, dashboardHash } from '../utils/routing';
 import { createAccount, login } from '../utils/http';
 import Alert from '../components/Alert.svelte';
 

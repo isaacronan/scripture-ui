@@ -1,6 +1,6 @@
 <script>
 import { getSubscriptions } from '../utils/http';
-import { editSubscriptionHash, createSubscriptionHash, issueHash, resetHash } from '../utils/routing';
+import { editSubscriptionHash, createSubscriptionHash, issueHash, resetHash, deleteHash } from '../utils/routing';
 import { subscriptions } from '../utils/store';
 import PatientContainer from '../components/PatientContainer.svelte';
 import ListItem from '../components/ListItem.svelte';
@@ -37,7 +37,7 @@ onMount(() => {
     <section>
         <h2>Account Settings</h2>
         <a href={resetHash} class="button alt">Reset Password</a>
-        <a href="#/" class="button alt negative">Delete Account</a>
+        <a href={deleteHash} class="button alt negative">Delete Account</a>
     </section>
 </article>
 <style>

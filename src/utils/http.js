@@ -106,7 +106,7 @@ const storeTokens = username => ({ token, refresh }) => {
     return token;
 };
 
-const removeTokens = () => {
+export const removeTokens = () => {
     accessToken.set(TOKEN_DNE);
     subscriptions.set(null);
     document.cookie = `refresh=; expires=${new Date(0).toUTCString()}`;
@@ -128,11 +128,15 @@ export const updateSubscription = (id, name, verseDosage, bookPool, currentIssue
 
 export const deleteSubscription = (id) => fetchWithAuth(constructDeleteRequest(`/api/subscriptions/${id}`));
 
-export const logout = () => fetchWithAuth(new Request('/api/user/logout')).then(removeTokens);
+export const logout = () => fetchWithAuth(new Request('/api/user/logout'));
 
 export const getSubscription = (id) => fetchWithAuth(new Request(`/api/subscriptions/${id}`));
 
 export const resetPassword = (currentPassword, newPassword) => fetchWithAuth(constructPutRequest('/api/user/password', {
     currentPassword,
     newPassword
+}));
+
+export const deleteAccount = (password) => fetchWithAuth(constructPostRequest('/api/user/delete', {
+    password
 }));

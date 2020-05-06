@@ -21,6 +21,7 @@ export const createSubscriptionPattern = new HashPattern(/^#\/subscription\/crea
 export const editSubscriptionPattern = new HashPattern(/^#\/subscription\/edit\/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})$/);
 export const issuePattern = new HashPattern(/^#\/subscription\/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})$/);
 export const resetPattern = new HashPattern(/^#\/reset$/);
+export const deletePattern = new HashPattern(/^#\/delete$/);
 
 export const homeHash = '#/';
 export const booksHash = '#/books';
@@ -33,3 +34,4 @@ export const createSubscriptionHash = '#/subscription/create';
 export const editSubscriptionHash = (id) => `#/subscription/edit/${id}`;
 export const issueHash = (id) => `#/subscription/${id}`;
 export const resetHash = '#/reset';
+export const deleteHash = '#/delete';

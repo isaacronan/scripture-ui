@@ -12,7 +12,8 @@ import {
     createSubscriptionPattern,
     editSubscriptionPattern,
     issuePattern,
-    resetPattern
+    resetPattern,
+    deletePattern
 } from './utils/routing';
 import { getBooks, refresh } from './utils/http';
 import Home from './screens/Home.svelte';
@@ -27,13 +28,13 @@ import CreateSubscription from './screens/CreateSubscription.svelte';
 import EditSubscription from './screens/EditSubscription.svelte';
 import Issue from './screens/Issue.svelte';
 import ResetPassword from './screens/ResetPassword.svelte';
-import ChapterNavigator from './components/ChapterNavigator.svelte';
+import DeleteAccount from './screens/DeleteAccount.svelte';
 import UserNavigator from './components/UserNavigator.svelte';
 
 let currentScreen = null;
 $: isLight = currentScreen === Chapter || currentScreen === Issue;
-$: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === ResetPassword;
-$: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue || currentScreen === ResetPassword;
+$: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === ResetPassword || currentScreen === DeleteAccount;
+$: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue || currentScreen === ResetPassword || currentScreen === DeleteAccount;
 
 const updateRoute = () => {
     if (homePattern.isMatch()) {
@@ -58,6 +59,8 @@ const updateRoute = () => {
         currentScreen = Issue;
     } else if(resetPattern.isMatch()) {
         currentScreen = ResetPassword;
+    } else if(deletePattern.isMatch()) {
+        currentScreen = DeleteAccount;
     } else {
         currentScreen = NotFound;
     }

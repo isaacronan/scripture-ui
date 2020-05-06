@@ -1,6 +1,6 @@
 <script>
 import { dashboardHash, homeHash, loginHash } from '../utils/routing';
-import { logout } from '../utils/http';
+import { logout, removeTokens } from '../utils/http';
 import { accessToken, TOKEN_DNE } from '../utils/store';
 
 export let isUserScreen = false;
@@ -8,6 +8,7 @@ export let isLight = false;
 
 const handleLogout = () => {
     logout().then(() => {
+        removeTokens();
         window.location.href = homeHash;
     });
 };
