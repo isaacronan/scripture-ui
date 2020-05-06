@@ -131,3 +131,8 @@ export const deleteSubscription = (id) => fetchWithAuth(constructDeleteRequest(`
 export const logout = () => fetchWithAuth(new Request('/api/user/logout')).then(removeTokens);
 
 export const getSubscription = (id) => fetchWithAuth(new Request(`/api/subscriptions/${id}`));
+
+export const resetPassword = (currentPassword, newPassword) => fetchWithAuth(constructPutRequest('/api/user/password', {
+    currentPassword,
+    newPassword
+}));

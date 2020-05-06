@@ -42,11 +42,11 @@ const handleLogin = () => {
             </div>
             <div>
                 <label for="password">Password</label>
-                <input bind:value={password} id="password" type="password">
+                <input on:input={serverMessage = ''} bind:value={password} id="password" type="password">
             </div>
             <div>
                 <label for="passwordConfirm">Confirm Password</label>
-                <input bind:value={passwordConfirm} id="passwordConfirm" type="password">
+                <input on:input={serverMessage = ''} bind:value={passwordConfirm} id="passwordConfirm" type="password">
             </div>
             <div>
                 <button type="submit" disabled={!usernameIsValid || !passwordIsValid} class="button">Create Account</button>

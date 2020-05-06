@@ -29,7 +29,7 @@ const handleLogin = () => {
         </div>
         <div>
             <label for="password">Password</label>
-            <input bind:value={password} id="password" type="password">
+            <input on:input={errorMessage = ''} bind:value={password} id="password" type="password">
         </div>
         <div>
             <button type="submit" class="button" disabled={!username || !password}>Login</button>
