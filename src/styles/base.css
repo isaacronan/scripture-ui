@@ -60,6 +60,7 @@ article {
 
 input,
 select {
+    background-color: var(--white);
     border-radius: var(--radius);
     color: var(--dark);
     padding: var(--spacing-md);
