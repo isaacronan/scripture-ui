@@ -1,7 +1,7 @@
 <script>
 import { ExpandableItem } from '../utils/models';
 import { books, oldBooks, newBooks, getShortName } from '../utils/store';
-import { ALL, OLD, NEW } from '../utils/constants';
+import { ALL, OLD, NEW, subscriptionNamePattern } from '../utils/constants';
 import { createSubscription, updateSubscription, deleteSubscription } from '../utils/http';
 import { dashboardHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
@@ -40,7 +40,7 @@ $: if (selectedBooknumbers.length && !selectedBooknumbers.find(booknumber => boo
 
 let expandableBooks = [];
 
-$: isValid = name && verseDosage > 0 && selectedBooknumbers.length;
+$: isValid = subscriptionNamePattern.test(name) && verseDosage > 0 && selectedBooknumbers.length;
 
 const handleNumericInputChange = field => (event) => {
     switch (field) {

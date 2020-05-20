@@ -1,6 +1,7 @@
 <script>
 import { dashboardHash, homeHash } from '../utils/routing';
 import { deleteAccount, removeTokens } from '../utils/http';
+import { passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 
@@ -8,7 +9,7 @@ let currentPassword = '';
 let serverMessage = '';
 let isDeleted = false;
 
-$: currentPasswordIsValid = /^\w{3}\w*$/.test(currentPassword);
+$: currentPasswordIsValid = passwordPattern.test(currentPassword);
 
 const handleSubmit = () => {
     deleteAccount(currentPassword).then(({ message }) => {

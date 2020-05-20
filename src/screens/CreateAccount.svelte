@@ -1,6 +1,7 @@
 <script>
 import { homeHash, loginHash, dashboardHash } from '../utils/routing';
 import { createAccount, login } from '../utils/http';
+import { usernamePattern, passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 
 let username = '';
@@ -9,8 +10,8 @@ let passwordConfirm = '';
 let serverMessage = '';
 let isCreated = false;
 
-$: usernameIsValid = /^\w{3}\w*$/.test(username);
-$: passwordIsValid = /^\S{3}\S*$/.test(password) && password === passwordConfirm;
+$: usernameIsValid = usernamePattern.test(username);
+$: passwordIsValid = passwordPattern.test(password) && password === passwordConfirm;
 
 const handleSubmit = () => {
     createAccount(username, password).then(({ message }) => {

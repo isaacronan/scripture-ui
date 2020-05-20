@@ -1,11 +1,15 @@
 <script>
 import { login } from '../utils/http';
 import { createAccountHash, dashboardHash, homeHash } from '../utils/routing';
+import { usernamePattern, passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 
 let username = '';
 let password = '';
 let errorMessage = '';
+
+$: usernameIsValid = usernamePattern.test(username);
+$: passwordIsValid = passwordPattern.test(password);
 
 const handleLogin = () => {
     login(username, password).then(() => {
@@ -32,7 +36,7 @@ const handleLogin = () => {
             <input on:input={errorMessage = ''} bind:value={password} id="password" type="password">
         </div>
         <div>
-            <button type="submit" class="button" disabled={!username || !password}>Login</button>
+            <button type="submit" class="button" disabled={!usernameIsValid || !passwordIsValid}>Login</button>
         </div>
         <div>
             <a href={homeHash} class="button alt">Home</a>

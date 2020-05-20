@@ -1,6 +1,7 @@
 <script>
 import { dashboardHash } from '../utils/routing';
 import { resetPassword } from '../utils/http';
+import { passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 
@@ -10,8 +11,8 @@ let newPasswordConfirm = '';
 let serverMessage = '';
 let isReset = false;
 
-$: currentPasswordIsValid = /^\w{3}\w*$/.test(currentPassword);
-$: passwordIsValid = /^\S{3}\S*$/.test(newPassword) && newPassword === newPasswordConfirm;
+$: currentPasswordIsValid = passwordPattern.test(currentPassword);
+$: passwordIsValid = passwordPattern.test(newPassword) && newPassword === newPasswordConfirm;
 
 const handleSubmit = () => {
     resetPassword(currentPassword, newPassword).then(({ message }) => {
