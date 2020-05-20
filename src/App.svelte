@@ -73,7 +73,11 @@ onMount(() => {
         books.set(data);
     });
 
-    refresh();
+    refresh().then(() => {
+        console.log('used refresh token');
+    }, () => {
+        console.log('no refresh token found');
+    });
 });
 </script>
 

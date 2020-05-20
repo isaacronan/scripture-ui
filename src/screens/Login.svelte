@@ -9,7 +9,7 @@ let errorMessage = '';
 
 const handleLogin = () => {
     login(username, password).then(() => {
-        window.location.href = dashboardHash;
+        window.location.hash = dashboardHash;
     }, (error) => {
         errorMessage = error;
     });

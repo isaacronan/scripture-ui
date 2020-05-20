@@ -23,7 +23,7 @@ const handleSubmit = () => {
 
 const handleLogin = () => {
     login(username, password).then(() => {
-        window.location.href = dashboardHash;
+        window.location.hash = dashboardHash;
     });
 };
 </script>

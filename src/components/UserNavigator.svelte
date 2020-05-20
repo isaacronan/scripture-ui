@@ -9,7 +9,7 @@ export let isLight = false;
 const handleLogout = () => {
     logout().then(() => {
         removeTokens();
-        window.location.href = homeHash;
+        window.location.hash = homeHash;
     });
 };
 </script>

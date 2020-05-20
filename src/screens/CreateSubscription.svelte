@@ -78,7 +78,7 @@ const preset = type => () => {
     }
 };
 
-const goToDashboard = () => window.location.href = dashboardHash;
+const goToDashboard = () => window.location.hash = dashboardHash;
 
 const handleSave = () => {
     if (isEdit) {

@@ -1,4 +1,5 @@
 import { accessToken, TOKEN_DNE, subscriptions } from './store';
+import { loginHash } from './routing';
 import { get } from 'svelte/store';
 
 const checkStatusAndRespond = (res) => {
@@ -76,7 +77,10 @@ const fetchWithAuth = (request) => {
             return refresh().then(token => fetchRequestWithAuth(token));
         }
         return response;
-    }).then(checkStatusAndRespond);
+    }).then(checkStatusAndRespond, () => {
+        const { origin, pathname } = window.location;
+        window.location.replace(`${origin}${pathname}${loginHash}`);
+    });
 };
 
 const constructPostRequest = (url, body) => new Request(url, {
