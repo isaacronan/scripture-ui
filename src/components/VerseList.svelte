@@ -35,36 +35,43 @@ const handleWheel = (event) => {
     <div class="columns">
         <div>
             {#each expandableVerses as { item, isExpanded }, index}
-                {#if item.title}
-                    <h3>
-                        {item.title}
-                        {#if item.isContinued}
-                            <small>cont'd</small>
+                <div class:non-breaking={index === expandableVerses.length - 1}>
+                    <div class="non-breaking">
+                        {#if item.title}
+                            <h3>
+                                {item.title}
+                                {#if item.isContinued}
+                                    <small>cont'd</small>
+                                {/if}
+                            </h3>
                         {/if}
-                    </h3>
-                {:else}
-                    <p>
-                        <small>{item.versenumber}</small> {item.text}
-                        {#if item.notes}
-                            <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
-                        {/if}
-                    </p>
+                        <p>
+                            <small>{item.versenumber}</small> {item.text}
+                            {#if item.notes}
+                                <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
+                            {/if}
+                        </p>
+                    </div>
                     {#if isExpanded}
                         {#each item.notes as note}
                             <p class="note">{note}</p>
                         {/each}
                     {/if}
-                {/if}
+                    {#if actionButtonLabel && index === expandableVerses.length - 1}
+                        <button on:click={handleAction} class="button alt action">{actionButtonLabel}</button>
+                    {/if}
+                </div>
             {/each}
-            {#if actionButtonLabel}
-                <button on:click={handleAction} class="button alt action">{actionButtonLabel}</button>
-            {/if}
         </div>
     </div>
 </div>
 <style>
 .container {
     display: flex;
+}
+
+.non-breaking {
+    break-inside: avoid;
 }
 
 p,

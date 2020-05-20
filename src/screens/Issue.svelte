@@ -24,11 +24,15 @@ const initialize = () => {
         subscription = data;
         subscription.books.forEach(book => {
             book.chapters.forEach(chapter => {
-                verses.push({
-                    title: `${$getShortName(book.booknumber)} ${chapter.chapternumber}`,
-                    isContinued: chapter.verses[0].versenumber !== 1
-                });
-                verses.push(...chapter.verses);
+                chapter.verses.forEach((verse, index) => {
+                    verses.push({
+                        ...verse,
+                        ...index === 0 ? {
+                            title: `${$getShortName(book.booknumber)} ${chapter.chapternumber}`,
+                            isContinued: chapter.verses[0].versenumber !== 1
+                        } : {}
+                    });
+                })
             });
         });
     }, () => {
