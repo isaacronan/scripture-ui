@@ -1,8 +1,9 @@
 <script>
+import debounce from 'lodash/debounce';
 import { ExpandableItem } from '../utils/models';
-import { books, oldBooks, newBooks, getShortName } from '../utils/store';
-import { ALL, OLD, NEW, subscriptionNamePattern } from '../utils/constants';
-import { createSubscription, updateSubscription, deleteSubscription } from '../utils/http';
+import { books, oldBooks, newBooks, getShortName, currentChapters } from '../utils/store';
+import { ALL, OLD, NEW, subscriptionNamePattern, TIMEOUT } from '../utils/constants';
+import { createSubscription, updateSubscription, deleteSubscription, getChapters, getVerses } from '../utils/http';
 import { dashboardHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
 import ListItem from '../components/ListItem.svelte';
@@ -12,6 +13,9 @@ import Breadcrumbs from '../components/Breadcrumbs.svelte';
 
 export let subscription = null;
 export let isEdit = false;
+
+let chapterMax = null;
+let verseMax = null;
 
 let name = '';
 let verseDosage = 10;
@@ -25,9 +29,16 @@ const hydrateForm = () => {
     name = subscription.name;
     verseDosage = subscription.verseDosage;
     selectedBooknumbers = subscription.bookPool;
-    currentBook = subscription.currentIssue.currentBook;
-    currentChapter = subscription.currentIssue.currentChapter;
-    currentVerse = subscription.currentIssue.currentVerse;
+    if (subscription.currentIssue) {
+        currentBook = subscription.currentIssue.currentBook;
+        currentChapter = subscription.currentIssue.currentChapter;
+        currentVerse = subscription.currentIssue.currentVerse;
+    } else {
+        currentBook = selectedBooknumbers[0];
+        currentChapter = 1;
+        currentVerse = 1;
+    }
+    fetchChapters(currentBook);
 };
 
 $: if (subscription) {
@@ -36,6 +47,7 @@ $: if (subscription) {
 
 $: if (selectedBooknumbers.length && !selectedBooknumbers.find(booknumber => booknumber === currentBook)) {
     currentBook = selectedBooknumbers[0];
+    fetchChapters(currentBook);
 }
 
 let expandableBooks = [];
@@ -45,10 +57,28 @@ $: isValid = subscriptionNamePattern.test(name) && verseDosage > 0 && selectedBo
 const handleNumericInputChange = field => (event) => {
     switch (field) {
         case 'verseDosage': verseDosage = event.detail.value; break;
-        case 'currentChapter': currentChapter = event.detail.value; break;
+        case 'currentChapter':
+            currentChapter = event.detail.value;
+            fetchVerses(currentBook, currentChapter);
+            break;
         case 'currentVerse': currentVerse = event.detail.value; break;
     }
 };
+
+const fetchChapters = debounce((booknumber) => {
+    getChapters(booknumber, true).then(data => {
+        chapterMax = data.length;
+        currentChapter = Math.min(currentChapter, chapterMax);
+        fetchVerses(booknumber, currentChapter);
+    });
+}, TIMEOUT);
+
+const fetchVerses = debounce((booknumber, chapternumber) => {
+    getVerses(booknumber, chapternumber, true).then(data => {
+        verseMax = data.length;
+        currentVerse = Math.min(currentVerse, verseMax);
+    });
+}, TIMEOUT);
 
 const hydrateExpandableBooks = () => expandableBooks = $books.map(book => new ExpandableItem(book));
 $: {
@@ -124,8 +154,8 @@ const handleDelete = () => {
                 <div>
                     <div>Current Book</div>
                     <div class="select">
-                        <select bind:value={currentBook} class="form-control">
-                            {#each selectedBooknumbers as booknumber}
+                        <select on:change={event => fetchChapters(Number(event.target.value))} bind:value={currentBook} class="form-control">
+                            {#each selectedBooknumbers as booknumber (booknumber)}
                                 <option value={booknumber}>{$getShortName(booknumber)}</option>
                             {/each}
                         </select>
@@ -134,11 +164,11 @@ const handleDelete = () => {
                 </div>
                 <div>
                     <div>Current Chapter</div>
-                    <NumericInput on:change={handleNumericInputChange('currentChapter')} value={currentChapter} />
+                    <NumericInput on:change={handleNumericInputChange('currentChapter')} max={chapterMax} value={currentChapter} />
                 </div>
                 <div>
                     <div>Current Verse</div>
-                    <NumericInput on:change={handleNumericInputChange('currentVerse')} value={currentVerse} />
+                    <NumericInput on:change={handleNumericInputChange('currentVerse')} max={verseMax} value={currentVerse} />
                 </div>
             </div>
         {/if}
@@ -151,7 +181,7 @@ const handleDelete = () => {
             </div>
             <div class="actions">
                 {#if isEdit}
-                    <button on:click={handleDelete} class="button negative"><i class="fas fa-trash-alt" /></button>
+                    <button on:click={handleDelete} class="button negative">Delete</button>
                 {/if}
                 <a class="button alt negative" href={dashboardHash}>Cancel</a>
                 <button on:click={handleSave} disabled={!isValid} class="button">{isEdit ? 'Save' : 'Create'}</button>
@@ -251,7 +281,6 @@ input {
     flex-grow: 1;
 }
 
-.actions i,
 .select i {
     font-size: 2rem;
 }

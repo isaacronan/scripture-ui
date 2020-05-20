@@ -52,19 +52,10 @@ const handleIssueUpdate = () => {
 </script>
 <svelte:window on:hashchange={initialize} />
 <svelte:head>
-{#if verses.length === 0}
-    <style>
-        :root {
-            height: 100%;
-        }
-    </style>
-{/if}
 <style>
-@media screen and (min-width: 768px) {
     :root {
         height: 100%;
     }
-}
 </style>
 </svelte:head>
 <article>

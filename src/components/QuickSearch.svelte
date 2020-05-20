@@ -51,7 +51,7 @@ const updateMatchingBooks = () => {
 };
 
 const fetchChapters = debounce((booknumber) => {
-    getChapters(booknumber).then(data => {
+    getChapters(booknumber, true).then(data => {
         chapterOptionsBooknumber = booknumber;
         chapterOptions = data;
     });

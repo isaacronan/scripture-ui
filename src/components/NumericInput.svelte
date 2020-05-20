@@ -19,10 +19,18 @@ const handleInput = (event) => {
         dispatch('change', { value: Math.floor(event.target.value )});
     }
 };
+
+const handleBlur = () => {
+    if (max !== null && value > max) {
+        dispatch('change', { value: max });
+    } else if (min !== null && value < min) {
+        dispatch('change', { value: min });
+    }
+};
 </script>
 <div class="form-control">
     <button disabled={value <= min} on:click={handleDecrement} class="button decrement"><i class="fas fa-minus" /></button>
-    <input type="number" on:input={handleInput} {value}>
+    <input type="number" on:input={handleInput} on:blur={handleBlur} {value}>
     <button disabled={max !== null && value >= max} on:click={handleIncrement} class="button increment"><i class="fas fa-plus" /></button>
 </div>
 <style>

@@ -28,7 +28,13 @@ onMount(() => {
             {#if $subscriptions.length}
                 <ul class="grid-list">
                     {#each $subscriptions as subscription}
-                        <ListItem primaryHref={editSubscriptionHash(subscription.id)} destinationHref={issueHash(subscription.id)} title={subscription.name} />
+                        {#if !subscription.currentIssue}
+                            <ListItem primaryHref={editSubscriptionHash(subscription.id)} title={subscription.name} isExpanded={true} description="Open settings to delete or reset.">
+                                <div><small>Completed</small></div>
+                            </ListItem>
+                        {:else}
+                            <ListItem primaryHref={editSubscriptionHash(subscription.id)} destinationHref={issueHash(subscription.id)} title={subscription.name} />
+                        {/if}
                     {/each}
                 </ul>
             {:else}
@@ -77,6 +83,10 @@ h2 {
 .new i {
     font-size: 2rem;
     margin-right: var(--spacing-md);
+}
+
+small {
+    text-transform: uppercase;
 }
 
 .flex-container {

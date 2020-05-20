@@ -10,8 +10,8 @@ const checkStatusAndRespond = (res) => {
 };
 
 export const getBooks = () => fetch('/api/books').then(checkStatusAndRespond);
-export const getChapters = (booknumber) => fetch(`/api/books/${booknumber}/chapters`).then(checkStatusAndRespond);
-export const getVerses = (booknumber, chapternumber) => fetch(`/api/books/${booknumber}/chapters/${chapternumber}`).then(checkStatusAndRespond);
+export const getChapters = (booknumber, numberOnly = false) => fetch(`/api/books/${booknumber}/chapters${numberOnly ? '?numberOnly=true' : ''}`).then(checkStatusAndRespond);
+export const getVerses = (booknumber, chapternumber, numberOnly = false) => fetch(`/api/books/${booknumber}/chapters/${chapternumber}${numberOnly ? '?numberOnly=true' : ''}`).then(checkStatusAndRespond);
 
 export const createAccount = (username, password) => fetch('/api/user/create', {
     method: 'POST',
