@@ -47,7 +47,8 @@ a, button {
     line-height: var(--lh-normal);
 }
 
-input {
+input,
+select {
     font-family: 'Open Sans', sans-serif;
     font-size: var(--fs-big);
     font-weight: 400;

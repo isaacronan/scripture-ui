@@ -58,7 +58,8 @@ article {
     width: 100%;
 }
 
-input {
+input,
+select {
     border-radius: var(--radius);
     color: var(--dark);
     padding: var(--spacing-md);

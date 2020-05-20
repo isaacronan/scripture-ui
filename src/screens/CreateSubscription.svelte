@@ -123,11 +123,14 @@ const handleDelete = () => {
             <div class="flex-container edit">
                 <div>
                     <div>Current Book</div>
-                    <select bind:value={currentBook} class="form-control">
-                        {#each selectedBooknumbers as booknumber}
-                            <option value={booknumber}>{$getShortName(booknumber)}</option>
-                        {/each}
-                    </select>
+                    <div class="select">
+                        <select bind:value={currentBook} class="form-control">
+                            {#each selectedBooknumbers as booknumber}
+                                <option value={booknumber}>{$getShortName(booknumber)}</option>
+                            {/each}
+                        </select>
+                        <i class="fas fa-chevron-down" />
+                    </div>
                 </div>
                 <div>
                     <div>Current Chapter</div>
@@ -224,6 +227,22 @@ input {
     box-sizing: border-box;
 }
 
+.select {
+    display: inline-block;
+    position: relative;
+}
+
+.select i {
+    align-items: center;
+    color: var(--cyan);
+    display: flex;
+    height: 100%;
+    pointer-events: none;
+    position: absolute;
+    right: var(--spacing-md);
+    top: 2px;
+}
+
 .actions {
     display: flex;
 }
@@ -232,7 +251,8 @@ input {
     flex-grow: 1;
 }
 
-.actions i {
+.actions i,
+.select i {
     font-size: 2rem;
 }
 
