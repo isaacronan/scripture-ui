@@ -57,11 +57,20 @@ module.exports = (env) => {
         devServer: {
             port: 8000,
             hot: true,
-            proxy: [{
-                context: ['/api', '/stats'],
-                target: process.env.PROXY,
-                secure: false
-            }]
+            proxy: [
+                {
+                    context: ['/api'],
+                    pathRewrite: { '^/api': '' },
+                    target: process.env.APIPROXY,
+                    secure: false
+                },
+                {
+                    context: ['/stats'],
+                    pathRewrite: { '^/stats': '' },
+                    target: process.env.STATSPROXY,
+                    secure: false
+                }
+            ]
         }
     }
 };

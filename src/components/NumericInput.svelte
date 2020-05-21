@@ -1,8 +1,10 @@
 <script>
 import { createEventDispatcher } from 'svelte';
 export let value = 0;
-export let min = 1;
 export let max = null;
+
+const MIN = 1;
+let input = null;
 
 const dispatch = createEventDispatcher();
 
@@ -15,22 +17,24 @@ const handleIncrement = () => {
 };
 
 const handleInput = (event) => {
-    if (event.target.value !== '') {
+    if (inputValueIsValid(Number(event.target.value))) {
         dispatch('change', { value: Math.floor(event.target.value )});
     }
 };
 
-const handleBlur = () => {
-    if (max !== null && value > max) {
-        dispatch('change', { value: max });
-    } else if (min !== null && value < min) {
-        dispatch('change', { value: min });
+const handleBlur = (event) => {
+    if (!inputValueIsValid(Number(event.target.value))) {
+        input.value = value;
     }
+};
+
+const inputValueIsValid = (inputValue) => {
+    return inputValue !== '' && !(max !== null && inputValue > max) && inputValue >= MIN;
 };
 </script>
 <div class="form-control">
-    <button disabled={value <= min} on:click={handleDecrement} class="button decrement"><i class="fas fa-minus" /></button>
-    <input type="number" on:input={handleInput} on:blur={handleBlur} {value}>
+    <button disabled={value <= MIN} on:click={handleDecrement} class="button decrement"><i class="fas fa-minus" /></button>
+    <input type="number" bind:this={input} on:input={handleInput} on:blur={handleBlur} {value}>
     <button disabled={max !== null && value >= max} on:click={handleIncrement} class="button increment"><i class="fas fa-plus" /></button>
 </div>
 <style>

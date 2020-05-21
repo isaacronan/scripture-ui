@@ -144,3 +144,9 @@ export const resetPassword = (currentPassword, newPassword) => fetchWithAuth(con
 export const deleteAccount = (password) => fetchWithAuth(constructPostRequest('/api/user/delete', {
     password
 }));
+
+export const getStats = (verseDosage, bookPool, currentIssue) => fetch(constructPostRequest('/stats/subscription', {
+    verseDosage,
+    bookPool,
+    currentIssue
+})).then(checkStatusAndRespond);

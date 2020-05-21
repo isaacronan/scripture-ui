@@ -1,9 +1,9 @@
 <script>
 import debounce from 'lodash/debounce';
 import { ExpandableItem } from '../utils/models';
-import { books, oldBooks, newBooks, getShortName, currentChapters } from '../utils/store';
+import { books, oldBooks, newBooks, getShortName } from '../utils/store';
 import { ALL, OLD, NEW, subscriptionNamePattern, TIMEOUT } from '../utils/constants';
-import { createSubscription, updateSubscription, deleteSubscription, getChapters, getVerses } from '../utils/http';
+import { createSubscription, updateSubscription, deleteSubscription, getChapters, getVerses , getStats} from '../utils/http';
 import { dashboardHash } from '../utils/routing';
 import NumericInput from '../components/NumericInput.svelte';
 import ListItem from '../components/ListItem.svelte';
@@ -14,8 +14,13 @@ import Breadcrumbs from '../components/Breadcrumbs.svelte';
 export let subscription = null;
 export let isEdit = false;
 
+const VERSEDOSAGE = 'VERSEDOSAGE';
+const CURRENTCHAPTER = 'CURRENTCHAPTER';
+const CURRENTVERSE = 'CURRENTVERSE';
+
 let chapterMax = null;
 let verseMax = null;
+let stats = null;
 
 let name = '';
 let verseDosage = 10;
@@ -38,46 +43,79 @@ const hydrateForm = () => {
         currentChapter = 1;
         currentVerse = 1;
     }
-    fetchChapters(currentBook);
 };
 
 $: if (subscription) {
     hydrateForm();
 }
 
-$: if (selectedBooknumbers.length && !selectedBooknumbers.find(booknumber => booknumber === currentBook)) {
-    currentBook = selectedBooknumbers[0];
-    fetchChapters(currentBook);
+$: {
+    verseDosage;
+    selectedBooknumbers;
+    currentBook;
+    currentChapter;
+    currentVerse;
+    fetchStats();
+}
+
+$: if (!selectedBooknumbers.find(booknumber => booknumber === currentBook)) {
+    currentBook = selectedBooknumbers.length ? selectedBooknumbers[0] : null;
+}
+
+$: if (currentBook) {
+    fetchChapters();
+}
+
+$: if (currentChapter) {
+    fetchVerses();
 }
 
 let expandableBooks = [];
 
-$: isValid = subscriptionNamePattern.test(name) && verseDosage > 0 && selectedBooknumbers.length;
+$: saveIsAllowed = subscriptionNamePattern.test(name) && necessaryFieldsAreValid;
+$: necessaryFieldsAreValid = createFieldsAreValid && (!isEdit || isEdit && editFieldsAreValid);
+$: createFieldsAreValid = verseDosage > 0 && selectedBooknumbers.length;
+$: editFieldsAreValid = currentBook && currentChapter && currentVerse;
 
 const handleNumericInputChange = field => (event) => {
     switch (field) {
-        case 'verseDosage': verseDosage = event.detail.value; break;
-        case 'currentChapter':
-            currentChapter = event.detail.value;
-            fetchVerses(currentBook, currentChapter);
+        case VERSEDOSAGE:
+            verseDosage = event.detail.value;
             break;
-        case 'currentVerse': currentVerse = event.detail.value; break;
+        case CURRENTCHAPTER:
+            currentChapter = event.detail.value;
+            break;
+        case CURRENTVERSE:
+            currentVerse = event.detail.value;
+            break;
     }
 };
 
-const fetchChapters = debounce((booknumber) => {
-    getChapters(booknumber, true).then(data => {
-        chapterMax = data.length;
-        currentChapter = Math.min(currentChapter, chapterMax);
-        fetchVerses(booknumber, currentChapter);
-    });
+const fetchChapters = debounce(() => {
+    if (currentBook) {
+        getChapters(currentBook, true).then(data => {
+            chapterMax = data.length;
+            currentChapter = Math.min(currentChapter, chapterMax);
+        });
+    }
 }, TIMEOUT);
 
-const fetchVerses = debounce((booknumber, chapternumber) => {
-    getVerses(booknumber, chapternumber, true).then(data => {
-        verseMax = data.length;
-        currentVerse = Math.min(currentVerse, verseMax);
-    });
+const fetchVerses = debounce(() => {
+    if (currentBook && currentChapter) {
+        getVerses(currentBook, currentChapter, true).then(data => {
+            verseMax = data.length;
+            currentVerse = Math.min(currentVerse, verseMax);
+        });
+    }
+}, TIMEOUT);
+
+const fetchStats = debounce(() => {
+    if (necessaryFieldsAreValid) {
+        const currentIssue = isEdit ? { currentBook, currentChapter, currentVerse } : { currentBook: selectedBooknumbers[0], currentChapter: 1, currentVerse: 1 };
+        getStats(verseDosage, selectedBooknumbers, currentIssue).then(data => {
+            stats = data;
+        });
+    }
 }, TIMEOUT);
 
 const hydrateExpandableBooks = () => expandableBooks = $books.map(book => new ExpandableItem(book));
@@ -146,15 +184,26 @@ const handleDelete = () => {
             </div>
             <div class="verses">
                 <div>Verses per day</div>
-                <NumericInput on:change={handleNumericInputChange('verseDosage')} value={verseDosage} />
+                <NumericInput on:change={handleNumericInputChange(VERSEDOSAGE)} value={verseDosage} />
             </div>
         </div>
+        {#if stats}
+            <div class="flex-container">
+                <div class="stats">
+                    <h3>Subscription Stats:</h3>
+                    <div>
+                        <div class="stat">{stats.averagewords} <small>words per day</small></div>
+                        <div class="stat">{stats.issues.length} <small>day{stats.issues.length === 1 ? '' : 's'}</small></div>
+                    </div>
+                </div>
+            </div>
+        {/if}
         {#if isEdit}
             <div class="flex-container edit">
                 <div>
                     <div>Current Book</div>
-                    <div class="select">
-                        <select on:change={event => fetchChapters(Number(event.target.value))} bind:value={currentBook} class="form-control">
+                    <div class="select form-control">
+                        <select bind:value={currentBook} class="form-control">
                             {#each selectedBooknumbers as booknumber (booknumber)}
                                 <option value={booknumber}>{$getShortName(booknumber)}</option>
                             {/each}
@@ -164,11 +213,11 @@ const handleDelete = () => {
                 </div>
                 <div>
                     <div>Current Chapter</div>
-                    <NumericInput on:change={handleNumericInputChange('currentChapter')} max={chapterMax} value={currentChapter} />
+                    <NumericInput on:change={handleNumericInputChange(CURRENTCHAPTER)} max={chapterMax} value={currentChapter} />
                 </div>
                 <div>
                     <div>Current Verse</div>
-                    <NumericInput on:change={handleNumericInputChange('currentVerse')} max={verseMax} value={currentVerse} />
+                    <NumericInput on:change={handleNumericInputChange(CURRENTVERSE)} max={verseMax} value={currentVerse} />
                 </div>
             </div>
         {/if}
@@ -184,7 +233,7 @@ const handleDelete = () => {
                     <button on:click={handleDelete} class="button negative">Delete</button>
                 {/if}
                 <a class="button alt negative" href={dashboardHash}>Cancel</a>
-                <button on:click={handleSave} disabled={!isValid} class="button">{isEdit ? 'Save' : 'Create'}</button>
+                <button on:click={handleSave} disabled={!saveIsAllowed} class="button">{isEdit ? 'Save' : 'Create'}</button>
             </div>
         </div>
         <div class="selected-books">
@@ -279,6 +328,26 @@ input {
 
 .actions > * {
     flex-grow: 1;
+}
+
+.stats h3 {
+    margin-right: var(--spacing-md);
+}
+
+.stats,
+.stats > div {
+    display: flex;
+}
+
+.stats {
+    flex-wrap: wrap;
+}
+
+.stat {
+    font-size: var(--fs-big);
+    font-weight: 300;
+    line-height: var(--lh-big);
+    margin-right: var(--spacing-md);
 }
 
 .select i {
