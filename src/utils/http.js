@@ -147,8 +147,9 @@ export const deleteAccount = (password) => fetchWithAuth(constructPostRequest('/
     password
 }));
 
-export const getStats = (verseDosage, bookPool, currentIssue) => fetch(constructPostRequest('/stats/subscription', {
+export const getStats = (verseDosage, isChapterSubscription, bookPool, currentIssue) => fetch(constructPostRequest('/stats/subscription', {
     verseDosage,
+    isChapterSubscription,
     bookPool,
     currentIssue
 })).then(checkStatusAndRespond);

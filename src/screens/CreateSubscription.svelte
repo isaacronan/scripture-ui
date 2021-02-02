@@ -53,6 +53,7 @@ $: if (subscription) {
 
 $: {
     verseDosage;
+    isChapterSubscription;
     selectedBooknumbers;
     currentBook;
     currentChapter;
@@ -114,7 +115,7 @@ const fetchVerses = debounce(() => {
 const fetchStats = debounce(() => {
     if (necessaryFieldsAreValid) {
         const currentIssue = isEdit ? { currentBook, currentChapter, currentVerse } : { currentBook: selectedBooknumbers[0], currentChapter: 1, currentVerse: 1 };
-        getStats(verseDosage, selectedBooknumbers, currentIssue).then(data => {
+        getStats(verseDosage, isChapterSubscription, selectedBooknumbers, currentIssue).then(data => {
             stats = data;
         });
     }
