@@ -1,9 +1,7 @@
 <script>
-import { createEventDispatcher} from 'svelte';
 import { SCREENWIDTH } from '../utils/constants';
 import { ExpandableItem } from '../utils/models';
 export let verses = [];
-export let actionButtonLabel = '';
 
 let container = null;
 let expandableVerses = [];
@@ -12,12 +10,6 @@ $: {
     verses;
     hydrateExpandableVerses();
 }
-
-const dispatch = createEventDispatcher();
-
-const handleAction = () => {
-    dispatch('action');
-};
 
 const toggleExpanded = (index) => () => {
     expandableVerses[index].toggleExpanded();
@@ -57,8 +49,8 @@ const handleWheel = (event) => {
                             <p class="note">{note}</p>
                         {/each}
                     {/if}
-                    {#if actionButtonLabel && index === expandableVerses.length - 1}
-                        <button on:click={handleAction} class="button alt action">{actionButtonLabel}</button>
+                    {#if index === expandableVerses.length - 1}
+                        <slot name="actionButton"></slot>
                     {/if}
                 </div>
             {/each}
@@ -86,10 +78,6 @@ p button {
 
 .note {
     margin: var(--spacing-md) var(--spacing-lg);
-}
-
-.action {
-    width: 100%;
 }
 
 @media screen and (min-width: 768px) {

@@ -24,6 +24,7 @@ let stats = null;
 
 let name = '';
 let verseDosage = 10;
+let isChapterSubscription = true;
 let selectedBooknumbers = [];
 
 let currentBook = null;
@@ -33,6 +34,7 @@ let currentVerse = null;
 const hydrateForm = () => {
     name = subscription.name;
     verseDosage = subscription.verseDosage;
+    isChapterSubscription = subscription.isChapterSubscription;
     selectedBooknumbers = subscription.bookPool;
     if (subscription.currentIssue) {
         currentBook = subscription.currentIssue.currentBook;
@@ -150,13 +152,13 @@ const goToDashboard = () => window.location.hash = dashboardHash;
 
 const handleSave = () => {
     if (isEdit) {
-        updateSubscription(subscription.id, name, verseDosage, selectedBooknumbers, {
+        updateSubscription(subscription.id, name, verseDosage, isChapterSubscription, selectedBooknumbers, {
             currentBook,
             currentChapter,
             currentVerse
         }).then(goToDashboard)
     } else {
-        createSubscription(name, verseDosage, selectedBooknumbers).then(goToDashboard)
+        createSubscription(name, verseDosage, isChapterSubscription, selectedBooknumbers).then(goToDashboard)
     }
 };
 
@@ -182,8 +184,22 @@ const handleDelete = () => {
                 <div>Name</div>
                 <input class="form-control" bind:value={name} type="text">
             </div>
+            <div class="check-control type-toggle">
+                <input id="isChapterSubscription" bind:group={isChapterSubscription} value={true} type="radio" >
+                <label for="isChapterSubscription">
+                    <i class="far fa-dot-circle"></i>
+                    <i class="far fa-circle"></i>
+                    Chapters
+                </label>
+                <input id="isVerseSubscription" bind:group={isChapterSubscription} value={false} type="radio" >
+                <label for="isVerseSubscription">
+                    <i class="far fa-dot-circle"></i>
+                    <i class="far fa-circle"></i>
+                    Verses
+                </label>
+            </div>
             <div class="verses">
-                <div>Verses per day</div>
+                <div>{isChapterSubscription ? 'Chapters' : 'Verses'} per day</div>
                 <NumericInput on:change={handleNumericInputChange(VERSEDOSAGE)} value={verseDosage} />
             </div>
         </div>
@@ -215,10 +231,12 @@ const handleDelete = () => {
                     <div>Current Chapter</div>
                     <NumericInput on:change={handleNumericInputChange(CURRENTCHAPTER)} max={chapterMax} value={currentChapter} />
                 </div>
-                <div>
-                    <div>Current Verse</div>
-                    <NumericInput on:change={handleNumericInputChange(CURRENTVERSE)} max={verseMax} value={currentVerse} />
-                </div>
+                {#if !isChapterSubscription}
+                    <div>
+                        <div>Current Verse</div>
+                        <NumericInput on:change={handleNumericInputChange(CURRENTVERSE)} max={verseMax} value={currentVerse} />
+                    </div>
+                {/if}
             </div>
         {/if}
         <div class="flex-container">
@@ -256,7 +274,7 @@ const handleDelete = () => {
         <ul class="grid-list">
             {#each expandableBooks as { item, isExpanded }, index}
                 <ListItem on:click={toggleExpanded(index)} {isExpanded} title={item.shortname} description={item.bookdesc}>
-                    <div class="book-check">
+                    <div class="check-control">
                         <input id="book-{item.booknumber}" value={item.booknumber} bind:group={selectedBooknumbers} type="checkbox">
                         <label for="book-{item.booknumber}">
                             <i class="far fa-check-circle"></i>
@@ -386,16 +404,32 @@ input {
     margin-right: var(--spacing-sm);
 }
 
-.book-check input,
-.book-check .fa-check-circle {
+.type-toggle i {
+    font-size: 2rem;
+    padding-right: var(--spacing-sm);
+}
+
+.type-toggle label {
+    align-items: center;
+    display: inline-flex;
+    margin-right: var(--spacing-sm);
+}
+
+.check-control input,
+.check-control .fa-check-circle,
+.check-control .fa-dot-circle {
     display: none;
 }
 
-.book-check input:checked + label .fa-check-circle {
+.check-control input:checked + label .fa-check-circle {
     display: block;
 }
 
-.book-check input:checked + label .fa-circle {
+.check-control input:checked + label .fa-dot-circle {
+    display: inline-block;
+}
+
+.check-control input:checked + label .fa-circle {
     display: none;
 }
 

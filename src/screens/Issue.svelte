@@ -10,6 +10,7 @@ import VerseList from '../components/VerseList.svelte';
 let [ id ] = issuePattern.getParams();
 let subscription = null;
 let verses = [];
+let isCompleted = false;
 
 onMount(() => {
     initialize();
@@ -19,6 +20,7 @@ const initialize = () => {
     [ id ] = issuePattern.getParams();
     subscription = null;
     verses = [];
+    isCompleted = false;
 
     getSubscription(id).then(data => {
         subscription = data;
@@ -40,17 +42,26 @@ const initialize = () => {
     });
 };
 
+const goToDashboard = () => window.location.hash = dashboardHash;
+
 const handleIssueUpdate = () => {
     updateSubscription(
         id,
         subscription.name,
         subscription.verseDosage,
+        subscription.isChapterSubscription,
         subscription.bookPool,
         subscription.nextIssue
-    ).then(() => window.location.hash = dashboardHash);
+    ).then(() => isCompleted = true);
+};
+
+const handleHashChange = () => {
+    if (id !== issuePattern.getParams()[0]) {
+        initialize();
+    }
 };
 </script>
-<svelte:window on:hashchange={initialize} />
+<svelte:window on:hashchange={handleHashChange} />
 <svelte:head>
 <style>
     :root {
@@ -66,11 +77,30 @@ const handleIssueUpdate = () => {
         <h2>{subscription.name}</h2>
     </PatientContainer>
     <PatientContainer isWaiting={!subscription}>
-        <VerseList on:action={handleIssueUpdate} actionButtonLabel="Complete" {verses} />
+        <VerseList {verses}>
+            <div slot="actionButton">
+                {#if !isCompleted}
+                    <button on:click={handleIssueUpdate} class="button action">Complete</button>
+                {:else}
+                    <button on:click={goToDashboard} class="button alt action">Dashboard</button>
+                    {#if subscription.nextIssue}
+                        <button on:click={initialize} class="button action">Next Issue</button>
+                    {/if}
+                {/if}
+            </div>
+        </VerseList>
     </PatientContainer>
 </article>
 <style>
 h2 {
     color: var(--dark);
+}
+
+.action {
+    width: 100%;
+}
+
+.action + .action {
+    margin-top: var(--spacing-sm);
 }
 </style>

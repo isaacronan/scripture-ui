@@ -117,15 +117,17 @@ export const removeTokens = () => {
     document.cookie = `username=; expires=${new Date(0).toUTCString()}`;
 };
 
-export const createSubscription = (name, verseDosage, bookPool) => fetchWithAuth(constructPostRequest('/api/subscriptions', {
+export const createSubscription = (name, verseDosage, isChapterSubscription, bookPool) => fetchWithAuth(constructPostRequest('/api/subscriptions', {
     name,
     verseDosage,
+    isChapterSubscription,
     bookPool
 }));
 
-export const updateSubscription = (id, name, verseDosage, bookPool, currentIssue) => fetchWithAuth(constructPutRequest(`/api/subscriptions/${id}`, {
+export const updateSubscription = (id, name, verseDosage, isChapterSubscription, bookPool, currentIssue) => fetchWithAuth(constructPutRequest(`/api/subscriptions/${id}`, {
     name,
     verseDosage,
+    isChapterSubscription,
     bookPool,
     currentIssue
 }));
