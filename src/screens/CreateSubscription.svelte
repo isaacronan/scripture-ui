@@ -118,6 +118,8 @@ const fetchStats = debounce(() => {
         getStats(verseDosage, isChapterSubscription, selectedBooknumbers, currentIssue).then(data => {
             stats = data;
         });
+    } else {
+        stats = null;
     }
 }, TIMEOUT);
 
@@ -204,17 +206,15 @@ const handleDelete = () => {
                 <NumericInput on:change={handleNumericInputChange(VERSEDOSAGE)} value={verseDosage} />
             </div>
         </div>
-        {#if stats}
-            <div class="flex-container">
-                <div class="stats">
-                    <h3>Subscription Stats:</h3>
-                    <div>
-                        <div class="stat">{stats.averagewords} <small>words per day</small></div>
-                        <div class="stat">{stats.issues.length} <small>day{stats.issues.length === 1 ? '' : 's'}</small></div>
-                    </div>
+        <div class="flex-container">
+            <div class="stats">
+                <h3>Subscription Stats:</h3>
+                <div>
+                    <div class="stat">{#if stats}{stats.averagewords}{:else}&mdash;{/if} <small>words per day</small></div>
+                    <div class="stat">{#if stats}{stats.issues.length}{:else}&mdash;{/if} <small>day{(!stats || stats.issues.length !== 1) ? 's' : ''}</small></div>
                 </div>
             </div>
-        {/if}
+        </div>
         {#if isEdit}
             <div class="flex-container edit">
                 <div>
@@ -350,16 +350,11 @@ input {
 }
 
 .stats h3 {
-    margin-right: var(--spacing-md);
+    margin-right: var(--spacing-sm);
 }
 
-.stats,
 .stats > div {
     display: flex;
-}
-
-.stats {
-    flex-wrap: wrap;
 }
 
 .stat {

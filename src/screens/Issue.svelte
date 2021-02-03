@@ -80,13 +80,11 @@ const handleHashChange = () => {
         <VerseList {verses}>
             <div slot="actionButton">
                 {#if !isCompleted}
-                    <button on:click={handleIssueUpdate} class="button action">Complete</button>
+                    <button on:click={handleIssueUpdate} class="button action bottom-spacing">Complete</button>
                 {:else}
                     <button on:click={goToDashboard} class="button alt action">Dashboard</button>
-                    {#if subscription.nextIssue}
-                        <button on:click={initialize} class="button action">Next Issue</button>
-                    {/if}
                 {/if}
+                <button on:click={initialize} class:hidden={!isCompleted || !subscription.nextIssue} class="button action">Next Issue</button>
             </div>
         </VerseList>
     </PatientContainer>
@@ -97,10 +95,11 @@ h2 {
 }
 
 .action {
+    margin-bottom: var(--spacing-sm);
     width: 100%;
 }
 
-.action + .action {
-    margin-top: var(--spacing-sm);
+.hidden {
+    visibility: hidden;
 }
 </style>
