@@ -134,7 +134,11 @@ export const updateSubscription = (id, name, verseDosage, isChapterSubscription,
 
 export const deleteSubscription = (id) => fetchWithAuth(constructDeleteRequest(`/api/subscriptions/${id}`));
 
-export const logout = () => fetchWithAuth(new Request('/api/user/logout'));
+export const logout = () => {
+    const refreshPattern = /refresh=(\w+)/;
+    const refresh = refreshPattern.test(document.cookie) ? refreshPattern.exec(document.cookie)[1] : null;
+    return fetchWithAuth(constructPostRequest('/api/user/logout', { refresh }));
+};
 
 export const getSubscription = (id) => fetchWithAuth(new Request(`/api/subscriptions/${id}`));
 

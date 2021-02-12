@@ -7,10 +7,9 @@ export let isUserScreen = false;
 export let isLight = false;
 
 const handleLogout = () => {
-    logout().then(() => {
-        removeTokens();
-        window.location.hash = homeHash;
-    });
+    logout();
+    removeTokens();
+    window.location.hash = homeHash;
 };
 </script>
 <nav class:light={isLight}>
