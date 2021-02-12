@@ -109,7 +109,7 @@ onMount(() => {
 }
 
 .light-alt {
-    background-color: var(--beige);
+    background-color: var(--lighter);
     --smartblue: var(--blue);
 }
 </style>

@@ -62,9 +62,14 @@ article {
 input,
 select {
     background-color: var(--white);
+    border: 1px solid var(--light);
     border-radius: var(--radius);
     color: var(--dark);
     padding: var(--spacing-md);
+}
+
+input::placeholder {
+    color: var(--light);
 }
 
 li {

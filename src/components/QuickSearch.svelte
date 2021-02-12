@@ -120,7 +120,7 @@ const handleKeyDown = (event) => {
     <div class:with-options={showChapterOptions} class="container">
         <div class="search-form">
             <form class="form-control" on:submit|preventDefault={handleSubmit}>
-                <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} on:input={handleInput} bind:value={query} type="text">
+                <input on:keydown={handleKeyDown} class:with-results={showSearchResults && matchingBooks.length} on:input={handleInput} bind:value={query} placeholder="e.g. Genesis, John 1, etc." type="text">
                 <button tabindex="-1" disabled={!booknumberQuery} class:active={booknumberQuery} type="submit"><i class="fas fa-search"/></button>
             </form>
             {#if showSearchResults && matchingBooks.length}
@@ -191,6 +191,8 @@ form .active {
 
 .search-results li {
     background-color: var(--white);
+    border-left: 1px solid var(--light);
+    border-right: 1px solid var(--light);
     display: block;
 }
 
@@ -210,6 +212,10 @@ form .active {
     border-radius: 0 0 var(--radius) var(--radius);
 }
 
+.search-results li:last-of-type {
+    border-bottom: 1px solid var(--light);
+}
+
 form {
     display: flex;
 }
@@ -219,6 +225,7 @@ input {
 }
 
 .with-results {
+    border-bottom: none;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }

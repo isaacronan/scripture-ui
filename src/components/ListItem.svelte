@@ -29,6 +29,7 @@ export let description = '';
 <style>
 li {
     background-color: var(--white);
+    border: 1px solid var(--light);
     border-radius: var(--radius);
     height: fit-content;
     padding: var(--spacing-md);

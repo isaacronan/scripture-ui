@@ -10,7 +10,7 @@ export let isError = false;
     .alert {
         align-items: center;
         background-color: var(--white);
-        border: 1px solid var(--green);
+        border: 2px solid var(--green);
         border-radius: var(--radius);
         color: var(--green);
         display: flex;

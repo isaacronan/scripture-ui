@@ -23,7 +23,7 @@ let verseMax = null;
 let stats = null;
 
 let name = '';
-let verseDosage = 10;
+let verseDosage = 2;
 let isChapterSubscription = true;
 let selectedBooknumbers = [];
 
