@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
-    "build": "rm -rf dist/* && webpack --env.production"
+    "build": "rm -rf dist && rm -rf node_modules && npm ci && webpack --env.production"
   },
   "author": "",
   "license": "ISC",
