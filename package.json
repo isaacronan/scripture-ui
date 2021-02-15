@@ -1,7 +1,11 @@
 {
-  "name": "web-app",
+  "name": "scripture-ui",
   "version": "1.0.0",
-  "description": "",
+  "description": "UI for Scripture app. Built with Svelte.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isaacronan/scripture-ui"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
