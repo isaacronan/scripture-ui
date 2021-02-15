@@ -64,7 +64,7 @@ export const getSubscriptions = () => fetchWithAuth(new Request('/api/subscripti
 const fetchWithAuth = (request) => {
     const fetchRequestWithAuth = token => {
         const headers = new Headers({
-            'X-Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
         });
         for (let key of request.headers.keys()) {
             headers.append(key, request.headers.get(key));

@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env) => {
     const isProduction = env && env.production;
+    const { API_SERVER = 'http://localhost:8001', STATS_SERVER = '' } = process.env;
     
     return {
         mode: isProduction ? 'production' : 'development',
@@ -60,14 +61,13 @@ module.exports = (env) => {
             proxy: [
                 {
                     context: ['/api'],
-                    pathRewrite: { '^/api': '' },
-                    target: process.env.APIPROXY,
+                    pathRewrite: /^http:\/\/localhost:\d+$/.test(API_SERVER) ? { '^/api': '' } : {},
+                    target: API_SERVER,
                     secure: false
                 },
                 {
                     context: ['/stats'],
-                    pathRewrite: { '^/stats': '' },
-                    target: process.env.STATSPROXY,
+                    target: STATS_SERVER,
                     secure: false
                 }
             ]
