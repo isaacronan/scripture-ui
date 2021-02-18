@@ -69,10 +69,6 @@ section + section {
     margin-top: var(--spacing-md);
 }
 
-section:last-of-type {
-    margin-bottom: var(--spacing-md);
-}
-
 section .link {
     color: var(--blue);
     margin-bottom: var(--spacing-md);

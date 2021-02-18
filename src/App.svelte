@@ -82,7 +82,7 @@ onMount(() => {
 </script>
 
 <svelte:head>
-    <meta content="width=device-width" name="viewport">
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </svelte:head>
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
@@ -100,6 +100,11 @@ onMount(() => {
     margin: 0 auto;
     max-width: var(--maxwidth);
     width: 100%;
+    padding:
+        env(safe-area-inset-top, 0)
+        env(safe-area-inset-right, 0)
+        env(safe-area-inset-bottom, 0)
+        env(safe-area-inset-left, 0);
 }
 
 .light {
