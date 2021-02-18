@@ -26,39 +26,34 @@ const setExpandedAll = (isExpanded) => () => {
 </script>
 
 <div>
-    <button class="plain-button" on:click={setExpandedAll(true)}>Expand All</button>
-    <button class="plain-button" on:click={setExpandedAll(false)}>Collapse All</button>
+    <button class="bulk-button plain-button" on:click={setExpandedAll(true)}>Expand All</button>
+    <button class="bulk-button plain-button" on:click={setExpandedAll(false)}>Collapse All</button>
 </div>
 <div>
     <ul class="grid-list">
         {#each expandableItems as { item, isExpanded }, index}
             <ListItem
-                on:click={toggleExpanded(index)}
-                {isExpanded}
-                destinationHref={getHref(item)}
+                showDescription={isExpanded}
                 title={getTitle(item)}
                 description={getDescription(item)}
-            />
+            >
+                <button slot="left" class="icon icon-secondary" on:click={toggleExpanded(index)}>
+                    <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
+                </button>
+                <a slot="right" class="icon icon-primary" href={getHref(item)}><i class="fas fa-arrow-right"/></a>
+            </ListItem>
         {/each}
     </ul>
 </div>
 <style>
-button {
+.bulk-button {
     color: var(--cyan);
 }
 
-button + button {
-    position: relative;
-}
-
-button + button::before {
-    background-color: var(--cyan);
-    content: '';
-    height: calc(100%);
-    left: calc(-1 * var(--spacing-md) / 2 - 1px);
-    position: absolute;
-    top: 0;
-    width: 1px;
+.bulk-button + .bulk-button {
+    border-left: 1px solid var(--cyan);
+    margin-left: var(--spacing-sm);
+    padding-left: var(--spacing-sm);
 }
 
 ul {

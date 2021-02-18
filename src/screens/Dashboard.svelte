@@ -28,13 +28,18 @@ onMount(() => {
             {#if $subscriptions.length}
                 <ul class="grid-list">
                     {#each $subscriptions as subscription}
-                        {#if !subscription.currentIssue}
-                            <ListItem primaryHref={editSubscriptionHash(subscription.id)} title={subscription.name} isExpanded={true} description="Open settings to delete or reset.">
-                                <div><small>Completed</small></div>
-                            </ListItem>
-                        {:else}
-                            <ListItem primaryHref={editSubscriptionHash(subscription.id)} destinationHref={issueHash(subscription.id)} title={subscription.name} />
-                        {/if}
+                        <ListItem title={subscription.name}>
+                            <a slot="left" class="icon icon-secondary" href={editSubscriptionHash(subscription.id)}>
+                                <i class="fas fa-cog"/>
+                            </a>
+                            <div slot="right">
+                                {#if !subscription.currentIssue}
+                                    <small class="icon-primary">Completed</small>
+                                {:else}
+                                    <a class="icon icon-primary" href={issueHash(subscription.id)}><i class="fas fa-arrow-right"/></a>
+                                {/if}
+                            </div>
+                        </ListItem>
                     {/each}
                 </ul>
             {:else}

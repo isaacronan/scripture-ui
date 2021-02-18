@@ -36,10 +36,6 @@ button:not(:disabled) {
     text-decoration: underline;
 }
 
-.plain-button + .plain-button {
-    margin-left: var(--spacing-md);
-}
-
 .button {
     background-color: var(--button-color);
     border-radius: var(--radius);
@@ -62,4 +58,16 @@ button:not(:disabled) {
 
 .negative {
     --button-color: var(--red);
+}
+
+.icon {
+    font-size: 2rem;
+}
+
+.icon-primary {
+    color: var(--cyan);
+}
+
+.icon-secondary {
+    color: var(--light);
 }

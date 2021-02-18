@@ -274,8 +274,11 @@ const handleDelete = () => {
     <PatientContainer isDark={true} isWaiting={$books.length === 0}>
         <ul class="grid-list">
             {#each expandableBooks as { item, isExpanded }, index}
-                <ListItem on:click={toggleExpanded(index)} {isExpanded} title={item.shortname} description={item.bookdesc}>
-                    <div class="check-control">
+                <ListItem showDescription={isExpanded} title={item.shortname} description={item.bookdesc}>
+                    <button slot="left" class="icon icon-secondary" on:click={toggleExpanded(index)}>
+                        <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
+                    </button>
+                    <div slot="right" class="check-control icon icon-primary">
                         <input id="book-{item.booknumber}" value={item.booknumber} bind:group={selectedBooknumbers} type="checkbox">
                         <label for="book-{item.booknumber}">
                             <i class="far fa-check-circle"></i>
