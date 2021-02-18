@@ -84,6 +84,9 @@ onMount(() => {
 <svelte:head>
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="mask-icon" color="#650505" href="/pinned-tab-icon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </svelte:head>
 <svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
 
