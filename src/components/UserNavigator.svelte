@@ -40,7 +40,11 @@ const handleLogout = () => {
     background-color: var(--dark);
     display: flex;
     height: var(--lh-normal);
-    padding: var(--spacing-md);
+    padding:
+        var(--spacing-md)
+        calc(var(--spacing-md) + env(safe-area-inset-right, 0))
+        var(--spacing-md)
+        calc(var(--spacing-md) + env(safe-area-inset-left, 0));
 }
 
 .light .user-navigator {

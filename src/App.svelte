@@ -103,11 +103,7 @@ onMount(() => {
     margin: 0 auto;
     max-width: var(--maxwidth);
     width: 100%;
-    padding:
-        env(safe-area-inset-top, 0)
-        env(safe-area-inset-right, 0)
-        env(safe-area-inset-bottom, 0)
-        env(safe-area-inset-left, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .light {

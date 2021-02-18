@@ -55,7 +55,12 @@ article {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: var(--spacing-md);
+    padding:
+        var(--spacing-md)
+        calc(var(--spacing-md) + env(safe-area-inset-right, 0))
+        var(--spacing-md)
+        calc(var(--spacing-md) + env(safe-area-inset-left, 0));
+
     width: 100%;
 }
 
