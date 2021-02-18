@@ -126,9 +126,7 @@ const handleKeyDown = (event) => {
             {#if showSearchResults && matchingBooks.length}
                 <ul class="search-results form-control">
                     {#each matchingBooks as { shortname, booknumber }, index}
-                        <li>
-                            <button tabindex="-1" class:focused={index === focusedResultElementIndex} on:click={handleBookSelect(booknumber)}>{shortname}</button>
-                        </li>
+                        <li tabindex="-1" class:focused={index === focusedResultElementIndex} on:mouseover={() => focusedResultElementIndex = index} on:click={handleBookSelect(booknumber)}>{shortname}</li>
                     {/each}
                 </ul>
             {/if}
@@ -193,22 +191,18 @@ form .active {
     background-color: var(--white);
     border-left: 1px solid var(--light);
     border-right: 1px solid var(--light);
+    cursor: pointer;
     display: block;
+    outline: none;
+    padding: var(--spacing-md);
+    text-align: left;
 }
 
 .search-results .focused {
     background-color: var(--lighter);
 }
 
-.search-results button {
-    height: 100%;
-    padding: var(--spacing-md);
-    text-align: left;
-    width: 100%;
-}
-
-.search-results li:last-of-type,
-.search-results li:last-of-type button {
+.search-results li:last-of-type {
     border-radius: 0 0 var(--radius) var(--radius);
 }
 
