@@ -4,15 +4,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env) => {
-    const isProduction = env && env.production;
+    const isProduction = !!env.production;
     const { API_SERVER = 'http://localhost:8001', STATS_SERVER = '' } = process.env;
     
     return {
         mode: isProduction ? 'production' : 'development',
-        devtool: isProduction ? '' : 'eval-source-map',
+        devtool: isProduction ? false : 'eval-source-map',
         entry: './index.js',
         output: {
-            filename: '[hash].bundle.js',
+            filename: '[fullhash].bundle.js',
             path: path.resolve(__dirname, 'dist')
         },
         module: {
@@ -23,7 +23,11 @@ module.exports = (env) => {
                     use: {
                         loader: 'svelte-loader',
                         options: {
-                            emitCss: true
+                            compilerOptions: {
+                                dev: !isProduction
+                            },
+                            emitCss: isProduction,
+                            hotReload: !isProduction
                         }
                     }
                 },
@@ -34,10 +38,7 @@ module.exports = (env) => {
                             loader: MiniCssExtractPlugin.loader,
                         } : 'style-loader',
                         {
-                            loader: 'css-loader',
-                            options: {
-                                sourceMap: isProduction ? false : true
-                            }
+                            loader: 'css-loader'
                         }
                     ]
                 },
@@ -52,7 +53,7 @@ module.exports = (env) => {
                 title: 'Scripture'
             }),
             new MiniCssExtractPlugin({
-                filename: '[hash].styles.css'
+                filename: '[fullhash].styles.css'
             })
         ],
         devServer: {
