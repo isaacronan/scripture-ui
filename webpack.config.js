@@ -14,7 +14,7 @@ module.exports = (env) => {
         output: {
             filename: '[fullhash].bundle.js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: '/'
+            publicPath: ''
         },
         module: {
             rules: [
