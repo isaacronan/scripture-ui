@@ -7,8 +7,7 @@ export let isUserScreen = false;
 export let isLight = false;
 
 const handleLogout = () => {
-    logout();
-    removeTokens();
+    logout().then(removeTokens, removeTokens);
     window.location.hash = homeHash;
 };
 </script>

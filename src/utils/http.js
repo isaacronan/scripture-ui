@@ -63,13 +63,9 @@ export const getSubscriptions = () => fetchWithAuth(new Request('/api/subscripti
 
 const fetchWithAuth = (request) => {
     const fetchRequestWithAuth = token => {
-        const headers = new Headers({
-            'Authorization': `Bearer ${token}`
-        });
-        for (let key of request.headers.keys()) {
-            headers.append(key, request.headers.get(key));
-        }
-        return fetch(request, { headers })
+        const headers = new Headers(request.headers);
+        headers.append('Authorization', `Bearer ${token}`);
+        return fetch(request.clone(), { headers })
     }
     const retrieveToken = get(accessToken) ? Promise.resolve(get(accessToken)) : refresh();
     return retrieveToken.then(token => fetchRequestWithAuth(token)).then(response => {
