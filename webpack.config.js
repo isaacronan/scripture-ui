@@ -13,7 +13,8 @@ module.exports = (env) => {
         entry: './index.js',
         output: {
             filename: '[fullhash].bundle.js',
-            path: path.resolve(__dirname, 'dist')
+            path: path.resolve(__dirname, 'dist'),
+            publicPath: '/'
         },
         module: {
             rules: [
@@ -35,7 +36,7 @@ module.exports = (env) => {
                     test: /\.css$/,
                     use: [
                         isProduction ? {
-                            loader: MiniCssExtractPlugin.loader,
+                            loader: MiniCssExtractPlugin.loader
                         } : 'style-loader',
                         {
                             loader: 'css-loader'
@@ -44,7 +45,10 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/i,
-                    use: 'url-loader'
+                    type: 'asset/resource',
+                    generator: {
+                        filename: 'fonts/[hash][ext][query]'
+                    }
                 }
             ]
         },
