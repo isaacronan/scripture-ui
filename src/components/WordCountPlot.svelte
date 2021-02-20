@@ -26,7 +26,7 @@ const fetchData = () => {
 };
 
 const plot = () => {
-    const HEIGHT = svg.clientHeight
+    const HEIGHT = svg.clientHeight - 2;
     const WIDTH = svg.clientWidth;
     const BARWIDTH = min([WIDTH / data.length, 100]);
     const BARSPACE = 0.1 * BARWIDTH;
@@ -41,6 +41,8 @@ const plot = () => {
     const textEnter = textUpdate.enter().append('g').attr('class', 'chart-label');
     textEnter.append('text').attr('class', 'label');
     textEnter.append('text').attr('class', 'value');
+    textEnter.select('.value').append('tspan').attr('class', 'count');
+    textEnter.select('.value').append('tspan').attr('class', 'unit');
     textUpdate.exit().remove();
 
     rectEnter.merge(rectUpdate)
@@ -72,15 +74,21 @@ const plot = () => {
         .attr('text-anchor', (_, i) => i < data.length / 2 ? 'start' : 'end')
         .attr('y', -20);
     textEnter.merge(textUpdate).select('.value')
-        .text(({ totalwords }) => {
-            return totalwords;
-        })
         .attr('text-anchor', (_, i) => i < data.length / 2 ? 'start' : 'end');
+    textEnter.merge(textUpdate).select('.count')
+        .text(({ totalwords }) => {
+            return formatNumber(totalwords);
+        });
+    textEnter.merge(textUpdate).select('.unit')
+        .text('words')
+        .attr('dx', 2);
     textEnter.merge(textUpdate)
         .style('transform', (_, i) => {
             return `translate(${i * BARWIDTH + (i < data.length / 2 ? BARWIDTH - BARSPACE + LABELSPACE : -LABELSPACE)}px, ${HEIGHT}px`
         });
 };
+
+const formatNumber = (number) => `${number}`.split('').reverse().map((digit, index) => !!index && !(index % 3) ? `${digit},` : digit).reverse().join('');
 </script>
 <svelte:window on:resize={plot} />
 <div>
@@ -92,7 +100,7 @@ const plot = () => {
 <style>
 div {
     line-height: 0;
-    padding-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
 }
 
 svg {

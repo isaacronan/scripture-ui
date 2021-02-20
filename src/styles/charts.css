@@ -15,9 +15,13 @@
 }
 
 .chart-label .label {
-    font-size: var(--fs-small);
+    font-size: var(--fs-normal);
 }
 
-.chart-label .value {
+.chart-label .count {
     font-size: var(--fs-big);
+}
+
+.chart-label .unit {
+    font-size: var(--fs-small);
 }
