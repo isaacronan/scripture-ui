@@ -1,0 +1,23 @@
+.chart-bar {
+    fill: var(--blue);
+    outline: none;
+}
+
+.chart:focus-within .chart-bar:not(:focus) {
+    opacity: 0.4;
+}
+
+.chart-label {
+    pointer-events: none;
+    fill: var(--light);
+    text-transform: uppercase;
+    visibility: hidden;
+}
+
+.chart-label .label {
+    font-size: var(--fs-small);
+}
+
+.chart-label .value {
+    font-size: var(--fs-big);
+}

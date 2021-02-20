@@ -28,6 +28,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
+    "d3-array": "^2.11.0",
+    "d3-scale": "^3.2.3",
+    "d3-selection": "^2.0.0",
     "lodash": "^4.17.20",
     "svelte": "^3.32.3"
   }

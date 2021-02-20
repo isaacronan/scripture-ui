@@ -153,3 +153,6 @@ export const getStats = (verseDosage, isChapterSubscription, bookPool, currentIs
     bookPool,
     currentIssue
 })).then(checkStatusAndRespond);
+
+export const getBooksStats = () => fetch('/stats/books').then(checkStatusAndRespond);
+export const getChaptersStats = (booknumber) => fetch(`/stats/books/${booknumber}/chapters`).then(checkStatusAndRespond);
