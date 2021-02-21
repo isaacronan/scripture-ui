@@ -5,7 +5,7 @@ import { ALL, OLD, NEW } from '../utils/constants';
 import ItemList from '../components/ItemList.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
-import WordCountPlot from '../components/WordCountPlot.svelte';
+import TextPlot from '../components/TextPlot.svelte';
 
 let bookSubset = ALL;
 let visibleBooks = $books;
@@ -25,7 +25,7 @@ $: switch (bookSubset) {
         { label: 'Home', hash: homeHash }
     ]}/>
     <h2>Books</h2>
-    <WordCountPlot />
+    <TextPlot />
     <div>
         <div class="book-controls">
             <span><input id={ALL} type="radio" bind:group={bookSubset} value={ALL}><label for={ALL}>All</label></span>

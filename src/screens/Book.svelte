@@ -7,7 +7,7 @@ import ItemList from '../components/ItemList.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import Expandable from '../components/Expandable.svelte';
-import WordCountPlot from '../components/WordCountPlot.svelte';
+import TextPlot from '../components/TextPlot.svelte';
 
 let [ booknumber ] = bookPattern.getParams();
 
@@ -38,7 +38,7 @@ const initialize = () => {
     <PatientContainer isShort={true} isFailed={$invalidBooknumberError} isWaiting={!$getBookName($currentBooknumber)}>
         <h2>{$getBookName($currentBooknumber)}</h2>
         {#if $currentChapters.length > 1}
-            <WordCountPlot booknumber={$currentBooknumber} />
+            <TextPlot booknumber={$currentBooknumber} />
         {/if}
         {#if $getBookDescription($currentBooknumber)}
             <Expandable content={$getBookDescription($currentBooknumber)} showLabel="Show Description" hideLabel="Hide Description" />

@@ -1,6 +1,6 @@
 <script>
 import debounce from 'lodash/debounce';
-import { ExpandableItem } from '../utils/models';
+import { ExpandableItem, formatNumber } from '../utils/misc';
 import { books, oldBooks, newBooks, getShortName } from '../utils/store';
 import { ALL, OLD, NEW, subscriptionNamePattern, TIMEOUT } from '../utils/constants';
 import { createSubscription, updateSubscription, deleteSubscription, getChapters, getVerses , getStats} from '../utils/http';
@@ -10,6 +10,7 @@ import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
+import WordCountPlot from '../components/WordCountPlot.svelte';
 
 export let subscription = null;
 export let isEdit = false;
@@ -210,9 +211,10 @@ const handleDelete = () => {
             <div class="stats">
                 <h3>Subscription Stats:</h3>
                 <div>
-                    <div class="stat">{#if stats}{stats.averagewords}{:else}&mdash;{/if} <small>words per day</small></div>
-                    <div class="stat">{#if stats}{stats.issues.length}{:else}&mdash;{/if} <small>day{(!stats || stats.issues.length !== 1) ? 's' : ''}</small></div>
+                    <div class="stat">{#if stats}{formatNumber(stats.averagewords)}{:else}&mdash;{/if} <small>words per day</small></div>
+                    <div class="stat">{#if stats}{formatNumber(stats.issues.length)}{:else}&mdash;{/if} <small>day{(!stats || stats.issues.length !== 1) ? 's' : ''}</small></div>
                 </div>
+                <WordCountPlot data={stats?.issues} getLabel={(_, i) => `Day ${i + 1}`} isDark={true} />
             </div>
         </div>
         {#if isEdit}

@@ -1,6 +1,6 @@
 <script>
 import { SCREENWIDTH } from '../utils/constants';
-import { ExpandableItem } from '../utils/models';
+import { ExpandableItem } from '../utils/misc';
 export let verses = [];
 
 let container = null;

@@ -12,3 +12,5 @@ ExpandableItem.prototype.setExpanded = function(isExpanded) {
     this.isExpanded = isExpanded;
     return this;
 };
+
+export const formatNumber = (number) => `${number}`.split('').reverse().map((digit, index) => !!index && !(index % 3) ? `${digit},` : digit).reverse().join('');

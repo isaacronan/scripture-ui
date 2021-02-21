@@ -1,6 +1,6 @@
 <script>
 import ListItem from './ListItem.svelte';
-import { ExpandableItem } from '../utils/models'
+import { ExpandableItem } from '../utils/misc'
 
 export let items = [];
 export let getTitle = () => '';

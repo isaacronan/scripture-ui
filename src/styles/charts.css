@@ -14,6 +14,10 @@
     visibility: hidden;
 }
 
+.chart-label.dark {
+    fill: var(--dark);
+}
+
 .chart-label .label {
     font-size: var(--fs-normal);
 }

@@ -1,6 +1,5 @@
 <script>
-import { onMount } from 'svelte';
-import { ExpandableItem } from '../utils/models';
+import { ExpandableItem } from '../utils/misc';
 export let content = '';
 export let showLabel = '';
 export let hideLabel = '';
