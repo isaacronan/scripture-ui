@@ -11,7 +11,7 @@ export let isDark = false;
 let svg = null;
 const index = local();
 
-$: if (data) {
+$: if (data && svg) {
     plot();
 }
 
@@ -59,10 +59,10 @@ const plot = () => {
 
     textEnter.merge(textUpdate).select('.label')
         .text((d, i) => getLabel(d, i))
-        .attr('text-anchor', (_, i) => i < data.length / 2 ? 'start' : 'end')
+        .attr('text-anchor', (_, i) => i * BARWIDTH < WIDTH / 2 ? 'start' : 'end')
         .attr('y', -20);
     textEnter.merge(textUpdate).select('.value')
-        .attr('text-anchor', (_, i) => i < data.length / 2 ? 'start' : 'end');
+        .attr('text-anchor', (_, i) => i * BARWIDTH < WIDTH / 2 ? 'start' : 'end');
     textEnter.merge(textUpdate).select('.count')
         .text((d) => formatNumber(getValue(d)));
     textEnter.merge(textUpdate).select('.unit')
@@ -70,7 +70,7 @@ const plot = () => {
         .attr('dx', 2);
     textEnter.merge(textUpdate)
         .style('transform', (_, i) => {
-            return `translate(${i * BARWIDTH + (i < data.length / 2 ? BARWIDTH - BARSPACE + LABELSPACE : -LABELSPACE)}px, ${HEIGHT}px`
+            return `translate(${i * BARWIDTH + (i * BARWIDTH < WIDTH / 2 ? BARWIDTH - BARSPACE + LABELSPACE : -LABELSPACE)}px, ${HEIGHT}px`
         });
 };
 </script>
