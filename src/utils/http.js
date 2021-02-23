@@ -9,11 +9,11 @@ const checkStatusAndRespond = (res) => {
     return res.json();
 };
 
-export const getBooks = () => fetch('/api/books').then(checkStatusAndRespond);
-export const getChapters = (booknumber, numberOnly = false) => fetch(`/api/books/${booknumber}/chapters${numberOnly ? '?numberOnly=true' : ''}`).then(checkStatusAndRespond);
-export const getVerses = (booknumber, chapternumber, numberOnly = false) => fetch(`/api/books/${booknumber}/chapters/${chapternumber}${numberOnly ? '?numberOnly=true' : ''}`).then(checkStatusAndRespond);
+export const getBooks = () => fetch('/scripture/api/books').then(checkStatusAndRespond);
+export const getChapters = (booknumber, numberOnly = false) => fetch(`/scripture/api/books/${booknumber}/chapters${numberOnly ? '?numberOnly=true' : ''}`).then(checkStatusAndRespond);
+export const getVerses = (booknumber, chapternumber, numberOnly = false) => fetch(`/scripture/api/books/${booknumber}/chapters/${chapternumber}${numberOnly ? '?numberOnly=true' : ''}`).then(checkStatusAndRespond);
 
-export const createAccount = (username, password) => fetch('/api/user/create', {
+export const createAccount = (username, password) => fetch('/scripture/api/user/create', {
     method: 'POST',
     body: JSON.stringify({
         username,
@@ -48,18 +48,18 @@ const _refresh = () => {
 
     const refresh = refreshPattern.exec(document.cookie)[1];
     const username = usernamePattern.exec(document.cookie)[1];
-    return fetch(constructPostRequest('/api/user/refresh', {
+    return fetch(constructPostRequest('/scripture/api/user/refresh', {
         refresh,
         username
     })).then(checkStatusAndRespond).then(storeTokens(username));
 };
 
-export const login = (username, password) => fetch(constructPostRequest('/api/user/login', {
+export const login = (username, password) => fetch(constructPostRequest('/scripture/api/user/login', {
     username,
     password
 })).then(checkStatusAndRespond).then(storeTokens(username));
 
-export const getSubscriptions = () => fetchWithAuth(new Request('/api/subscriptions'));
+export const getSubscriptions = () => fetchWithAuth(new Request('/scripture/api/subscriptions'));
 
 const fetchWithAuth = (request) => {
     const fetchRequestWithAuth = token => {
@@ -113,14 +113,14 @@ export const removeTokens = () => {
     document.cookie = `username=; expires=${new Date(0).toUTCString()}`;
 };
 
-export const createSubscription = (name, verseDosage, isChapterSubscription, bookPool) => fetchWithAuth(constructPostRequest('/api/subscriptions', {
+export const createSubscription = (name, verseDosage, isChapterSubscription, bookPool) => fetchWithAuth(constructPostRequest('/scripture/api/subscriptions', {
     name,
     verseDosage,
     isChapterSubscription,
     bookPool
 }));
 
-export const updateSubscription = (id, name, verseDosage, isChapterSubscription, bookPool, currentIssue) => fetchWithAuth(constructPutRequest(`/api/subscriptions/${id}`, {
+export const updateSubscription = (id, name, verseDosage, isChapterSubscription, bookPool, currentIssue) => fetchWithAuth(constructPutRequest(`/scripture/api/subscriptions/${id}`, {
     name,
     verseDosage,
     isChapterSubscription,
@@ -128,22 +128,22 @@ export const updateSubscription = (id, name, verseDosage, isChapterSubscription,
     currentIssue
 }));
 
-export const deleteSubscription = (id) => fetchWithAuth(constructDeleteRequest(`/api/subscriptions/${id}`));
+export const deleteSubscription = (id) => fetchWithAuth(constructDeleteRequest(`/scripture/api/subscriptions/${id}`));
 
 export const logout = () => {
     const refreshPattern = /refresh=(\w+)/;
     const refresh = refreshPattern.test(document.cookie) ? refreshPattern.exec(document.cookie)[1] : null;
-    return fetchWithAuth(constructPostRequest('/api/user/logout', { refresh }));
+    return fetchWithAuth(constructPostRequest('/scripture/api/user/logout', { refresh }));
 };
 
-export const getSubscription = (id) => fetchWithAuth(new Request(`/api/subscriptions/${id}`));
+export const getSubscription = (id) => fetchWithAuth(new Request(`/scripture/api/subscriptions/${id}`));
 
-export const resetPassword = (currentPassword, newPassword) => fetchWithAuth(constructPutRequest('/api/user/password', {
+export const resetPassword = (currentPassword, newPassword) => fetchWithAuth(constructPutRequest('/scripture/api/user/password', {
     currentPassword,
     newPassword
 }));
 
-export const deleteAccount = (password) => fetchWithAuth(constructPostRequest('/api/user/delete', {
+export const deleteAccount = (password) => fetchWithAuth(constructPostRequest('/scripture/api/user/delete', {
     password
 }));
 

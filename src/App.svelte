@@ -1,5 +1,5 @@
 <script>
-import { onMount } from 'svelte';
+import { onMount, setContext } from 'svelte';
 import { books } from './utils/store';
 import {
     homePattern,
@@ -31,7 +31,13 @@ import ResetPassword from './screens/ResetPassword.svelte';
 import DeleteAccount from './screens/DeleteAccount.svelte';
 import UserNavigator from './components/UserNavigator.svelte';
 
-let currentScreen = null;
+export let prefetched = null;
+// setContext('prefetched', prefetched || window.__PREFETCHED__);
+if (prefetched) {
+    books.set(prefetched.books);
+}
+
+let currentScreen = Home;
 $: isLight = currentScreen === Chapter || currentScreen === Issue;
 $: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === ResetPassword || currentScreen === DeleteAccount;
 $: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue || currentScreen === ResetPassword || currentScreen === DeleteAccount;
@@ -69,9 +75,13 @@ const updateRoute = () => {
 };
 
 onMount(() => {
-    getBooks().then((data) => {
-        books.set(data);
-    });
+    if (window.__PREFETCHED__) {
+        books.set(window.__PREFETCHED__.books);
+    } else {
+        getBooks().then((data) => {
+            books.set(data);
+        });
+    }
 
     refresh().then(() => {
         console.log('used refresh token');

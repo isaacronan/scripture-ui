@@ -14,7 +14,7 @@ module.exports = (env) => {
         output: {
             filename: '[fullhash].bundle.js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: ''
+            publicPath: isProduction ? '/scripture/' : '/'
         },
         module: {
             rules: [
@@ -25,7 +25,8 @@ module.exports = (env) => {
                         loader: 'svelte-loader',
                         options: {
                             compilerOptions: {
-                                dev: !isProduction
+                                dev: !isProduction,
+                                hydratable: true
                             },
                             emitCss: isProduction,
                             hotReload: !isProduction
@@ -54,7 +55,8 @@ module.exports = (env) => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                title: 'Scripture'
+                title: 'Scripture',
+                filename: isProduction ? 'scripture.html' : 'index.html'
             }),
             new MiniCssExtractPlugin({
                 filename: '[fullhash].styles.css'
@@ -65,8 +67,7 @@ module.exports = (env) => {
             hot: true,
             proxy: [
                 {
-                    context: ['/api'],
-                    pathRewrite: /^http:\/\/localhost:\d+$/.test(API_SERVER) ? { '^/api': '' } : {},
+                    context: ['/scripture/api'],
                     target: API_SERVER,
                     secure: false
                 },
