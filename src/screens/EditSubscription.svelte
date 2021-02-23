@@ -7,7 +7,7 @@ import CreateSubscription from './CreateSubscription.svelte';
 
 const changeRoute = getContext('changeRoute');
 
-let [editId] = editSubscriptionPattern.getParams();
+let [editId] = editSubscriptionPattern.getParams(getContext('initialRoute'));
 $: subscription = $subscriptions ? $subscriptions.find(({ id }) => id === editId) : null;
 $: if ($subscriptions && !subscription) {
     changeRoute(dashboardHash);

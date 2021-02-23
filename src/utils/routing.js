@@ -1,13 +1,27 @@
+import Home from '../screens/Home.svelte';
+import Books from '../screens/Books.svelte';
+import Book from '../screens/Book.svelte';
+import Chapter from '../screens/Chapter.svelte';
+import NotFound from '../screens/NotFound.svelte';
+import CreateAccount from '../screens/CreateAccount.svelte';
+import Login from '../screens/Login.svelte';
+import Dashboard from '../screens/Dashboard.svelte';
+import CreateSubscription from '../screens/CreateSubscription.svelte';
+import EditSubscription from '../screens/EditSubscription.svelte';
+import Issue from '../screens/Issue.svelte';
+import ResetPassword from '../screens/ResetPassword.svelte';
+import DeleteAccount from '../screens/DeleteAccount.svelte';
+
 const HashPattern = function(pattern) {
     this.pattern = pattern;
 };
 
-HashPattern.prototype.isMatch = function() {
-    return this.pattern.test(window.location.pathname);
+HashPattern.prototype.isMatch = function(defaultRoute = '') {
+    return this.pattern.test(defaultRoute || window.location.pathname);
 };
 
-HashPattern.prototype.getParams = function() {
-    return this.pattern.exec(window.location.pathname).slice(1);
+HashPattern.prototype.getParams = function(defaultRoute = '') {
+    return this.pattern.exec(defaultRoute || window.location.pathname).slice(1);
 };
 
 export const homePattern = new HashPattern(/^\/scripture\/?$/);
@@ -37,3 +51,33 @@ export const resetHash = '/scripture/reset';
 export const deleteHash = '/scripture/delete';
 
 export const routeChangeEvent = new Event('routechange');
+
+export const getCurrentScreen = (defaultRoute = '') => {
+    if (homePattern.isMatch(defaultRoute)) {
+        return Home;
+    } else if (booksPattern.isMatch(defaultRoute)) {
+        return Books;
+    } else if (bookPattern.isMatch(defaultRoute)) {
+        return Book;
+    } else if(chapterPattern.isMatch(defaultRoute)) {
+        return Chapter;
+    } else if(createAccountPattern.isMatch(defaultRoute)) {
+        return CreateAccount;
+    } else if(loginPattern.isMatch(defaultRoute)) {
+        return Login;
+    } else if(dashboardPattern.isMatch(defaultRoute)) {
+        return Dashboard;
+    } else if(createSubscriptionPattern.isMatch(defaultRoute)) {
+        return CreateSubscription;
+    } else if(editSubscriptionPattern.isMatch(defaultRoute)) {
+        return EditSubscription;
+    } else if(issuePattern.isMatch(defaultRoute)) {
+        return Issue;
+    } else if(resetPattern.isMatch(defaultRoute)) {
+        return ResetPassword;
+    } else if(deletePattern.isMatch(defaultRoute)) {
+        return DeleteAccount;
+    } else {
+        return NotFound;
+    }
+};

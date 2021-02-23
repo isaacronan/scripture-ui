@@ -1,5 +1,5 @@
 <script>
-import { onMount } from 'svelte';
+import { getContext, onMount } from 'svelte';
 import { getBookName, getBookDescription, currentChapters, currentBooknumber, invalidBooknumberError } from '../utils/store';
 import { bookPattern, homeHash, booksHash, chapterHash } from '../utils/routing';
 import { getChapters } from '../utils/http';
@@ -9,11 +9,20 @@ import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import Expandable from '../components/Expandable.svelte';
 import TextPlot from '../components/TextPlot.svelte';
 
-let [ booknumber ] = bookPattern.getParams();
+let [ booknumber ] = bookPattern.getParams(getContext('initialRoute'));
+
+const prefetched = getContext('prefetched');
+if (prefetched?.chapters) {
+    currentBooknumber.set(booknumber);
+    currentChapters.set(prefetched.chapters);
+}
 
 onMount(() => {
-    [ booknumber ] = bookPattern.getParams();
-    if (booknumber !== $currentBooknumber) {
+    if (window.__PREFETCHED__?.chapters) {
+        currentBooknumber.set(booknumber);
+        currentChapters.set(window.__PREFETCHED__.chapters);
+        delete window.__PREFETCHED__.chapters;
+    } else if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
         invalidBooknumberError.set('');

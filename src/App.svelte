@@ -1,29 +1,9 @@
 <script>
 import { onMount, setContext } from 'svelte';
 import { books } from './utils/store';
-import {
-    homePattern,
-    booksPattern,
-    bookPattern,
-    chapterPattern,
-    createAccountPattern,
-    loginPattern,
-    dashboardPattern,
-    createSubscriptionPattern,
-    editSubscriptionPattern,
-    issuePattern,
-    resetPattern,
-    deletePattern,
-    routeChangeEvent
-} from './utils/routing';
+import { routeChangeEvent, getCurrentScreen } from './utils/routing';
 import { getBooks, refresh } from './utils/http';
-import Home from './screens/Home.svelte';
-import Books from './screens/Books.svelte';
-import Book from './screens/Book.svelte';
 import Chapter from './screens/Chapter.svelte';
-import NotFound from './screens/NotFound.svelte';
-import CreateAccount from './screens/CreateAccount.svelte';
-import Login from './screens/Login.svelte';
 import Dashboard from './screens/Dashboard.svelte';
 import CreateSubscription from './screens/CreateSubscription.svelte';
 import EditSubscription from './screens/EditSubscription.svelte';
@@ -33,12 +13,15 @@ import DeleteAccount from './screens/DeleteAccount.svelte';
 import UserNavigator from './components/UserNavigator.svelte';
 
 export let prefetched = null;
-// setContext('prefetched', prefetched || window.__PREFETCHED__);
+export let initialRoute = null;
+setContext('prefetched', prefetched);
+setContext('initialRoute', initialRoute);
+
 if (prefetched) {
     books.set(prefetched.books);
 }
 
-let currentScreen = null;
+let currentScreen = getCurrentScreen(initialRoute);
 $: isLight = currentScreen === Chapter || currentScreen === Issue;
 $: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === ResetPassword || currentScreen === DeleteAccount;
 $: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue || currentScreen === ResetPassword || currentScreen === DeleteAccount;
@@ -55,40 +38,14 @@ const changeRoute = (route) => {
 setContext('changeRoute', changeRoute);
 
 const syncScreenWithRoute = () => {
-    if (homePattern.isMatch()) {
-        currentScreen = Home;
-    } else if (booksPattern.isMatch()) {
-        currentScreen = Books;
-    } else if (bookPattern.isMatch()) {
-        currentScreen = Book;
-    } else if(chapterPattern.isMatch()) {
-        currentScreen = Chapter;
-    } else if(createAccountPattern.isMatch()) {
-        currentScreen = CreateAccount;
-    } else if(loginPattern.isMatch()) {
-        currentScreen = Login;
-    } else if(dashboardPattern.isMatch()) {
-        currentScreen = Dashboard;
-    } else if(createSubscriptionPattern.isMatch()) {
-        currentScreen = CreateSubscription;
-    } else if(editSubscriptionPattern.isMatch()) {
-        currentScreen = EditSubscription;
-    } else if(issuePattern.isMatch()) {
-        currentScreen = Issue;
-    } else if(resetPattern.isMatch()) {
-        currentScreen = ResetPassword;
-    } else if(deletePattern.isMatch()) {
-        currentScreen = DeleteAccount;
-    } else {
-        currentScreen = NotFound;
-    }
-
+    currentScreen = getCurrentScreen();
     window.scrollTo(0, 0);
 };
 
 onMount(() => {
-    if (window.__PREFETCHED__) {
+    if (window.__PREFETCHED__?.books) {
         books.set(window.__PREFETCHED__.books);
+        delete window.__PREFETCHED__.books;
     } else {
         getBooks().then((data) => {
             books.set(data);
@@ -110,7 +67,7 @@ onMount(() => {
     <link rel="mask-icon" color="#650505" href="/pinned-tab-icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </svelte:head>
-<svelte:window on:popstate={() => changeRoute()} on:load={() => changeRoute()} on:routechange={syncScreenWithRoute} />
+<svelte:window on:popstate={() => changeRoute()} on:routechange={syncScreenWithRoute} />
 
 <div class:light={isLight} class:light-alt={isLightAlt} class="app">
     <UserNavigator isLight={isLight || isLightAlt} isUserScreen={isUserScreen} />

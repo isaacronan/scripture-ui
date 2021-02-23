@@ -1,14 +1,10 @@
 <script>
-import { onMount } from 'svelte';
+import { getContext } from 'svelte';
 import { getShortName, currentBooknumber, currentChapters } from '../utils/store';
 import { chapterPattern, chapterHash } from '../utils/routing';
 import Link from './Link.svelte';
 
-let chapternumber = chapterPattern.getParams()[1];
-
-onMount(() => {
-    initialize();
-});
+let chapternumber = chapterPattern.getParams(getContext('initialRoute'))[1];
 
 const initialize = () => {
     if (chapterPattern.isMatch()) {

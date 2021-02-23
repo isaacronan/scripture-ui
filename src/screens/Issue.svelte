@@ -9,7 +9,7 @@ import VerseList from '../components/VerseList.svelte';
 
 const changeRoute = getContext('changeRoute');
 
-let [ id ] = issuePattern.getParams();
+let [ id ] = issuePattern.getParams(getContext('initialRoute'));
 let subscription = null;
 let verses = [];
 let isCompleted = false;

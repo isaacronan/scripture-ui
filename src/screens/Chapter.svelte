@@ -1,5 +1,5 @@
 <script>
-import { onMount } from 'svelte';
+import { getContext, onMount } from 'svelte';
 import { getShortName, getChapterDescription, currentBooknumber, currentChapters, invalidBooknumberError } from '../utils/store';
 import { chapterPattern, homeHash, booksHash, bookHash } from '../utils/routing';
 import { getChapters, getVerses } from '../utils/http';
@@ -9,16 +9,29 @@ import VerseList from '../components/VerseList.svelte';
 import Expandable from '../components/Expandable.svelte';
 import ChapterNavigator from '../components/ChapterNavigator.svelte';
 
-let [ booknumber, chapternumber ] = chapterPattern.getParams();
+let [ booknumber, chapternumber ] = chapterPattern.getParams(getContext('initialRoute'));
 let verses = [];
 let invalidChapternumberError = '';
+
+const prefetched = getContext('prefetched');
+if (prefetched?.verses && prefetched?.chapters) {
+    currentBooknumber.set(booknumber);
+    currentChapters.set(prefetched.chapters);
+    verses = prefetched.verses;
+}
 
 onMount(() => {
     initialize();
 });
 
 const initialize = () => {
-    if (chapterPattern.isMatch()) {
+    if (window.__PREFETCHED__?.verses && window.__PREFETCHED__?.chapters) {
+        currentBooknumber.set(booknumber);
+        currentChapters.set(window.__PREFETCHED__.chapters);
+        delete window.__PREFETCHED__.chapters;
+        verses = window.__PREFETCHED__.verses;
+        delete window.__PREFETCHED__.verses;
+    } else if (chapterPattern.isMatch()) {
         [ booknumber, chapternumber ] = chapterPattern.getParams();
         verses = [];
         invalidChapternumberError = '';
