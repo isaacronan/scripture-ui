@@ -101,16 +101,16 @@ const constructDeleteRequest = (url) => new Request(url, {
 
 const storeTokens = username => ({ token, refresh }) => {
     accessToken.set(token);
-    document.cookie = `refresh=${refresh}`;
-    document.cookie = `username=${username}`;
+    document.cookie = `refresh=${refresh}; path=/scripture`;
+    document.cookie = `username=${username}; path=/scripture`;
     return token;
 };
 
 export const removeTokens = () => {
     accessToken.set(TOKEN_DNE);
     subscriptions.set(null);
-    document.cookie = `refresh=; expires=${new Date(0).toUTCString()}`;
-    document.cookie = `username=; expires=${new Date(0).toUTCString()}`;
+    document.cookie = `refresh=; path=/scripture; expires=${new Date(0).toUTCString()}`;
+    document.cookie = `username=; path=/scripture; expires=${new Date(0).toUTCString()}`;
 };
 
 export const createSubscription = (name, verseDosage, isChapterSubscription, bookPool) => fetchWithAuth(constructPostRequest('/scripture/api/subscriptions', {
