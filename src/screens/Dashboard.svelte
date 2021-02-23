@@ -6,6 +6,7 @@ import PatientContainer from '../components/PatientContainer.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
 import { onMount } from 'svelte';
+import Link from '../components/Link.svelte';
 
 onMount(() => {
     subscriptions.set(null);
@@ -29,14 +30,18 @@ onMount(() => {
                 <ul class="grid-list">
                     {#each $subscriptions as subscription}
                         <ListItem title={subscription.name}>
-                            <a slot="left" class="icon icon-secondary" href={editSubscriptionHash(subscription.id)}>
-                                <i class="fas fa-cog"/>
-                            </a>
+                            <div slot="left">
+                                <Link>
+                                    <a class="icon icon-secondary" href={editSubscriptionHash(subscription.id)}>
+                                        <i class="fas fa-cog"/>
+                                    </a>
+                                </Link>
+                            </div>
                             <div slot="right">
                                 {#if !subscription.currentIssue}
                                     <small class="icon-primary">Completed</small>
                                 {:else}
-                                    <a class="icon icon-primary" href={issueHash(subscription.id)}><i class="fas fa-arrow-right"/></a>
+                                    <Link><a class="icon icon-primary" href={issueHash(subscription.id)}><i class="fas fa-arrow-right"/></a></Link>
                                 {/if}
                             </div>
                         </ListItem>
@@ -50,15 +55,15 @@ onMount(() => {
                 </div>
             {/if}
             <div class="new">
-                <a href={createSubscriptionHash} class="plain-button"><i class="fas fa-plus" />New Subscription</a>
+                <Link><a href={createSubscriptionHash} class="plain-button"><i class="fas fa-plus" />New Subscription</a></Link>
             </div>
         </PatientContainer>
     </section>
     <section>
         <h2>Account Settings</h2>
         <div class="flex-container">
-            <a href={resetHash} class="button alt">Reset Password</a>
-            <a href={deleteHash} class="button alt negative">Delete Account</a>
+            <Link><a href={resetHash} class="button alt reset">Reset Password</a></Link>
+            <Link><a href={deleteHash} class="button alt negative delete">Delete Account</a></Link>
         </div>
     </section>
 </article>
@@ -102,8 +107,12 @@ small {
     flex-basis: 100%;
 }
 
-.flex-container a + a {
-    margin-left: var(--spacing-sm);
+.reset {
+    margin-right: var(--spacing-xs);
+}
+
+.delete {
+    margin-left: var(--spacing-xs);
 }
 
 @media screen and (min-width: 768px) {

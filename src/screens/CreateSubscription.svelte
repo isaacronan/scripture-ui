@@ -11,6 +11,10 @@ import Alert from '../components/Alert.svelte';
 import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import WordCountPlot from '../components/WordCountPlot.svelte';
+import Link from '../components/Link.svelte';
+import { getContext } from 'svelte';
+
+const changeRoute = getContext('changeRoute');
 
 export let subscription = null;
 export let isEdit = false;
@@ -152,7 +156,7 @@ const preset = type => () => {
     }
 };
 
-const goToDashboard = () => window.location.hash = dashboardHash;
+const goToDashboard = () => changeRoute(dashboardHash);
 
 const handleSave = () => {
     if (isEdit) {
@@ -253,7 +257,7 @@ const handleDelete = () => {
                 {#if isEdit}
                     <button on:click={handleDelete} class="button negative">Delete</button>
                 {/if}
-                <a class="button alt negative" href={dashboardHash}>Cancel</a>
+                <Link><a class="button alt negative" href={dashboardHash}>Cancel</a></Link>
                 <button on:click={handleSave} disabled={!saveIsAllowed} class="button">{isEdit ? 'Save' : 'Create'}</button>
             </div>
         </div>

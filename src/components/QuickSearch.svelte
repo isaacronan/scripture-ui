@@ -4,6 +4,10 @@ import { TIMEOUT } from '../utils/constants';
 import { books, getShortName } from '../utils/store';
 import { getChapters } from '../utils/http';
 import { chapterHash, bookHash } from '../utils/routing';
+import Link from './Link.svelte';
+import { getContext } from 'svelte';
+
+const changeRoute = getContext('changeRoute');
 
 let query = '';
 let queryPattern = /^((\d*\s)?(\w+))(\s(\d+))?/;
@@ -74,11 +78,11 @@ const handleBookSelect = (booknumber) => () => {
     setSelectedBook(booknumber);
 };
 
-const handleSubmit = (event) => {
+const handleSubmit = () => {
     if (booknumberQuery && chapternumberQuery) {
-        window.location.hash = chapterHash(booknumberQuery, chapternumberQuery);
+        changeRoute(chapterHash(booknumberQuery, chapternumberQuery));
     } else if (booknumberQuery) {
-        window.location.hash = bookHash(booknumberQuery);
+        changeRoute(bookHash(booknumberQuery));
     }
 };
 
@@ -137,7 +141,7 @@ const handleKeyDown = (event) => {
                 <ul>
                     {#each chapterOptions as { chapternumber }}
                         <li>
-                            <a href={chapterHash(chapterOptionsBooknumber, chapternumber)} class="list-button small" class:selected={chapternumber === Number(chapternumberQuery) && bookGuessMatchesSelected}>{chapternumber}</a>
+                            <Link><a href={chapterHash(chapterOptionsBooknumber, chapternumber)} class="list-button small" class:selected={chapternumber === Number(chapternumberQuery) && bookGuessMatchesSelected}>{chapternumber}</a></Link>
                         </li>
                     {/each}
                 </ul>

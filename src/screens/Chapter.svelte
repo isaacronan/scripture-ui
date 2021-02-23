@@ -18,28 +18,30 @@ onMount(() => {
 });
 
 const initialize = () => {
-    [ booknumber, chapternumber ] = chapterPattern.getParams();
-    verses = [];
-    invalidChapternumberError = '';
-    if (booknumber !== $currentBooknumber) {
-        currentBooknumber.set(booknumber);
-        currentChapters.set([]);
-        invalidBooknumberError.set('');
-        getChapters($currentBooknumber).then(data => {
-            currentChapters.set(data);
+    if (chapterPattern.isMatch()) {
+        [ booknumber, chapternumber ] = chapterPattern.getParams();
+        verses = [];
+        invalidChapternumberError = '';
+        if (booknumber !== $currentBooknumber) {
+            currentBooknumber.set(booknumber);
+            currentChapters.set([]);
+            invalidBooknumberError.set('');
+            getChapters($currentBooknumber).then(data => {
+                currentChapters.set(data);
+            }, (error) => {
+                invalidBooknumberError.set(error);
+            });
+        }
+
+        getVerses($currentBooknumber, chapternumber).then(data => {
+            verses = data;
         }, (error) => {
-            invalidBooknumberError.set(error);
+            invalidChapternumberError = error;
         });
     }
-
-    getVerses($currentBooknumber, chapternumber).then(data => {
-        verses = data;
-    }, (error) => {
-        invalidChapternumberError = error;
-    });
 };
 </script>
-<svelte:window on:hashchange={initialize} />
+<svelte:window on:routechange={initialize} />
 <svelte:head>
 {#if verses.length === 0}
     <style>

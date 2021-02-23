@@ -12,10 +12,6 @@ import TextPlot from '../components/TextPlot.svelte';
 let [ booknumber ] = bookPattern.getParams();
 
 onMount(() => {
-    initialize();
-});
-
-const initialize = () => {
     [ booknumber ] = bookPattern.getParams();
     if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
@@ -27,9 +23,8 @@ const initialize = () => {
             invalidBooknumberError.set(error);
         });
     }
-};
+});
 </script>
-<svelte:window on:hashchange={initialize} />
 <article>
     <Breadcrumbs crumbs={[
         { label: 'Home', hash: homeHash },

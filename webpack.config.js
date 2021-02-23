@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = (env) => {
     const isProduction = !!env.production;
     const { API_SERVER = 'http://localhost:8001', STATS_SERVER = '' } = process.env;
+    const PUBLIC_PATH = '/scripture/';
     
     return {
         mode: isProduction ? 'production' : 'development',
@@ -14,7 +15,7 @@ module.exports = (env) => {
         output: {
             filename: '[fullhash].bundle.js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: isProduction ? '/scripture/' : '/'
+            publicPath: PUBLIC_PATH
         },
         module: {
             rules: [
@@ -65,6 +66,11 @@ module.exports = (env) => {
         devServer: {
             port: 8000,
             hot: true,
+            historyApiFallback: {
+                rewrites: [
+                    { from: /\/scripture(\/.*)?$/, to: PUBLIC_PATH }
+                ]
+            },
             proxy: [
                 {
                     context: ['/scripture/api'],

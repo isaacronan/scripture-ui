@@ -4,6 +4,7 @@ import { resetPassword } from '../utils/http';
 import { passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
+import Link from '../components/Link.svelte';
 
 let currentPassword = '';
 let newPassword = '';
@@ -66,7 +67,7 @@ const handleSubmit = () => {
         </div>
         <div class="next-steps form-control">
             <div>
-                <a href={dashboardHash} class="button">Dashboard</a>
+                <Link><a href={dashboardHash} class="button">Dashboard</a></Link>
             </div>
         </div>
     {/if}

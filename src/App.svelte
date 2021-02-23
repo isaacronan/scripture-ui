@@ -13,7 +13,8 @@ import {
     editSubscriptionPattern,
     issuePattern,
     resetPattern,
-    deletePattern
+    deletePattern,
+    routeChangeEvent
 } from './utils/routing';
 import { getBooks, refresh } from './utils/http';
 import Home from './screens/Home.svelte';
@@ -37,12 +38,23 @@ if (prefetched) {
     books.set(prefetched.books);
 }
 
-let currentScreen = Home;
+let currentScreen = null;
 $: isLight = currentScreen === Chapter || currentScreen === Issue;
 $: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === ResetPassword || currentScreen === DeleteAccount;
 $: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue || currentScreen === ResetPassword || currentScreen === DeleteAccount;
 
-const updateRoute = () => {
+const changeRoute = (route) => {
+    if (route !== window.location.pathname) {
+        if (route) {
+            window.history.pushState({}, '', route);
+        }
+        window.dispatchEvent(routeChangeEvent);
+    }
+};
+
+setContext('changeRoute', changeRoute);
+
+const syncScreenWithRoute = () => {
     if (homePattern.isMatch()) {
         currentScreen = Home;
     } else if (booksPattern.isMatch()) {
@@ -98,7 +110,7 @@ onMount(() => {
     <link rel="mask-icon" color="#650505" href="/pinned-tab-icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </svelte:head>
-<svelte:window on:popstate={updateRoute} on:load={updateRoute} on:hashchange={updateRoute} />
+<svelte:window on:popstate={() => changeRoute()} on:load={() => changeRoute()} on:routechange={syncScreenWithRoute} />
 
 <div class:light={isLight} class:light-alt={isLightAlt} class="app">
     <UserNavigator isLight={isLight || isLightAlt} isUserScreen={isUserScreen} />

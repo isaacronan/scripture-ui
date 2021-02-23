@@ -1,4 +1,6 @@
 <script>
+import Link from './Link.svelte';
+
 export let crumbs = [];
 </script>
 <nav>
@@ -6,7 +8,7 @@ export let crumbs = [];
         {#each crumbs as crumb}
             <li>
                 {#if crumb.label}
-                    <a class="link" href="{crumb.hash}"><i class="fas fa-chevron-left" />{crumb.label}</a>
+                    <Link><a class="link" href="{crumb.hash}"><i class="fas fa-chevron-left" />{crumb.label}</a></Link>
                 {/if}
             </li>
         {/each}

@@ -74,8 +74,8 @@ const fetchWithAuth = (request) => {
         }
         return response;
     }).then(checkStatusAndRespond, () => {
-        const { origin, pathname } = window.location;
-        window.location.replace(`${origin}${pathname}${loginHash}`);
+        const { origin } = window.location;
+        window.location.replace(`${origin}${loginHash}`);
     });
 };
 
