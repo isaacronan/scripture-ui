@@ -218,7 +218,7 @@ const handleDelete = () => {
                     <div class="stat">{#if stats}{formatNumber(stats.averagewords)}{:else}&mdash;{/if} <small>words per day</small></div>
                     <div class="stat">{#if stats}{formatNumber(stats.issues.length)}{:else}&mdash;{/if} <small>day{(!stats || stats.issues.length !== 1) ? 's' : ''}</small></div>
                 </div>
-                <WordCountPlot data={stats?.issues} getLabel={(_, i) => `Day ${i + 1}`} isDark={true} />
+                <WordCountPlot data={stats?.issues} getLabel={(_, i) => `Day ${formatNumber(i + 1)}`} isDark={true} />
             </div>
         </div>
         {#if isEdit}
