@@ -1,7 +1,8 @@
 <script>
-import { getContext, onMount } from 'svelte';
+import { getContext, onDestroy, onMount } from 'svelte';
 
 let sibling = null;
+let element = null;
 const changeRoute = getContext('changeRoute');
 const handleLinkClick = (event) => {
     event.preventDefault();
@@ -9,7 +10,13 @@ const handleLinkClick = (event) => {
 };
 
 onMount(() => {
-    sibling.nextElementSibling.addEventListener('click', handleLinkClick);
+    element = sibling.nextElementSibling;
+    element.addEventListener('click', handleLinkClick);
+    sibling.remove();
+});
+
+onDestroy(() => {
+    element?.before(sibling);
 });
 </script>
 <span bind:this={sibling} />
