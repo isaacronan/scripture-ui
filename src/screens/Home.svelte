@@ -8,9 +8,7 @@ import Link from '../components/Link.svelte';
 <article>
     <h1>Scripture</h1>
     <h3>A digital transcription of the <span>Douay-Rheims</span> translation</h3>
-    {#if $accessToken === TOKEN_DNE}
-        <p><Link><a class="link" href={loginHash}>Login</a></Link> or <Link><a class="link" href={createAccountHash}>create an account</a></Link> to make a customized reading plan.</p>
-    {/if}
+    <p class:visible={$accessToken === TOKEN_DNE}><Link><a class="link" href={loginHash}>Login</a></Link> or <Link><a class="link" href={createAccountHash}>create an account</a></Link> to make a customized reading plan.</p>
     <section>
         <h2>Quick Search</h2>
         <QuickSearch />
@@ -39,19 +37,25 @@ h1, h3 {
 
 p {
     color: var(--light);
+    margin-bottom: var(--spacing-md);
     text-align: center;
+    visibility: hidden;
 }
 
 p .link {
     color: var(--white);
 }
 
-h1 {
-    margin: var(--spacing-sm) 0;
+.visible {
+    visibility: visible;
 }
 
-h3, p {
-    margin-bottom: var(--spacing-lg);
+h1 {
+    margin-bottom: var(--spacing-md);
+}
+
+h3 {
+    margin-bottom: var(--spacing-sm);
 }
 
 h3 span {
