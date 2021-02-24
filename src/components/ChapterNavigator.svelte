@@ -1,36 +1,39 @@
 <script>
-import { onMount } from 'svelte';
+import { getContext } from 'svelte';
 import { getShortName, currentBooknumber, currentChapters } from '../utils/store';
 import { chapterPattern, chapterHash } from '../utils/routing';
+import Link from './Link.svelte';
 
-let chapternumber = chapterPattern.getParams()[1];
-
-onMount(() => {
-    initialize();
-});
+let chapternumber = chapterPattern.getParams(getContext('initialRoute'))[1];
 
 const initialize = () => {
-    chapternumber = chapterPattern.getParams()[1];
+    if (chapterPattern.isMatch()) {
+        chapternumber = chapterPattern.getParams()[1];
+    }
 };
 
 $: nextChapter = $currentChapters.find(chapter => chapter.chapternumber > Number(chapternumber));
 $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < Number(chapternumber)).pop();
 </script>
-<svelte:window on:hashchange={initialize} />
+<svelte:window on:routechange={initialize} />
 <nav>
     <div class="chapter-navigator">
         {#if previousChapter}
-            <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
-                <i class="fas fa-arrow-left" />
-                {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
-            </a>
+            <Link>
+                <a class="plain-button" href={chapterHash($currentBooknumber, previousChapter.chapternumber)}>
+                    <i class="fas fa-arrow-left" />
+                    {$getShortName($currentBooknumber)} {previousChapter.chapternumber}
+                </a>
+            </Link>
         {/if}
         {#if nextChapter}
             <div class="next-chapter">
-                <a class="plain-button" href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
-                    {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
-                    <i class="fas fa-arrow-right" />
-                </a>
+                <Link>
+                    <a class="plain-button" href={chapterHash($currentBooknumber, nextChapter.chapternumber)}>
+                        {$getShortName($currentBooknumber)} {nextChapter.chapternumber}
+                        <i class="fas fa-arrow-right" />
+                    </a>
+                </Link>
             </div>
         {/if}
     </div>

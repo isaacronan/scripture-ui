@@ -1,19 +1,17 @@
 <script>
-import { onMount } from 'svelte';
+import { getContext, onMount } from 'svelte';
 import { subscriptions } from '../utils/store';
 import { getSubscriptions } from '../utils/http';
 import { editSubscriptionPattern, dashboardHash } from '../utils/routing';
 import CreateSubscription from './CreateSubscription.svelte';
 
-let [editId] = editSubscriptionPattern.getParams();
+const changeRoute = getContext('changeRoute');
+
+let [editId] = editSubscriptionPattern.getParams(getContext('initialRoute'));
 $: subscription = $subscriptions ? $subscriptions.find(({ id }) => id === editId) : null;
 $: if ($subscriptions && !subscription) {
-    window.location.hash = dashboardHash;
+    changeRoute(dashboardHash);
 }
-
-const initialize = () => {
-    [editId] = editSubscriptionPattern.getParams()
-};
 
 onMount(() => {
     if (!$subscriptions) {
@@ -23,5 +21,4 @@ onMount(() => {
     }
 });
 </script>
-<svelte:window on:hashchange={initialize} />
 <CreateSubscription isEdit={true} {subscription} />

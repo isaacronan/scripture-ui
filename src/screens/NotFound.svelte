@@ -1,9 +1,10 @@
 <script>
 import { homeHash } from '../utils/routing';
+import Link from '../components/Link.svelte';
 </script>
 <article>
     <h1>Page not found!</h1>
-    <a class="link" href={homeHash}>Home</a>
+    <Link><a class="link" href={homeHash}>Home</a></Link>
 </article>
 <style>
 h1,

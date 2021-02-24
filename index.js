@@ -8,5 +8,6 @@ import './src/styles/charts.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 new App({
-    target: document.body
+    target: document.body,
+    hydrate: true
 });

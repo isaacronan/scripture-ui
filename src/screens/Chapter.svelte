@@ -1,5 +1,5 @@
 <script>
-import { onMount } from 'svelte';
+import { getContext, onMount } from 'svelte';
 import { getShortName, getChapterDescription, currentBooknumber, currentChapters, invalidBooknumberError } from '../utils/store';
 import { chapterPattern, homeHash, booksHash, bookHash } from '../utils/routing';
 import { getChapters, getVerses } from '../utils/http';
@@ -9,37 +9,52 @@ import VerseList from '../components/VerseList.svelte';
 import Expandable from '../components/Expandable.svelte';
 import ChapterNavigator from '../components/ChapterNavigator.svelte';
 
-let [ booknumber, chapternumber ] = chapterPattern.getParams();
+let [ booknumber, chapternumber ] = chapterPattern.getParams(getContext('initialRoute'));
 let verses = [];
 let invalidChapternumberError = '';
+
+const prefetched = getContext('prefetched');
+if (prefetched?.verses && prefetched?.chapters) {
+    currentBooknumber.set(booknumber);
+    currentChapters.set(prefetched.chapters);
+    verses = prefetched.verses;
+}
 
 onMount(() => {
     initialize();
 });
 
 const initialize = () => {
-    [ booknumber, chapternumber ] = chapterPattern.getParams();
-    verses = [];
-    invalidChapternumberError = '';
-    if (booknumber !== $currentBooknumber) {
+    if (window.__PREFETCHED__?.verses && window.__PREFETCHED__?.chapters) {
         currentBooknumber.set(booknumber);
-        currentChapters.set([]);
-        invalidBooknumberError.set('');
-        getChapters($currentBooknumber).then(data => {
-            currentChapters.set(data);
+        currentChapters.set(window.__PREFETCHED__.chapters);
+        delete window.__PREFETCHED__.chapters;
+        verses = window.__PREFETCHED__.verses;
+        delete window.__PREFETCHED__.verses;
+    } else if (chapterPattern.isMatch()) {
+        [ booknumber, chapternumber ] = chapterPattern.getParams();
+        verses = [];
+        invalidChapternumberError = '';
+        if (booknumber !== $currentBooknumber) {
+            currentBooknumber.set(booknumber);
+            currentChapters.set([]);
+            invalidBooknumberError.set('');
+            getChapters($currentBooknumber).then(data => {
+                currentChapters.set(data);
+            }, (error) => {
+                invalidBooknumberError.set(error);
+            });
+        }
+
+        getVerses($currentBooknumber, chapternumber).then(data => {
+            verses = data;
         }, (error) => {
-            invalidBooknumberError.set(error);
+            invalidChapternumberError = error;
         });
     }
-
-    getVerses($currentBooknumber, chapternumber).then(data => {
-        verses = data;
-    }, (error) => {
-        invalidChapternumberError = error;
-    });
 };
 </script>
-<svelte:window on:hashchange={initialize} />
+<svelte:window on:routechange={initialize} />
 <svelte:head>
 {#if verses.length === 0}
     <style>

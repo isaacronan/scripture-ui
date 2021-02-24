@@ -10,8 +10,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve",
-    "build": "rm -rf dist && rm -rf node_modules && npm ci && webpack --env production",
-    "build:quick": "rm -rf dist && webpack --env production"
+    "build": "rm -rf dist && rm -rf node_modules && npm ci && webpack --env production && npm run build:ssr",
+    "build:quick": "rm -rf dist && webpack --env production",
+    "build:ssr": "webpack --config ssr.config.js"
   },
   "author": "",
   "license": "ISC",

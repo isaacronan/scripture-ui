@@ -1,6 +1,7 @@
 <script>
 import ListItem from './ListItem.svelte';
 import { ExpandableItem } from '../utils/misc'
+import Link from './Link.svelte';
 
 export let items = [];
 export let getTitle = () => '';
@@ -40,7 +41,9 @@ const setExpandedAll = (isExpanded) => () => {
                 <button slot="left" class="icon icon-secondary" on:click={toggleExpanded(index)}>
                     <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
                 </button>
-                <a slot="right" class="icon icon-primary" href={getHref(item)}><i class="fas fa-arrow-right"/></a>
+                <div slot="right">
+                    <Link><a class="icon icon-primary" href={getHref(item)}><i class="fas fa-arrow-right"/></a></Link>
+                </div>
             </ListItem>
         {/each}
     </ul>

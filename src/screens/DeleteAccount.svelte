@@ -4,6 +4,7 @@ import { deleteAccount, removeTokens } from '../utils/http';
 import { passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
+import Link from '../components/Link.svelte';
 
 let currentPassword = '';
 let serverMessage = '';
@@ -62,7 +63,7 @@ const handleSubmit = () => {
         </div>
         <div class="next-steps form-control">
             <div>
-                <a href={homeHash} class="button">Home</a>
+                <Link><a href={homeHash} class="button">Home</a></Link>
             </div>
         </div>
     {/if}

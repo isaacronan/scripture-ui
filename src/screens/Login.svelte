@@ -3,6 +3,10 @@ import { login } from '../utils/http';
 import { createAccountHash, dashboardHash, homeHash } from '../utils/routing';
 import { usernamePattern, passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
+import Link from '../components/Link.svelte';
+import { getContext } from 'svelte';
+
+const changeRoute = getContext('changeRoute');
 
 let username = '';
 let password = '';
@@ -13,7 +17,7 @@ $: passwordIsValid = passwordPattern.test(password);
 
 const handleLogin = () => {
     login(username, password).then(() => {
-        window.location.hash = dashboardHash;
+        changeRoute(dashboardHash);
     }, (error) => {
         errorMessage = error;
     });
@@ -39,10 +43,10 @@ const handleLogin = () => {
             <button type="submit" class="button" disabled={!usernameIsValid || !passwordIsValid}>Login</button>
         </div>
         <div>
-            <a href={homeHash} class="button alt">Home</a>
+            <Link><a href={homeHash} class="button alt">Home</a></Link>
         </div>
     </form>
-    <a href={createAccountHash} class="link">Create an account</a>
+    <Link><a href={createAccountHash} class="link">Create an account</a></Link>
 </article>
 <style>
 article {

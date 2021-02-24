@@ -3,6 +3,10 @@ import { homeHash, loginHash, dashboardHash } from '../utils/routing';
 import { createAccount, login } from '../utils/http';
 import { usernamePattern, passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
+import Link from '../components/Link.svelte';
+import { getContext } from 'svelte';
+
+const changeRoute = getContext('changeRoute');
 
 let username = '';
 let password = '';
@@ -24,7 +28,7 @@ const handleSubmit = () => {
 
 const handleLogin = () => {
     login(username, password).then(() => {
-        window.location.hash = dashboardHash;
+        changeRoute(dashboardHash);
     });
 };
 </script>
@@ -53,10 +57,10 @@ const handleLogin = () => {
                 <button type="submit" disabled={!usernameIsValid || !passwordIsValid} class="button">Create Account</button>
             </div>
             <div>
-                <a href={homeHash} class="button alt">Home</a>
+                <Link><a href={homeHash} class="button alt">Home</a></Link>
             </div>
         </form>
-        <a href={loginHash} class="link">Login</a>
+        <Link><a href={loginHash} class="link">Login</a></Link>
     {:else}
         <div class="spacing-bottom">
             <Alert message={serverMessage} />
@@ -66,7 +70,7 @@ const handleLogin = () => {
                 <button on:click={handleLogin} class="button">Login</button>
             </div>
             <div>
-                <a href={homeHash} class="button alt">Home</a>
+                <Link><a href={homeHash} class="button alt">Home</a></Link>
             </div>
         </div>
     {/if}

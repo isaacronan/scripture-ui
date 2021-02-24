@@ -2,22 +2,28 @@
 import { dashboardHash, homeHash, loginHash } from '../utils/routing';
 import { logout, removeTokens } from '../utils/http';
 import { accessToken, TOKEN_DNE } from '../utils/store';
+import Link from './Link.svelte';
+import { getContext } from 'svelte';
 
 export let isUserScreen = false;
 export let isLight = false;
 
+const changeRoute = getContext('changeRoute');
+
 const handleLogout = () => {
     logout().then(removeTokens, removeTokens);
-    window.location.hash = homeHash;
+    changeRoute(homeHash);
 };
 </script>
 <nav class:light={isLight}>
     <div class="user-navigator">
         {#if $accessToken}
-            <a class="plain-button" href={isUserScreen ? homeHash : dashboardHash}>
-                <i class="fas fa-home" />
-                {isUserScreen ? 'Home' : 'Dashboard'}
-            </a>
+            <Link>
+                <a class="plain-button" href={isUserScreen ? homeHash : dashboardHash}>
+                    <i class="fas fa-home" />
+                    {isUserScreen ? 'Home' : 'Dashboard'}
+                </a>
+            </Link>
         {/if}
         <div class="logout">
             {#if $accessToken}
@@ -26,10 +32,12 @@ const handleLogout = () => {
                     <i class="fas fa-sign-out-alt" />
                 </button>
             {:else if $accessToken === TOKEN_DNE}
-                <a href={loginHash} class="plain-button">
-                    Log In
-                    <i class="fas fa-sign-in-alt" />
-                </a>
+                <Link>
+                    <a href={loginHash} class="plain-button">
+                        Log In
+                        <i class="fas fa-sign-in-alt" />
+                    </a>
+                </Link>
             {/if}
         </div>
     </div>

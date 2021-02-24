@@ -1,5 +1,5 @@
 <script>
-import { onMount } from 'svelte';
+import { onMount, getContext } from 'svelte';
 import { getShortName } from '../utils/store';
 import { issuePattern, dashboardHash } from '../utils/routing';
 import { getSubscription, updateSubscription } from '../utils/http';
@@ -7,7 +7,9 @@ import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import VerseList from '../components/VerseList.svelte';
 
-let [ id ] = issuePattern.getParams();
+const changeRoute = getContext('changeRoute');
+
+let [ id ] = issuePattern.getParams(getContext('initialRoute'));
 let subscription = null;
 let verses = [];
 let isCompleted = false;
@@ -38,11 +40,11 @@ const initialize = () => {
             });
         });
     }, () => {
-        window.location.hash = dashboardHash;
+        changeRoute(dashboardHash);
     });
 };
 
-const goToDashboard = () => window.location.hash = dashboardHash;
+const goToDashboard = () => changeRoute(dashboardHash);
 
 const handleIssueUpdate = () => {
     updateSubscription(
@@ -54,14 +56,7 @@ const handleIssueUpdate = () => {
         subscription.nextIssue
     ).then(() => isCompleted = true);
 };
-
-const handleHashChange = () => {
-    if (id !== issuePattern.getParams()[0]) {
-        initialize();
-    }
-};
 </script>
-<svelte:window on:hashchange={handleHashChange} />
 <svelte:head>
 <style>
     :root {

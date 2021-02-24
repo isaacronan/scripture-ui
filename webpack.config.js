@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = (env) => {
     const isProduction = !!env.production;
     const { API_SERVER = 'http://localhost:8001', STATS_SERVER = '' } = process.env;
+    const PUBLIC_PATH = '/scripture/';
     
     return {
         mode: isProduction ? 'production' : 'development',
@@ -14,7 +15,7 @@ module.exports = (env) => {
         output: {
             filename: '[fullhash].bundle.js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: ''
+            publicPath: PUBLIC_PATH
         },
         module: {
             rules: [
@@ -25,7 +26,8 @@ module.exports = (env) => {
                         loader: 'svelte-loader',
                         options: {
                             compilerOptions: {
-                                dev: !isProduction
+                                dev: !isProduction,
+                                hydratable: true
                             },
                             emitCss: isProduction,
                             hotReload: !isProduction
@@ -54,7 +56,8 @@ module.exports = (env) => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                title: 'Scripture'
+                title: 'Scripture',
+                filename: isProduction ? 'scripture.html' : 'index.html'
             }),
             new MiniCssExtractPlugin({
                 filename: '[fullhash].styles.css'
@@ -63,10 +66,14 @@ module.exports = (env) => {
         devServer: {
             port: 8000,
             hot: true,
+            historyApiFallback: {
+                rewrites: [
+                    { from: /\/scripture(\/.*)?$/, to: PUBLIC_PATH }
+                ]
+            },
             proxy: [
                 {
-                    context: ['/api'],
-                    pathRewrite: /^http:\/\/localhost:\d+$/.test(API_SERVER) ? { '^/api': '' } : {},
+                    context: ['/scripture/api'],
                     target: API_SERVER,
                     secure: false
                 },
