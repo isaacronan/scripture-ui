@@ -1,6 +1,8 @@
 <script>
 import { SCREENWIDTH } from '../utils/constants';
 import { ExpandableItem } from '../utils/misc';
+import { chapterHash } from '../utils/routing';
+import Link from './Link.svelte';
 export let verses = [];
 
 let container = null;
@@ -35,6 +37,11 @@ const handleWheel = (event) => {
                                 {#if item.isContinued}
                                     <small>cont'd</small>
                                 {/if}
+                                <Link>
+                                    <a href={chapterHash(item.booknumber, item.chapternumber)} target="_blank">
+                                        <i class="fas fa-external-link-alt icon-primary" />
+                                    </a>
+                                </Link>
                             </h3>
                         {/if}
                         <p>
@@ -70,6 +77,21 @@ p,
 h3 {
     color: var(--dark);
     margin: var(--spacing-sm) 0;
+}
+
+h3 {
+    align-items: baseline;
+    display: flex;
+}
+
+h3 small {
+    margin-left: var(--spacing-sm);
+}
+
+a {
+    align-self: center;
+    font-size: var(--fs-normal);
+    margin-left: var(--spacing-sm);
 }
 
 p button {
