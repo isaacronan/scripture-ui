@@ -24,7 +24,6 @@ if (prefetched) {
 let currentScreen = getCurrentScreen(initialRoute);
 $: isLight = currentScreen === Chapter || currentScreen === Issue;
 $: isLightAlt = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === ResetPassword || currentScreen === DeleteAccount;
-$: isUserScreen = currentScreen === Dashboard || currentScreen === CreateSubscription || currentScreen === EditSubscription || currentScreen === Issue || currentScreen === ResetPassword || currentScreen === DeleteAccount;
 
 const changeRoute = (route) => {
     if (route !== window.location.pathname) {
@@ -70,7 +69,7 @@ onMount(() => {
 <svelte:window on:popstate={() => changeRoute()} on:routechange={syncScreenWithRoute} />
 
 <div class:light={isLight} class:light-alt={isLightAlt} class="app">
-    <UserNavigator isLight={isLight || isLightAlt} isUserScreen={isUserScreen} />
+    <UserNavigator isLight={isLight || isLightAlt} />
     <svelte:component this={currentScreen} />
 </div>
 

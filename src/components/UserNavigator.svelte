@@ -1,11 +1,21 @@
 <script>
-import { dashboardHash, homeHash, loginHash } from '../utils/routing';
+import {
+    dashboardHash,
+    homeHash,
+    loginHash,
+    loginPattern,
+    dashboardPattern,
+    createSubscriptionPattern,
+    editSubscriptionPattern,
+    issuePattern,
+    resetPattern,
+    deletePattern,
+} from '../utils/routing';
 import { logout, removeTokens } from '../utils/http';
 import { accessToken, TOKEN_DNE } from '../utils/store';
 import Link from './Link.svelte';
 import { getContext } from 'svelte';
 
-export let isUserScreen = false;
 export let isLight = false;
 
 const changeRoute = getContext('changeRoute');
@@ -14,7 +24,19 @@ const handleLogout = () => {
     logout().then(removeTokens, removeTokens);
     changeRoute(homeHash);
 };
+
+const getIsUserScreen = (defaultRoute = '') => !![dashboardPattern, createSubscriptionPattern, editSubscriptionPattern, issuePattern, resetPattern, deletePattern]
+    .find(pattern => pattern.isMatch(defaultRoute));
+
+const handleRouteChange = () => {
+    isUserScreen = getIsUserScreen()
+    isLoginScreen = loginPattern.isMatch();
+};
+
+let isUserScreen = getIsUserScreen(getContext('initialRoute'));
+let isLoginScreen = loginPattern.isMatch(getContext('initialRoute'));
 </script>
+<svelte:window on:routechange={handleRouteChange} />
 <nav class:light={isLight}>
     <div class="user-navigator">
         {#if $accessToken}
@@ -31,7 +53,7 @@ const handleLogout = () => {
                     Log Out
                     <i class="fas fa-sign-out-alt" />
                 </button>
-            {:else if $accessToken === TOKEN_DNE}
+            {:else if $accessToken === TOKEN_DNE && !isLoginScreen}
                 <Link>
                     <a href={loginHash} class="plain-button">
                         Log In
