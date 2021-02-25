@@ -5,14 +5,23 @@ import { subscriptions } from '../utils/store';
 import PatientContainer from '../components/PatientContainer.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
-import { onMount } from 'svelte';
+import { getContext, onMount } from 'svelte';
 import Link from '../components/Link.svelte';
 
+const prefetched = getContext('prefetched') || window.__PREFETCHED__;
+if (prefetched?.subscriptions) {
+    subscriptions.set(prefetched.subscriptions);
+}
+
 onMount(() => {
-    subscriptions.set(null);
-    getSubscriptions().then(data => {
-        subscriptions.set(data);
-    });
+    if (prefetched?.subscriptions) {
+        delete prefetched.subscriptions;
+    } else {
+        subscriptions.set(null);
+        getSubscriptions().then(data => {
+            subscriptions.set(data);
+        });
+    }
 });
 </script>
 <svelte:head>

@@ -14,34 +14,46 @@ let subscription = null;
 let verses = [];
 let isCompleted = false;
 
+const fillVerses = () => subscription.books.forEach(book => {
+        book.chapters.forEach(chapter => {
+            chapter.verses.forEach((verse, index) => {
+                verses.push({
+                    ...verse,
+                    ...index === 0 ? {
+                        title: `${$getShortName(book.booknumber)} ${chapter.chapternumber}`,
+                        isContinued: chapter.verses[0].versenumber !== 1
+                    } : {}
+                });
+            })
+        });
+    });
+
+const prefetched = getContext('prefetched') || window.__PREFETCHED__;
+if (prefetched?.subscription) {
+    subscription = prefetched.subscription;
+    fillVerses();
+};
+
 onMount(() => {
     initialize();
 });
 
 const initialize = () => {
-    [ id ] = issuePattern.getParams();
-    subscription = null;
-    verses = [];
-    isCompleted = false;
+    if (prefetched?.subscription) {
+        delete prefetched.subscription;
+    } else {
+        [ id ] = issuePattern.getParams();
+        subscription = null;
+        verses = [];
+        isCompleted = false;
 
-    getSubscription(id).then(data => {
-        subscription = data;
-        subscription.books.forEach(book => {
-            book.chapters.forEach(chapter => {
-                chapter.verses.forEach((verse, index) => {
-                    verses.push({
-                        ...verse,
-                        ...index === 0 ? {
-                            title: `${$getShortName(book.booknumber)} ${chapter.chapternumber}`,
-                            isContinued: chapter.verses[0].versenumber !== 1
-                        } : {}
-                    });
-                })
-            });
+        getSubscription(id).then(data => {
+            subscription = data;
+            fillVerses();
+        }, () => {
+            changeRoute(dashboardHash);
         });
-    }, () => {
-        changeRoute(dashboardHash);
-    });
+    }
 };
 
 const goToDashboard = () => changeRoute(dashboardHash);
