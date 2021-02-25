@@ -1,6 +1,6 @@
 <script>
 import { onMount, setContext } from 'svelte';
-import { books } from './utils/store';
+import { accessToken, books, TOKEN_DNE } from './utils/store';
 import { routeChangeEvent, getCurrentScreen } from './utils/routing';
 import { getBooks, refresh } from './utils/http';
 import Chapter from './screens/Chapter.svelte';
@@ -17,8 +17,12 @@ export let initialRoute = null;
 setContext('prefetched', prefetched);
 setContext('initialRoute', initialRoute);
 
-if (prefetched) {
+if (prefetched?.books) {
     books.set(prefetched.books);
+}
+
+if (prefetched?.token || prefetched?.token === TOKEN_DNE) {
+    accessToken.set(prefetched.token);
 }
 
 let currentScreen = getCurrentScreen(initialRoute);
@@ -51,11 +55,7 @@ onMount(() => {
         });
     }
 
-    refresh().then(() => {
-        console.log('used refresh token');
-    }, () => {
-        console.log('no refresh token found');
-    });
+    refresh().catch(() => {});
 });
 </script>
 

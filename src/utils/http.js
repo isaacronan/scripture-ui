@@ -40,13 +40,18 @@ export const refresh =  () => {
 };
 
 const _refresh = () => {
-    return fetch('/scripture/api/user/refresh').then(checkStatusAndRespond).then(storeTokens());
+    if (window.__PREFETCHED__?.token || window.__PREFETCHED__?.token === TOKEN_DNE) {
+        const { token } = window.__PREFETCHED__;
+        delete window.__PREFETCHED__.token;
+        return Promise.resolve({ token }).then(storeTokens);
+    }
+    return fetch('/scripture/api/user/refresh').then(checkStatusAndRespond).then(storeTokens);
 };
 
 export const login = (username, password) => fetch(constructPostRequest('/scripture/api/user/login', {
     username,
     password
-})).then(checkStatusAndRespond).then(storeTokens(username));
+})).then(checkStatusAndRespond).then(storeTokens);
 
 export const getSubscriptions = () => fetchWithAuth(new Request('/scripture/api/subscriptions'));
 
@@ -88,7 +93,7 @@ const constructDeleteRequest = (url) => new Request(url, {
     method: 'DELETE'
 });
 
-const storeTokens = username => ({ token, refresh }) => {
+const storeTokens = ({ token }) => {
     accessToken.set(token);
     return token;
 };
