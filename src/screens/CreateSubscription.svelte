@@ -12,7 +12,7 @@ import PatientContainer from '../components/PatientContainer.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import WordCountPlot from '../components/WordCountPlot.svelte';
 import Link from '../components/Link.svelte';
-import { getContext } from 'svelte';
+import { getContext, onMount } from 'svelte';
 
 const changeRoute = getContext('changeRoute');
 
@@ -99,7 +99,8 @@ const handleNumericInputChange = field => (event) => {
     }
 };
 
-const fetchChapters = debounce(() => {
+let fetchChapters = () => {};
+const _fetchChapters = debounce(() => {
     if (currentBook) {
         getChapters(currentBook, true).then(data => {
             chapterMax = data.length;
@@ -108,7 +109,8 @@ const fetchChapters = debounce(() => {
     }
 }, TIMEOUT);
 
-const fetchVerses = debounce(() => {
+let fetchVerses = () => {};
+const _fetchVerses = debounce(() => {
     if (currentBook && currentChapter) {
         getVerses(currentBook, currentChapter, true).then(data => {
             verseMax = data.length;
@@ -117,11 +119,14 @@ const fetchVerses = debounce(() => {
     }
 }, TIMEOUT);
 
-const fetchStats = debounce(() => {
+let fetchStats = () => {};
+const _fetchStats = debounce(() => {
     if (necessaryFieldsAreValid) {
         const currentIssue = isEdit ? { currentBook, currentChapter, currentVerse } : { currentBook: selectedBooknumbers[0], currentChapter: 1, currentVerse: 1 };
         getStats(verseDosage, isChapterSubscription, selectedBooknumbers, currentIssue).then(data => {
             stats = data;
+        }).catch(() => {
+            stats = null;
         });
     } else {
         stats = null;
@@ -173,6 +178,12 @@ const handleSave = () => {
 const handleDelete = () => {
     deleteSubscription(subscription.id).then(goToDashboard)
 }
+
+onMount(() => {
+    fetchChapters = _fetchChapters;
+    fetchVerses = _fetchVerses;
+    fetchStats = _fetchStats;
+});
 </script>
 <svelte:head>
 <style>
