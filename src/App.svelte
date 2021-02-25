@@ -17,12 +17,13 @@ export let initialRoute = null;
 setContext('prefetched', prefetched);
 setContext('initialRoute', initialRoute);
 
-if (prefetched?.books) {
-    books.set(prefetched.books);
+const prefetchedData = prefetched || window.__PREFETCHED__;
+if (prefetchedData?.books) {
+    books.set(prefetchedData.books);
 }
 
-if (prefetched?.token || prefetched?.token === TOKEN_DNE) {
-    accessToken.set(prefetched.token);
+if (prefetchedData?.token || prefetchedData?.token === TOKEN_DNE) {
+    accessToken.set(prefetchedData.token);
 }
 
 let currentScreen = getCurrentScreen(initialRoute);
@@ -46,9 +47,8 @@ const syncScreenWithRoute = () => {
 };
 
 onMount(() => {
-    if (window.__PREFETCHED__?.books) {
-        books.set(window.__PREFETCHED__.books);
-        delete window.__PREFETCHED__.books;
+    if (prefetchedData?.books) {
+        delete prefetchedData.books;
     } else {
         getBooks().then((data) => {
             books.set(data);

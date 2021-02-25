@@ -13,7 +13,7 @@ let [ booknumber, chapternumber ] = chapterPattern.getParams(getContext('initial
 let verses = [];
 let invalidChapternumberError = '';
 
-const prefetched = getContext('prefetched');
+const prefetched = getContext('prefetched') || window.__PREFETCHED__;
 if (prefetched?.verses && prefetched?.chapters) {
     currentBooknumber.set(booknumber);
     currentChapters.set(prefetched.chapters);
@@ -25,12 +25,9 @@ onMount(() => {
 });
 
 const initialize = () => {
-    if (window.__PREFETCHED__?.verses && window.__PREFETCHED__?.chapters) {
-        currentBooknumber.set(booknumber);
-        currentChapters.set(window.__PREFETCHED__.chapters);
-        delete window.__PREFETCHED__.chapters;
-        verses = window.__PREFETCHED__.verses;
-        delete window.__PREFETCHED__.verses;
+    if (prefetched?.verses && prefetched?.chapters) {
+        delete prefetched.chapters;
+        delete prefetched.verses;
     } else if (chapterPattern.isMatch()) {
         [ booknumber, chapternumber ] = chapterPattern.getParams();
         verses = [];

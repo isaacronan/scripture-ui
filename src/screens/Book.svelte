@@ -11,17 +11,15 @@ import TextPlot from '../components/TextPlot.svelte';
 
 let [ booknumber ] = bookPattern.getParams(getContext('initialRoute'));
 
-const prefetched = getContext('prefetched');
+const prefetched = getContext('prefetched') || window.__PREFETCHED__;
 if (prefetched?.chapters) {
     currentBooknumber.set(booknumber);
     currentChapters.set(prefetched.chapters);
 }
 
 onMount(() => {
-    if (window.__PREFETCHED__?.chapters) {
-        currentBooknumber.set(booknumber);
-        currentChapters.set(window.__PREFETCHED__.chapters);
-        delete window.__PREFETCHED__.chapters;
+    if (prefetched?.chapters) {
+        delete prefetched.chapters;
     } else if (booknumber !== $currentBooknumber) {
         currentBooknumber.set(booknumber);
         currentChapters.set([]);
