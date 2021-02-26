@@ -8,26 +8,31 @@ export let data = null;
 export let getLabel = d => d;
 export let getValue = d => d;
 export let isDark = false;
+
+const maxPoints = 1000;
+$: points = (data || []).map((d, i) => ({ label: getLabel(d, i), value: getValue(d, i) }))
+    .filter((_, index, arr) => index % Math.ceil(arr.length / maxPoints) === 0);
+
 let svg = null;
 const index = local();
 
-$: if (data && svg) {
+$: if (points && svg) {
     plot();
 }
 
 const plot = () => {
     const HEIGHT = svg.clientHeight - 2;
     const WIDTH = svg.clientWidth;
-    const BARWIDTH = min([WIDTH / data.length, 100]);
+    const BARWIDTH = min([WIDTH / points.length, 100]);
     const BARSPACE = 0.1 * BARWIDTH;
     const LABELSPACE = 2;
-    const scale = scaleLinear([0, max(data, (d) => getValue(d))], [0.1 * HEIGHT, HEIGHT]);
+    const scale = scaleLinear([0, max(points, ({ value }) => value)], [0.1 * HEIGHT, HEIGHT]);
 
-    const rectUpdate = select(svg).select('.bars').selectAll('rect').data(data);
+    const rectUpdate = select(svg).select('.bars').selectAll('rect').data(points);
     const rectEnter = rectUpdate.enter().append('rect').attr('class', 'chart-bar').attr('tabindex', '-1');
     rectUpdate.exit().remove();
 
-    const textUpdate = select(svg).select('.labels').selectAll('g').data(data);
+    const textUpdate = select(svg).select('.labels').selectAll('g').data(points);
     const textEnter = textUpdate.enter().append('g').attr('class', `chart-label ${isDark ? 'dark' : ''}`);
     textEnter.append('text').attr('class', 'label');
     textEnter.append('text').attr('class', 'value');
@@ -37,9 +42,9 @@ const plot = () => {
 
     rectEnter.merge(rectUpdate)
         .attr('x', (_, i) => i * BARWIDTH)
-        .attr('y', (d) => HEIGHT - scale(getValue(d)))
+        .attr('y', ({ value }) => HEIGHT - scale(value))
         .attr('width', BARWIDTH - BARSPACE)
-        .attr('height', (d) => scale(getValue(d)))
+        .attr('height', ({ value }) => scale(value))
         .each((_, i, { [i]: element }) => {
             element.blur();
             index.set(element, i);
@@ -58,13 +63,13 @@ const plot = () => {
         });
 
     textEnter.merge(textUpdate).select('.label')
-        .text((d, i) => getLabel(d, i))
+        .text(({ label }) => label)
         .attr('text-anchor', (_, i) => i * BARWIDTH < WIDTH / 2 ? 'start' : 'end')
         .attr('y', -20);
     textEnter.merge(textUpdate).select('.value')
         .attr('text-anchor', (_, i) => i * BARWIDTH < WIDTH / 2 ? 'start' : 'end');
     textEnter.merge(textUpdate).select('.count')
-        .text((d) => formatNumber(getValue(d)));
+        .text(({ value }) => formatNumber(value));
     textEnter.merge(textUpdate).select('.unit')
         .text('words')
         .attr('dx', 2);
