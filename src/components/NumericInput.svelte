@@ -1,19 +1,35 @@
 <script>
-import { createEventDispatcher } from 'svelte';
+import { createEventDispatcher, onDestroy } from 'svelte';
 export let value = 0;
 export let max = null;
 
 const MIN = 1;
 let input = null;
+let delta = 1;
+let backoffTimeout = null;
 
 const dispatch = createEventDispatcher();
 
+const backoff = () => {
+    clearTimeout(backoffTimeout);
+    if (delta > 1) {
+        backoffTimeout = setTimeout(() => {
+            delta = Math.max(1, delta / 1.2);
+            backoff();
+        }, 100);
+    }
+};
+
 const handleDecrement = () => {
-    dispatch('change', { value: value - 1 });
+    dispatch('change', { value: Math.floor(Math.max(MIN, value - delta)) });
+    delta *= 1.5;
+    backoff();
 };
 
 const handleIncrement = () => {
-    dispatch('change', { value: value + 1 });
+    dispatch('change', { value: Math.floor(max ? Math.min(max, value + delta) : value + delta) });
+    delta *= 1.5;
+    backoff();
 };
 
 const handleInput = (event) => {
@@ -31,6 +47,10 @@ const handleBlur = (event) => {
 const inputValueIsValid = (inputValue) => {
     return inputValue !== '' && !(max !== null && inputValue > max) && inputValue >= MIN;
 };
+
+onDestroy(() => {
+    clearTimeout(backoffTimeout);
+});
 </script>
 <div class="form-control">
     <button disabled={value <= MIN} on:click={handleDecrement} class="button decrement"><i class="fas fa-minus" /></button>
