@@ -32,8 +32,8 @@ export const createAccountPattern = new HashPattern(/^\/scripture\/create$/);
 export const loginPattern = new HashPattern(/^\/scripture\/login$/);
 export const dashboardPattern = new HashPattern(/^\/scripture\/dashboard$/);
 export const createSubscriptionPattern = new HashPattern(/^\/scripture\/subscription\/create$/);
-export const editSubscriptionPattern = new HashPattern(/^\/scripture\/subscription\/edit\/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})$/);
-export const issuePattern = new HashPattern(/^\/scripture\/subscription\/(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})$/);
+export const editSubscriptionPattern = new HashPattern(/^\/scripture\/subscription\/edit\/(\w{4})$/);
+export const issuePattern = new HashPattern(/^\/scripture\/subscription\/(\w{4})$/);
 export const resetPattern = new HashPattern(/^\/scripture\/reset$/);
 export const deletePattern = new HashPattern(/^\/scripture\/delete$/);
 
