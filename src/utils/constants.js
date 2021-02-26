@@ -4,6 +4,6 @@ export const ALL = 'ALL';
 export const OLD = 'OLD';
 export const NEW = 'NEW';
 
-export const subscriptionNamePattern = /^\w+$/;
+export const subscriptionNamePattern = /\S+/;
 export const usernamePattern = /^\w+$/;
 export const passwordPattern = /^\S+$/;

@@ -1,7 +1,7 @@
 <script>
 import debounce from 'lodash/debounce';
 import { ExpandableItem, formatNumber } from '../utils/misc';
-import { books, oldBooks, newBooks, getShortName } from '../utils/store';
+import { books, oldBooks, newBooks, getShortName, subscriptions } from '../utils/store';
 import { ALL, OLD, NEW, subscriptionNamePattern, TIMEOUT } from '../utils/constants';
 import { createSubscription, updateSubscription, deleteSubscription, getChapters, getVerses , getStats} from '../utils/http';
 import { dashboardHash } from '../utils/routing';
@@ -165,18 +165,23 @@ const goToDashboard = () => changeRoute(dashboardHash);
 
 const handleSave = () => {
     if (isEdit) {
+        subscriptions.set($subscriptions.map(existingSubscription => (
+            existingSubscription.id === subscription.id ? { ...existingSubscription, name } : existingSubscription
+        )));
         updateSubscription(subscription.id, name, verseDosage, isChapterSubscription, selectedBooknumbers, {
             currentBook,
             currentChapter,
             currentVerse
         }).then(goToDashboard)
     } else {
+        subscriptions.set([...($subscriptions || []), { name, id: '', currentIssue: {}}]);
         createSubscription(name, verseDosage, isChapterSubscription, selectedBooknumbers).then(goToDashboard)
     }
 };
 
 const handleDelete = () => {
-    deleteSubscription(subscription.id).then(goToDashboard)
+    subscriptions.set($subscriptions.filter(({ id }) => id !== subscription.id));
+    deleteSubscription(subscription.id).then(goToDashboard);
 }
 
 onMount(() => {

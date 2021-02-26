@@ -17,7 +17,6 @@ onMount(() => {
     if (prefetched?.subscriptions) {
         delete prefetched.subscriptions;
     } else {
-        subscriptions.set(null);
         getSubscriptions().then(data => {
             subscriptions.set(data);
         });
