@@ -14,6 +14,9 @@ let subscription = null;
 let verses = [];
 let isCompleted = false;
 
+$: continuationLabel = subscription?.nextIssue?.currentVerse > 1 ?
+    `(${$getShortName(subscription.nextIssue.currentBook)} ${subscription.nextIssue.currentChapter} cont'd)` : '';
+
 const fillVerses = () => subscription.books.forEach(book => {
         book.chapters.forEach(chapter => {
             chapter.verses.forEach((verse, index) => {
@@ -96,7 +99,12 @@ const handleIssueUpdate = () => {
                 {:else}
                     <button on:click={goToDashboard} class="button alt action">Dashboard</button>
                 {/if}
-                <button on:click={initialize} class:hidden={!isCompleted || !subscription.nextIssue} class="button action">Next Issue</button>
+                <button on:click={initialize} class:hidden={!isCompleted || !subscription.nextIssue} class="button action">
+                    Next Issue
+                    {#if continuationLabel}
+                        <small>{continuationLabel}</small>
+                    {/if}
+                </button>
             </div>
         </VerseList>
     </PatientContainer>
