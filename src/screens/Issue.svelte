@@ -1,6 +1,6 @@
 <script>
 import { onMount, getContext } from 'svelte';
-import { getShortName } from '../utils/store';
+import { getShortName, subscriptions } from '../utils/store';
 import { issuePattern, dashboardHash } from '../utils/routing';
 import { getSubscription, updateSubscription } from '../utils/http';
 import PatientContainer from '../components/PatientContainer.svelte';
@@ -59,6 +59,11 @@ const initialize = () => {
 const goToDashboard = () => changeRoute(dashboardHash);
 
 const handleIssueUpdate = () => {
+    if ($subscriptions) {
+        subscriptions.set($subscriptions.map(existingSubscription => (
+            existingSubscription.id === id ? { ...existingSubscription, currentIssue: subscription.nextIssue } : existingSubscription
+        )));
+    };
     updateSubscription(
         id,
         subscription.name,

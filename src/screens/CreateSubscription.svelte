@@ -84,6 +84,13 @@ $: saveIsAllowed = subscriptionNamePattern.test(name) && necessaryFieldsAreValid
 $: necessaryFieldsAreValid = createFieldsAreValid && (!isEdit || isEdit && editFieldsAreValid);
 $: createFieldsAreValid = verseDosage > 0 && selectedBooknumbers.length;
 $: editFieldsAreValid = currentBook && currentChapter && currentVerse;
+$: saveLabel = (() => {
+    const isBeginning = currentBook === subscription?.bookPool[0] && currentChapter === 1 && currentVerse === 1;
+    if (isEdit) {
+        return !subscription?.currentIssue && isBeginning ? 'Start Over' : 'Save';
+    }
+    return 'Create';
+})();
 
 const handleNumericInputChange = field => (event) => {
     switch (field) {
@@ -274,7 +281,7 @@ onMount(() => {
                     <button on:click={handleDelete} class="button negative">Delete</button>
                 {/if}
                 <Link><a class="button alt negative" href={dashboardHash}>Cancel</a></Link>
-                <button on:click={handleSave} disabled={!saveIsAllowed} class="button">{isEdit ? 'Save' : 'Create'}</button>
+                <button on:click={handleSave} disabled={!saveIsAllowed} class="button">{saveLabel}</button>
             </div>
         </div>
         <div class="selected-books">
