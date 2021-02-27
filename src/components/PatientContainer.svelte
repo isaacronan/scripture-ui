@@ -1,12 +1,11 @@
 <script>
 export let isFailed = false;
 export let isWaiting = false;
-export let isDark = false;
 export let isShort = false;
 export let errorMessage = '';
 </script>
 {#if isFailed || isWaiting}
-    <div class:failed={isFailed} class:dark={isDark} class:short={isShort} class="skeleton">
+    <div class:failed={isFailed} class:short={isShort} class="skeleton">
         {#if isFailed}
             <div class="failure">
                 <i class="fas fa-exclamation-triangle" />
@@ -19,19 +18,13 @@ export let errorMessage = '';
 {/if}
 <style>
 .skeleton {
-    --skeletoncolor: var(--light);
-
     animation: pulse 1s linear 0s infinite alternate-reverse;
     align-items: center;
-    background-color: var(--skeletoncolor);
+    background-color: var(--smartskeleton);
     border-radius: var(--radius);
     display: flex;
     height: 200px;
     margin-top: var(--spacing-md);
-}
-
-.skeleton.dark {
-    --skeletoncolor: var(--dark);
 }
 
 .skeleton.short {

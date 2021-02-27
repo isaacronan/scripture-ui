@@ -16,6 +16,9 @@
 
     --smartblue: var(--cyan);
     --smartbody: var(--white);
+    --smartskeleton: var(--light);
+    --smartchartlabel: var(--light);
+    --smartchartbar: var(--blue);
     --button-color: var(--cyan);
 
     font-size: 10px;

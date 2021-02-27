@@ -202,7 +202,7 @@ onMount(() => {
         { label: 'Dashboard', hash: dashboardHash }
     ]}/>
     <h2>{isEdit ? 'Edit': 'New'} Subscription</h2>
-    <PatientContainer isDark={true} isWaiting={isEdit && !subscription || $books.length === 0}>
+    <PatientContainer isWaiting={isEdit && !subscription || $books.length === 0}>
         <div class="flex-container">
             <div class="name">
                 <div>Name</div>
@@ -234,7 +234,7 @@ onMount(() => {
                     <div class="stat">{#if stats}{formatNumber(stats.averagewords)}{:else}&mdash;{/if} <small>words per day</small></div>
                     <div class="stat">{#if stats}{formatNumber(stats.issues.length)}{:else}&mdash;{/if} <small>day{(!stats || stats.issues.length !== 1) ? 's' : ''}</small></div>
                 </div>
-                <WordCountPlot data={stats?.issues} getLabel={(_, i) => `Day ${formatNumber(i + 1)}`} isDark={true} />
+                <WordCountPlot data={stats?.issues} getLabel={(_, i) => `Day ${formatNumber(i + 1)}`} />
             </div>
         </div>
         {#if isEdit}
@@ -293,7 +293,7 @@ onMount(() => {
             {/if}
         </div>
     </PatientContainer>
-    <PatientContainer isDark={true} isWaiting={$books.length === 0}>
+    <PatientContainer isWaiting={$books.length === 0}>
         <ul class="grid-list">
             {#each expandableBooks as { item, isExpanded }, index}
                 <ListItem showDescription={isExpanded} title={item.shortname} description={item.bookdesc}>
@@ -315,6 +315,8 @@ onMount(() => {
 </article>
 <style>
 article {
+    --smartskeleton: var(--dark);
+    --smartchartlabel: var(--dark);
     color: var(--dark);
 }
 

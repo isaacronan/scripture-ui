@@ -81,7 +81,7 @@ const handleIssueUpdate = () => {
         { label: 'Dashboard', hash: dashboardHash }
     ]}/>
     <PatientContainer isShort={true} isWaiting={!subscription}>
-        <h2>{subscription.name}</h2>
+        <h2 class="light">{subscription.name}</h2>
     </PatientContainer>
     <PatientContainer isWaiting={!subscription}>
         <VerseList {verses}>

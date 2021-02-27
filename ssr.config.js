@@ -7,6 +7,7 @@ module.exports = () => {
         output: {
             filename: 'scripture-ssr.js',
             path: path.resolve(__dirname, 'dist'),
+            libraryExport: 'default',
             libraryTarget: 'commonjs'
         },
         module: {

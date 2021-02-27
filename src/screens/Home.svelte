@@ -18,7 +18,7 @@ import Link from '../components/Link.svelte';
         <div>
             <Link><a class="link" href={booksHash}>Detail View</a></Link>
         </div>
-        <PatientContainer isDark={true} isWaiting={$books.length === 0}>
+        <PatientContainer isWaiting={$books.length === 0}>
             <ul>
                 {#each $books as { shortname, booknumber }}
                     <li>
@@ -30,6 +30,10 @@ import Link from '../components/Link.svelte';
     </section>
 </article>
 <style>
+article {
+    --smartskeleton: var(--dark);
+}
+
 h1, h3 {
     color: var(--cyan);
     text-align: center;

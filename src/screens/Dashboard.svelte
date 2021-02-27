@@ -33,7 +33,7 @@ onMount(() => {
 <article>
     <section>
         <h2>Subscriptions</h2>
-        <PatientContainer isDark={true} isWaiting={!$subscriptions}>
+        <PatientContainer isWaiting={!$subscriptions}>
             {#if $subscriptions.length}
                 <ul class="grid-list">
                     {#each $subscriptions as subscription}
@@ -77,6 +77,7 @@ onMount(() => {
 </article>
 <style>
 article {
+    --smartskeleton: var(--dark);
     color: var(--dark);
 }
 

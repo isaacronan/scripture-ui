@@ -1,5 +1,5 @@
 .chart-bar {
-    fill: var(--blue);
+    fill: var(--smartchartbar);
     outline: none;
 }
 
@@ -9,13 +9,9 @@
 
 .chart-label {
     pointer-events: none;
-    fill: var(--light);
+    fill: var(--smartchartlabel);
     text-transform: uppercase;
     visibility: hidden;
-}
-
-.chart-label.dark {
-    fill: var(--dark);
 }
 
 .chart-label .label {

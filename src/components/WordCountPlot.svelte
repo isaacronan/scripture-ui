@@ -7,7 +7,6 @@ import { formatNumber } from '../utils/misc';
 export let data = null;
 export let getLabel = d => d;
 export let getValue = d => d;
-export let isDark = false;
 
 const maxPoints = 1000;
 $: points = (data || []).map((d, i) => ({ label: getLabel(d, i), value: getValue(d, i) }))
@@ -33,7 +32,7 @@ const plot = () => {
     rectUpdate.exit().remove();
 
     const textUpdate = select(svg).select('.labels').selectAll('g').data(points);
-    const textEnter = textUpdate.enter().append('g').attr('class', `chart-label ${isDark ? 'dark' : ''}`);
+    const textEnter = textUpdate.enter().append('g').attr('class', `chart-label`);
     textEnter.append('text').attr('class', 'label');
     textEnter.append('text').attr('class', 'value');
     textEnter.select('.value').append('tspan').attr('class', 'count');
