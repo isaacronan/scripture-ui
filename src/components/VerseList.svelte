@@ -7,6 +7,10 @@ import Link from './Link.svelte';
 export let verses = [];
 export let showChapterTitles = false;
 
+let isFlagMode = false;
+let isFavoriteMode = false;
+let startIndex = null;
+let endIndex = null;
 let container = null;
 let expandableVerses = [];
 const hydrateExpandableVerses = () => expandableVerses = verses.map(verse => new ExpandableItem(verse));
@@ -15,7 +19,8 @@ $: {
     hydrateExpandableVerses();
 }
 
-const toggleExpanded = (index) => () => {
+const toggleExpanded = (index) => (event) => {
+    event.stopPropagation();
     expandableVerses[index].toggleExpanded();
     expandableVerses = expandableVerses;    
 };
@@ -26,15 +31,75 @@ const handleWheel = (event) => {
         container.scrollBy(event.deltaY, 0);
     }
 };
+
+const handleVerseClick = (index) => () => {
+    if (isFlagMode) {
+        if (index === startIndex) {
+            console.log('flag', verses[index]);
+            startIndex = null;
+            isFlagMode = false;
+        } else if (startIndex === null) {
+            startIndex = index;
+        } else {
+            startIndex = null;
+        }
+    }
+
+    if (isFavoriteMode) {
+        if (startIndex === null) {
+            startIndex = index;
+        } else if (index < startIndex || !(verses[index].booknumber === verses[startIndex].booknumber && verses[index].chapternumber === verses[startIndex].chapternumber)) {
+            startIndex = null;
+            endIndex = null;
+        } else if(index !== endIndex) {
+            endIndex = index;
+        } else {
+            console.log('favorite', verses.slice(startIndex, endIndex + 1));
+            startIndex = null;
+            endIndex = null;
+            isFavoriteMode = false;
+        }
+    }
+
+};
+
+const handleFlagClick = () => {
+    isFlagMode = !isFlagMode;
+    isFavoriteMode = false;
+    startIndex = null;
+    endIndex = null;
+};
+
+const handleFavoriteClick = () => {
+    isFavoriteMode = !isFavoriteMode;
+    isFlagMode = false;
+    startIndex = null;
+    endIndex = null;
+};
+
+$: getIsFaint = (index) => {
+    const isStartIndex = startIndex !== null && index === startIndex;
+    const isInRange = startIndex !== null && endIndex !== null && index >= startIndex && index <= endIndex;
+
+    if (startIndex === null || isStartIndex) {
+        return false;
+    }
+
+    if (isFavoriteMode && isInRange) {
+        return false;
+    }
+
+    return true;
+};
 </script>
 <div on:wheel={handleWheel} bind:this={container} class="container">
-    <div class="columns">
+    <div class:click-mode={isFlagMode || isFavoriteMode} class="columns">
         <div>
             {#each expandableVerses as { item, isExpanded }, index}
                 <div class:non-breaking={index === expandableVerses.length - 1}>
                     <div class="non-breaking">
                         {#if (index === 0 || item.versenumber === 1) && showChapterTitles}
-                            <h3>
+                            <h3 class:faint={getIsFaint(index)}>
                                 {$getShortName(item.booknumber)} {item.chapternumber}
                                 {#if index === 0 && item.versenumber !== 1}
                                     <small>cont'd</small>
@@ -46,7 +111,7 @@ const handleWheel = (event) => {
                                 </Link>
                             </h3>
                         {/if}
-                        <p>
+                        <p on:click={(isFlagMode || isFavoriteMode) ? handleVerseClick(index) : null} class:faint={getIsFaint(index)}>
                             <small>{item.versenumber}</small> {item.text}
                             {#if item.notes}
                                 <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
@@ -55,20 +120,52 @@ const handleWheel = (event) => {
                     </div>
                     {#if isExpanded}
                         {#each item.notes as note}
-                            <p class="note">{note}</p>
+                            <p on:click={(isFlagMode || isFavoriteMode) ? handleVerseClick(index) : null} class:faint={getIsFaint(index)} class="note">{note}</p>
                         {/each}
                     {/if}
                     {#if index === expandableVerses.length - 1}
-                        <slot name="actionButton"></slot>
+                        <div class="action-button">
+                            <slot name="actionButton"></slot>
+                        </div>
                     {/if}
                 </div>
             {/each}
+        </div>
+    </div>
+    <div class="controls">
+        <div>
+            <button on:click={handleFlagClick} class="control-button"><i class={`fa${isFlagMode ? 's' : 'r'} fa-flag`} /></button>
+            <button on:click={handleFavoriteClick} class="control-button"><i class={`fa${isFavoriteMode ? 's' : 'r'} fa-star`} /></button>
         </div>
     </div>
 </div>
 <style>
 .container {
     display: flex;
+    padding-bottom: calc(var(--spacing-md) + 4rem);
+    position: relative;
+}
+
+.controls {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+}
+
+.controls > div {
+    position: fixed;
+    bottom: var(--spacing-md);
+}
+
+.click-mode .action-button {
+    visibility: hidden;
+}
+
+.faint {
+    opacity: 0.4;
 }
 
 .non-breaking {

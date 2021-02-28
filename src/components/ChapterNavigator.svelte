@@ -42,6 +42,7 @@ $: previousChapter = $currentChapters.filter(chapter => chapter.chapternumber < 
 nav {
     position: sticky;
     top: 0;
+    z-index: 1;
 }
 
 .chapter-navigator {

@@ -65,3 +65,16 @@ button:not(:disabled) {
 .icon-secondary {
     color: var(--light);
 }
+
+.control-button {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 2rem;
+    box-shadow: var(--dark) 0 0 5px;
+    height: 4rem;
+    margin: 0 var(--spacing-sm);
+    width: 4rem;
+}
+
+.control-button i {
+    font-size: 2rem;
+}
