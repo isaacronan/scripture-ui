@@ -2,8 +2,10 @@
 import { SCREENWIDTH } from '../utils/constants';
 import { ExpandableItem } from '../utils/misc';
 import { chapterHash } from '../utils/routing';
+import { getShortName } from '../utils/store';
 import Link from './Link.svelte';
 export let verses = [];
+export let showChapterTitles = false;
 
 let container = null;
 let expandableVerses = [];
@@ -31,10 +33,10 @@ const handleWheel = (event) => {
             {#each expandableVerses as { item, isExpanded }, index}
                 <div class:non-breaking={index === expandableVerses.length - 1}>
                     <div class="non-breaking">
-                        {#if item.title}
+                        {#if (index === 0 || item.versenumber === 1) && showChapterTitles}
                             <h3>
-                                {item.title}
-                                {#if item.isContinued}
+                                {$getShortName(item.booknumber)} {item.chapternumber}
+                                {#if index === 0 && item.versenumber !== 1}
                                     <small>cont'd</small>
                                 {/if}
                                 <Link>

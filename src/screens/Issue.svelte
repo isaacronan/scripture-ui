@@ -11,30 +11,22 @@ const changeRoute = getContext('changeRoute');
 
 let [ id ] = issuePattern.getParams(getContext('initialRoute'));
 let subscription = null;
-let verses = [];
 let isCompleted = false;
 
 $: continuationLabel = subscription?.nextIssue?.currentVerse > 1 ?
     `(${$getShortName(subscription.nextIssue.currentBook)} ${subscription.nextIssue.currentChapter} cont'd)` : '';
 
-const fillVerses = () => subscription.books.forEach(book => {
-        book.chapters.forEach(chapter => {
-            chapter.verses.forEach((verse, index) => {
-                verses.push({
-                    ...verse,
-                    ...index === 0 ? {
-                        title: `${$getShortName(book.booknumber)} ${chapter.chapternumber}`,
-                        isContinued: chapter.verses[0].versenumber !== 1
-                    } : {}
-                });
-            })
-        });
-    });
+$: verses = subscription?.books.reduce((acc, book) => ([
+        ...acc,
+        ...book.chapters.reduce((acc, chapter) => ([
+            ...acc,
+            ...chapter.verses
+        ]), [])
+    ]), []);
 
 const prefetched = getContext('prefetched') || window.__PREFETCHED__;
 if (prefetched?.subscription) {
     subscription = prefetched.subscription;
-    fillVerses();
 };
 
 onMount(() => {
@@ -52,7 +44,6 @@ const initialize = () => {
 
         getSubscription(id).then(data => {
             subscription = data;
-            fillVerses();
         }, () => {
             changeRoute(dashboardHash);
         });
@@ -92,7 +83,7 @@ const handleIssueUpdate = () => {
         <h2 class="light">{subscription.name}</h2>
     </PatientContainer>
     <PatientContainer isWaiting={!subscription}>
-        <VerseList {verses}>
+        <VerseList showChapterTitles={true} {verses}>
             <div slot="actionButton">
                 {#if !isCompleted}
                     <button on:click={handleIssueUpdate} class="button action bottom-spacing">Complete</button>
