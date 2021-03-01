@@ -1,8 +1,9 @@
 <script>
 import { SCREENWIDTH } from '../utils/constants';
+import { createFavorite, createFeedback } from '../utils/http';
 import { ExpandableItem } from '../utils/misc';
 import { chapterHash } from '../utils/routing';
-import { getShortName } from '../utils/store';
+import { getShortName, accessToken } from '../utils/store';
 import Link from './Link.svelte';
 export let verses = [];
 export let showChapterTitles = false;
@@ -72,12 +73,13 @@ const handleVerseClick = (index) => () => {
 };
 
 const handleConfirmClick = () => {
+    const { booknumber, chapternumber, versenumber } = verses[startIndex];
     if (isFlagMode) {
-        console.log(verses[startIndex]);
+        createFeedback(booknumber, chapternumber, versenumber);
     }
 
     if (isFavoriteMode) {
-        console.log(verses.slice(startIndex, (endIndex || startIndex) + 1));
+        createFavorite(booknumber, chapternumber, versenumber, endIndex === null ? versenumber : verses[endIndex].versenumber);
     }
 
     cancel();
@@ -152,7 +154,9 @@ $: getIsFaint = (index) => {
                 <button on:click={cancel} class="control-button"><i class="fas fa-times" /></button>
             {:else}
                 <button on:click={() => isFlagMode = true} class="control-button"><i class="far fa-flag" /></button>
-                <button on:click={() => isFavoriteMode = true} class="control-button"><i class="far fa-star" /></button>
+                {#if $accessToken}
+                    <button on:click={() => isFavoriteMode = true} class="control-button"><i class="far fa-star" /></button>
+                {/if}
             {/if}
         </div>
         {#if isFavoriteMode || isFlagMode}
@@ -174,6 +178,14 @@ $: getIsFaint = (index) => {
     flex-direction: column;
     position: absolute;
     width: 100%;
+}
+
+.fa-flag {
+    color: var(--red);
+}
+
+.fa-star {
+    color: var(--yellow);
 }
 
 .control-buttons {
@@ -221,6 +233,10 @@ p,
 h3 {
     color: var(--dark);
     margin: var(--spacing-sm) 0;
+}
+
+.click-mode p {
+    cursor: default;
 }
 
 h3 {

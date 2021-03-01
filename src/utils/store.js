@@ -41,3 +41,4 @@ export const TOKEN_DNE = '';
 export const accessToken = writable(TOKEN_NOT_FETCHED);
 
 export const subscriptions = writable(null);
+export const favorites = writable(null);

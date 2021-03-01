@@ -70,6 +70,7 @@ button:not(:disabled) {
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 2rem;
     box-shadow: var(--dark) 0 0 5px;
+    color: var(--cyan);
     height: 4rem;
     margin: 0 var(--spacing-sm);
     width: 4rem;

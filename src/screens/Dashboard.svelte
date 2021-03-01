@@ -1,7 +1,7 @@
 <script>
-import { getSubscriptions } from '../utils/http';
-import { editSubscriptionHash, createSubscriptionHash, issueHash, resetHash, deleteHash } from '../utils/routing';
-import { subscriptions } from '../utils/store';
+import { getFavorites, getSubscriptions, updateFavorites } from '../utils/http';
+import { editSubscriptionHash, createSubscriptionHash, issueHash, resetHash, deleteHash, chapterHash } from '../utils/routing';
+import { getShortName, subscriptions, favorites } from '../utils/store';
 import PatientContainer from '../components/PatientContainer.svelte';
 import ListItem from '../components/ListItem.svelte';
 import Alert from '../components/Alert.svelte';
@@ -21,7 +21,16 @@ onMount(() => {
             subscriptions.set(data);
         });
     }
+
+    getFavorites().then(data => {
+        favorites.set(data);
+    });
 });
+
+const deleteFavorite = (deleteIndex) => () => {
+    favorites.set($favorites.filter((_, index) => index !== deleteIndex));
+    updateFavorites($favorites.map(({ booknumber, chapternumber, start, end }) => ({ booknumber, chapternumber, start, end })));
+};
 </script>
 <svelte:head>
 <style>
@@ -65,6 +74,37 @@ onMount(() => {
             <div class="new">
                 <Link><a href={createSubscriptionHash} class="plain-button"><i class="fas fa-plus" />New Subscription</a></Link>
             </div>
+        </PatientContainer>
+    </section>
+    <section>
+        <h2>Favorites</h2>
+        <PatientContainer isWaiting={!$favorites}>
+            {#if $favorites.length}
+                <ul class="grid-list">
+                    {#each $favorites as { booknumber, chapternumber, start, end, verses }, index }
+                        <ListItem
+                            title={`${$getShortName(booknumber)} ${chapternumber}: ${start}${end !== start ? `-${end}` : ''}`}
+                            showDescription={true}
+                            description={verses.map(({ text }) => text).join(' ')}
+                        >
+                            <div slot="left">
+                                <button on:click={deleteFavorite(index)} class="icon icon-secondary">
+                                    <i class="fas fa-trash-alt"/>
+                                </button>
+                            </div>
+                            <div slot="right">
+                                <Link><a class="icon icon-primary" href={chapterHash(booknumber, chapternumber)}><i class="fas fa-arrow-right"/></a></Link>
+                            </div>
+                        </ListItem>
+                    {/each}
+                </ul>
+            {:else}
+                <div class="flex-container">
+                    <div>
+                        <Alert isError message="No favorites!" />
+                    </div>
+                </div>
+            {/if}
         </PatientContainer>
     </section>
     <section>
@@ -114,6 +154,10 @@ small {
 
 .flex-container > * {
     flex-basis: 100%;
+}
+
+.fa-trash-alt {
+    color: var(--red);
 }
 
 .reset {
