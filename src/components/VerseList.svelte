@@ -34,11 +34,7 @@ const handleWheel = (event) => {
 
 const handleVerseClick = (index) => () => {
     if (isFlagMode) {
-        if (index === startIndex) {
-            console.log('flag', verses[index]);
-            startIndex = null;
-            isFlagMode = false;
-        } else if (startIndex === null) {
+        if (startIndex === null) {
             startIndex = index;
         } else {
             startIndex = null;
@@ -51,27 +47,30 @@ const handleVerseClick = (index) => () => {
         } else if (index < startIndex || !(verses[index].booknumber === verses[startIndex].booknumber && verses[index].chapternumber === verses[startIndex].chapternumber)) {
             startIndex = null;
             endIndex = null;
-        } else if(index !== endIndex) {
+        } else if(endIndex === null) {
             endIndex = index;
         } else {
-            console.log('favorite', verses.slice(startIndex, endIndex + 1));
             startIndex = null;
             endIndex = null;
-            isFavoriteMode = false;
         }
     }
 
 };
 
-const handleFlagClick = () => {
-    isFlagMode = !isFlagMode;
-    isFavoriteMode = false;
-    startIndex = null;
-    endIndex = null;
+const handleConfirmClick = () => {
+    if (isFlagMode) {
+        console.log(verses[startIndex]);
+    }
+
+    if (isFavoriteMode) {
+        console.log(verses.slice(startIndex, (endIndex || startIndex) + 1));
+    }
+
+    cancel();
 };
 
-const handleFavoriteClick = () => {
-    isFavoriteMode = !isFavoriteMode;
+const cancel = () => {
+    isFavoriteMode = false;
     isFlagMode = false;
     startIndex = null;
     endIndex = null;
@@ -134,8 +133,13 @@ $: getIsFaint = (index) => {
     </div>
     <div class="controls">
         <div>
-            <button on:click={handleFlagClick} class="control-button"><i class={`fa${isFlagMode ? 's' : 'r'} fa-flag`} /></button>
-            <button on:click={handleFavoriteClick} class="control-button"><i class={`fa${isFavoriteMode ? 's' : 'r'} fa-star`} /></button>
+            {#if isFavoriteMode || isFlagMode}
+                <button disabled={startIndex === null} on:click={handleConfirmClick} class="control-button"><i class="fas fa-check" /></button>
+                <button on:click={cancel} class="control-button"><i class="fas fa-times" /></button>
+            {:else}
+                <button on:click={() => isFlagMode = true} class="control-button"><i class="far fa-flag" /></button>
+                <button on:click={() => isFavoriteMode = true} class="control-button"><i class="far fa-star" /></button>
+            {/if}
         </div>
     </div>
 </div>

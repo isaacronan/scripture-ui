@@ -78,3 +78,7 @@ button:not(:disabled) {
 .control-button i {
     font-size: 2rem;
 }
+
+.control-button[disabled] {
+    color: var(--light);
+}
