@@ -19,6 +19,20 @@ $: {
     hydrateExpandableVerses();
 }
 
+$: infoText = (() => {
+    if (startIndex !== null) {
+        return 'Confirm or cancel.'
+    }
+
+    if (isFlagMode) {
+        return 'Select verse to report an error.'
+    }
+
+    if (isFavoriteMode) {
+        return 'Select verses to add to favorites.'
+    }
+})();
+
 const toggleExpanded = (index) => (event) => {
     event.stopPropagation();
     expandableVerses[index].toggleExpanded();
@@ -132,7 +146,7 @@ $: getIsFaint = (index) => {
         </div>
     </div>
     <div class="controls">
-        <div>
+        <div class="control-buttons">
             {#if isFavoriteMode || isFlagMode}
                 <button disabled={startIndex === null} on:click={handleConfirmClick} class="control-button"><i class="fas fa-check" /></button>
                 <button on:click={cancel} class="control-button"><i class="fas fa-times" /></button>
@@ -141,6 +155,9 @@ $: getIsFaint = (index) => {
                 <button on:click={() => isFavoriteMode = true} class="control-button"><i class="far fa-star" /></button>
             {/if}
         </div>
+        {#if isFavoriteMode || isFlagMode}
+            <div class="control-info">{infoText}</div>
+        {/if}
     </div>
 </div>
 <style>
@@ -159,13 +176,37 @@ $: getIsFaint = (index) => {
     width: 100%;
 }
 
-.controls > div {
+.control-buttons {
     position: fixed;
     bottom: var(--spacing-md);
 }
 
 .click-mode .action-button {
     visibility: hidden;
+}
+
+.control-info {
+    animation-name: pulse;
+    animation-duration: 800ms;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+
+    background-color: var(--white);
+    border: 2px solid var(--dark);
+    color: var(--dark);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    position: fixed;
+    bottom: calc(var(--lh-normal) + 4rem);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 1;
+    }
 }
 
 .faint {
