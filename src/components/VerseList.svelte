@@ -3,7 +3,7 @@ import { SCREENWIDTH } from '../utils/constants';
 import { createFavorite, createFeedback } from '../utils/http';
 import { ExpandableItem } from '../utils/misc';
 import { chapterHash } from '../utils/routing';
-import { getShortName, accessToken } from '../utils/store';
+import { getShortName, accessToken, favorites } from '../utils/store';
 import Link from './Link.svelte';
 export let verses = [];
 export let showChapterTitles = false;
@@ -22,7 +22,7 @@ $: {
 
 $: infoText = (() => {
     if (startIndex !== null) {
-        return 'Confirm or cancel.'
+        return `Confirm ${isFlagMode ? 'error' : 'favorites'} or cancel.`;
     }
 
     if (isFlagMode) {
@@ -59,7 +59,7 @@ const handleVerseClick = (index) => () => {
     if (isFavoriteMode) {
         if (startIndex === null) {
             startIndex = index;
-        } else if (index < startIndex || !(verses[index].booknumber === verses[startIndex].booknumber && verses[index].chapternumber === verses[startIndex].chapternumber)) {
+        } else if (index <= startIndex || !(verses[index].booknumber === verses[startIndex].booknumber && verses[index].chapternumber === verses[startIndex].chapternumber)) {
             startIndex = null;
             endIndex = null;
         } else if(endIndex === null) {
@@ -79,6 +79,13 @@ const handleConfirmClick = () => {
     }
 
     if (isFavoriteMode) {
+        favorites.set([...$favorites, {
+            booknumber,
+            chapternumber,
+            start: versenumber,
+            end: endIndex === null ? versenumber : verses[endIndex].versenumber,
+            verses: verses.slice(startIndex, (endIndex || startIndex) + 1)
+        }]);
         createFavorite(booknumber, chapternumber, versenumber, endIndex === null ? versenumber : verses[endIndex].versenumber);
     }
 
@@ -111,7 +118,7 @@ $: getIsFaint = (index) => {
     <div class:click-mode={isFlagMode || isFavoriteMode} class="columns">
         <div>
             {#each expandableVerses as { item, isExpanded }, index}
-                <div class:non-breaking={index === expandableVerses.length - 1}>
+                <div class:last-verse={index === expandableVerses.length - 1}>
                     <div class="non-breaking">
                         {#if (index === 0 || item.versenumber === 1) && showChapterTitles}
                             <h3 class:faint={getIsFaint(index)}>
@@ -167,7 +174,6 @@ $: getIsFaint = (index) => {
 <style>
 .container {
     display: flex;
-    padding-bottom: calc(var(--spacing-md) + 4rem);
     position: relative;
 }
 
@@ -176,7 +182,8 @@ $: getIsFaint = (index) => {
     bottom: 0;
     display: flex;
     flex-direction: column;
-    position: absolute;
+    max-width: var(--maxwidth);
+    position: fixed;
     width: 100%;
 }
 
@@ -189,7 +196,8 @@ $: getIsFaint = (index) => {
 }
 
 .control-buttons {
-    position: fixed;
+    position: absolute;
+    right: calc(2 * var(--spacing-md));
     bottom: var(--spacing-md);
 }
 
@@ -207,8 +215,9 @@ $: getIsFaint = (index) => {
     border: 2px solid var(--dark);
     color: var(--dark);
     padding: var(--spacing-xs) var(--spacing-sm);
-    position: fixed;
+    position: absolute;
     bottom: calc(var(--lh-normal) + 4rem);
+    right: calc(2 * var(--spacing-md));
 }
 
 @keyframes pulse {
@@ -227,6 +236,11 @@ $: getIsFaint = (index) => {
 
 .non-breaking {
     break-inside: avoid;
+}
+
+.last-verse {
+    break-inside: avoid;
+    padding-bottom: calc(var(--spacing-md) + 4rem);
 }
 
 p,
