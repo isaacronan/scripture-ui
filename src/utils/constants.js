@@ -5,5 +5,5 @@ export const OLD = 'OLD';
 export const NEW = 'NEW';
 
 export const subscriptionNamePattern = /\S+/;
-export const usernamePattern = /^\w+$/;
-export const passwordPattern = /^\S+$/;
+export const usernamePattern = /^\S+$/;
+export const passwordPattern = /^.+$/;
