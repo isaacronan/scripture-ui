@@ -116,10 +116,8 @@ const deleteFavorite = (deleteIndex) => () => {
     </section>
     <section>
         <h2>Account Settings</h2>
-        <div class="flex-container">
-            <Link><a href={resetHash} class="button alt reset">Reset Password</a></Link>
-            <Link><a href={deleteHash} class="button alt negative delete">Delete Account</a></Link>
-        </div>
+        <div class="setting"><Link><a href={resetHash} class="link font-big">Reset Password</a></Link></div>
+        <div class="setting"><Link><a href={deleteHash} class="link font-big">Delete Account</a></Link></div>
     </section>
 </article>
 <style>
@@ -167,12 +165,12 @@ small {
     color: var(--red);
 }
 
-.reset {
-    margin-right: var(--spacing-xs);
+.setting + .setting {
+    margin-top: var(--spacing-md);
 }
 
-.delete {
-    margin-left: var(--spacing-xs);
+.setting a {
+    color: var(--blue);
 }
 
 @media screen and (min-width: 768px) {

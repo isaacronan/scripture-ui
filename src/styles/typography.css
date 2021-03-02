@@ -33,7 +33,7 @@ h3 {
     line-height: var(--lh-big);
 }
 
-h4 {
+h4, .font-big {
     font-family: 'Open Sans', sans-serif;
     font-size: var(--fs-big);
     font-weight: 400;
