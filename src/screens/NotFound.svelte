@@ -3,7 +3,8 @@ import { homeHash } from '../utils/routing';
 import Link from '../components/Link.svelte';
 </script>
 <article>
-    <h1>Page not found!</h1>
+    <img alt="broken" height="100" src="/broken_red.svg">
+    <h1>Page Not Found</h1>
     <Link><a class="link" href={homeHash}>Home</a></Link>
 </article>
 <style>
@@ -12,9 +13,12 @@ a {
     align-self: center;
 }
 
-h1 {
-    margin-bottom: var(--spacing-sm);
+img {
     margin-top: var(--spacing-lg);
+}
+
+h1 {
+    margin: var(--spacing-md) 0;
 }
 
 a {
