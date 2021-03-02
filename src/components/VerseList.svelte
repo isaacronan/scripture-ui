@@ -12,6 +12,7 @@ let isFlagMode = false;
 let isFavoriteMode = false;
 let startIndex = null;
 let endIndex = null;
+let successMessage = '';
 let container = null;
 let expandableVerses = [];
 const hydrateExpandableVerses = () => expandableVerses = verses.map(verse => new ExpandableItem(verse));
@@ -19,6 +20,8 @@ $: {
     verses;
     hydrateExpandableVerses();
 }
+
+$: isClickMode = isFlagMode || isFavoriteMode;
 
 $: infoText = (() => {
     if (startIndex !== null) {
@@ -45,6 +48,16 @@ const handleWheel = (event) => {
         event.preventDefault();
         container.scrollBy(event.deltaY, 0);
     }
+};
+
+const startFlagMode = () => {
+    isFlagMode = true;
+    successMessage = '';
+};
+
+const startFavoriteMode = () => {
+    isFavoriteMode = true;
+    successMessage = '';
 };
 
 const handleVerseClick = (index) => () => {
@@ -76,10 +89,11 @@ const handleConfirmClick = () => {
     const { booknumber, chapternumber, versenumber } = verses[startIndex];
     if (isFlagMode) {
         createFeedback(booknumber, chapternumber, versenumber);
+        successMessage = 'Error reported. Thank you!';
     }
 
     if (isFavoriteMode) {
-        favorites.set([...$favorites, {
+        favorites.set([...($favorites || []), {
             booknumber,
             chapternumber,
             start: versenumber,
@@ -87,6 +101,7 @@ const handleConfirmClick = () => {
             verses: verses.slice(startIndex, (endIndex || startIndex) + 1)
         }]);
         createFavorite(booknumber, chapternumber, versenumber, endIndex === null ? versenumber : verses[endIndex].versenumber);
+        successMessage = 'Verses saved to favorites!'
     }
 
     cancel();
@@ -115,7 +130,7 @@ $: getIsFaint = (index) => {
 };
 </script>
 <div on:wheel={handleWheel} bind:this={container} class="container">
-    <div class:click-mode={isFlagMode || isFavoriteMode} class="columns">
+    <div class:click-mode={isClickMode} class="columns">
         <div>
             {#each expandableVerses as { item, isExpanded }, index}
                 <div class:last-verse={index === expandableVerses.length - 1}>
@@ -133,7 +148,7 @@ $: getIsFaint = (index) => {
                                 </Link>
                             </h3>
                         {/if}
-                        <p on:click={(isFlagMode || isFavoriteMode) ? handleVerseClick(index) : null} class:faint={getIsFaint(index)}>
+                        <p on:click={isClickMode ? handleVerseClick(index) : null} class:faint={getIsFaint(index)}>
                             <small>{item.versenumber}</small> {item.text}
                             {#if item.notes}
                                 <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
@@ -142,7 +157,7 @@ $: getIsFaint = (index) => {
                     </div>
                     {#if isExpanded}
                         {#each item.notes as note}
-                            <p on:click={(isFlagMode || isFavoriteMode) ? handleVerseClick(index) : null} class:faint={getIsFaint(index)} class="note">{note}</p>
+                            <p on:click={isClickMode ? handleVerseClick(index) : null} class:faint={getIsFaint(index)} class="note">{note}</p>
                         {/each}
                     {/if}
                     {#if index === expandableVerses.length - 1}
@@ -156,18 +171,21 @@ $: getIsFaint = (index) => {
     </div>
     <div class="controls">
         <div class="control-buttons">
-            {#if isFavoriteMode || isFlagMode}
+            {#if isClickMode}
                 <button disabled={startIndex === null} on:click={handleConfirmClick} class="control-button"><i class="fas fa-check" /></button>
                 <button on:click={cancel} class="control-button"><i class="fas fa-times" /></button>
             {:else}
-                <button on:click={() => isFlagMode = true} class="control-button"><i class="far fa-flag" /></button>
+                <button on:click={startFlagMode} class="control-button"><i class="far fa-flag" /></button>
                 {#if $accessToken}
-                    <button on:click={() => isFavoriteMode = true} class="control-button"><i class="far fa-star" /></button>
+                    <button on:click={startFavoriteMode} class="control-button"><i class="far fa-star" /></button>
                 {/if}
             {/if}
         </div>
-        {#if isFavoriteMode || isFlagMode}
-            <div class="control-info">{infoText}</div>
+        {#if isClickMode}
+            <div class="control-info animate-heavy-pulse">{infoText}</div>
+        {/if}
+        {#if successMessage}
+            <div class="control-info animate-fade-away">{successMessage}</div>
         {/if}
     </div>
 </div>
@@ -206,11 +224,6 @@ $: getIsFaint = (index) => {
 }
 
 .control-info {
-    animation-name: pulse;
-    animation-duration: 800ms;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-
     background-color: var(--white);
     border: 2px solid var(--dark);
     color: var(--dark);
@@ -218,20 +231,6 @@ $: getIsFaint = (index) => {
     position: absolute;
     bottom: calc(var(--lh-normal) + 4rem);
     right: calc(2 * var(--spacing-md));
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 0;
-    }
-
-    80% {
-        opacity: 1;
-    }
-}
-
-.faint {
-    opacity: 0.4;
 }
 
 .non-breaking {

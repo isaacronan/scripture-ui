@@ -67,7 +67,7 @@ button:not(:disabled) {
 }
 
 .control-button {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: var(--translucent);
     border-radius: 2rem;
     box-shadow: var(--dark) 0 0 5px;
     color: var(--cyan);

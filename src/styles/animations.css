@@ -1,0 +1,35 @@
+.animate-heavy-pulse {
+    animation-name: heavy-pulse;
+    animation-duration: 800ms;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes heavy-pulse {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 1;
+    }
+}
+
+.animate-fade-away {
+    animation-name: fade-away;
+    animation-delay: 1600ms;
+    animation-duration: 1600ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-away {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
