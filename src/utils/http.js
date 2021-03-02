@@ -144,3 +144,19 @@ export const getStats = (verseDosage, isChapterSubscription, bookPool, currentIs
 
 export const getBooksStats = () => fetch('/stats/books').then(checkStatusAndRespond);
 export const getChaptersStats = (booknumber) => fetch(`/stats/books/${booknumber}/chapters`).then(checkStatusAndRespond);
+
+export const createFeedback = (booknumber, chapternumber, versenumber) => fetch(constructPostRequest('/scripture/api/books/feedback', {
+    booknumber,
+    chapternumber,
+    versenumber
+}));
+
+export const createFavorite = (booknumber, chapternumber, start, end) => fetchWithAuth(constructPostRequest('/scripture/api/user/favorites', {
+    booknumber,
+    chapternumber,
+    start,
+    end
+}));
+
+export const getFavorites = () => fetchWithAuth(new Request('/scripture/api/user/favorites'));
+export const updateFavorites = (favorites) => fetchWithAuth(constructPutRequest('/scripture/api/user/favorites', favorites));
