@@ -33,3 +33,20 @@
         visibility: hidden;
     }
 }
+
+.animate-light-pulse {
+    animation-name: light-pulse;
+    animation-duration: 800ms;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes light-pulse {
+    from {
+        opacity: 0.4;
+    }
+
+    to {
+        opacity: 0.2;
+    }
+}

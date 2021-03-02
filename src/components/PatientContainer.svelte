@@ -5,7 +5,7 @@ export let isShort = false;
 export let errorMessage = '';
 </script>
 {#if isFailed || isWaiting}
-    <div class:failed={isFailed} class:short={isShort} class="skeleton">
+    <div class:failed={isFailed} class:short={isShort} class="skeleton animate-light-pulse">
         {#if isFailed}
             <div class="failure">
                 <i class="fas fa-exclamation-triangle" />
@@ -18,7 +18,6 @@ export let errorMessage = '';
 {/if}
 <style>
 .skeleton {
-    animation: pulse 1s linear 0s infinite alternate-reverse;
     align-items: center;
     background-color: var(--smartskeleton);
     border-radius: var(--radius);
@@ -57,15 +56,5 @@ h4 {
 
 i {
     font-size: 2rem;
-}
-
-@keyframes pulse {
-    from {
-        opacity: 0.4;
-    }
-
-    to {
-        opacity: 0.2;
-    }
 }
 </style>
