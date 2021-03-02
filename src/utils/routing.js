@@ -24,7 +24,7 @@ HashPattern.prototype.getParams = function(defaultRoute = '') {
     return this.pattern.exec(defaultRoute || window.location.pathname).slice(1);
 };
 
-export const homePattern = new HashPattern(/^\/scripture\/?$/);
+export const homePattern = new HashPattern(/^\/scripture$/);
 export const booksPattern = new HashPattern(/^\/scripture\/books$/);
 export const bookPattern = new HashPattern(/^\/scripture\/books\/(\d+)$/);
 export const chapterPattern = new HashPattern(/^\/scripture\/books\/(\d+)\/chapters\/(\d+)$/);
