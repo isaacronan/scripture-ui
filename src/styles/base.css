@@ -22,6 +22,7 @@
     --smartchartlabel: var(--light);
     --smartchartbar: var(--blue);
     --button-color: var(--cyan);
+    --control-button-size: 3rem;
 
     font-size: 10px;
     
@@ -93,6 +94,10 @@ li {
 }
 
 @media screen and (min-width: 768px) {
+    :root {
+        --control-button-size: 2rem;
+    }
+
     .grid-list {
         grid-template-columns: 1fr 1fr;
     }

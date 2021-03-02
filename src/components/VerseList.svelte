@@ -212,8 +212,8 @@ $: getIsFaint = (index) => {
 
 .control-buttons {
     position: absolute;
-    right: calc(2 * var(--spacing-md));
-    bottom: var(--spacing-md);
+    right: calc(2 * var(--spacing-md) + env(safe-area-inset-right, 0));
+    bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom, 0));
 }
 
 .click-mode .action-button {
@@ -226,8 +226,8 @@ $: getIsFaint = (index) => {
     color: var(--dark);
     padding: var(--spacing-xs) var(--spacing-sm);
     position: absolute;
-    bottom: calc(var(--lh-normal) + 4rem);
-    right: calc(2 * var(--spacing-md));
+    bottom: calc(var(--lh-normal) + 2 * var(--control-button-size) + env(safe-area-inset-bottom, 0));
+    right: calc(2 * var(--spacing-md) + env(safe-area-inset-right, 0));
 }
 
 .non-breaking {
@@ -236,7 +236,7 @@ $: getIsFaint = (index) => {
 
 .last-verse {
     break-inside: avoid;
-    padding-bottom: calc(var(--spacing-md) + 4rem);
+    padding-bottom: calc(var(--spacing-md) + 2 * var(--control-button-size));
 }
 
 p,

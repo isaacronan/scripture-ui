@@ -68,16 +68,16 @@ button:not(:disabled) {
 
 .control-button {
     background-color: var(--translucent);
-    border-radius: 2rem;
+    border-radius: var(--control-button-size);
     box-shadow: var(--dark) 0 0 5px;
     color: var(--cyan);
-    height: 4rem;
+    height: calc(2 * var(--control-button-size));
     margin: 0 var(--spacing-sm);
-    width: 4rem;
+    width: calc(2 * var(--control-button-size));
 }
 
 .control-button i {
-    font-size: 2rem;
+    font-size: var(--control-button-size);
 }
 
 .control-button[disabled] {
