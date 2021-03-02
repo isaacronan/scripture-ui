@@ -5,6 +5,7 @@ import { usernamePattern, passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 import Link from '../components/Link.svelte';
 import { getContext } from 'svelte';
+import EncryptionInfo from '../components/EncryptionInfo.svelte';
 
 const changeRoute = getContext('changeRoute');
 
@@ -47,6 +48,7 @@ const handleLogin = () => {
         </div>
     </form>
     <Link><a href={createAccountHash} class="link">Create an account</a></Link>
+    <EncryptionInfo />
 </article>
 <style>
 article {

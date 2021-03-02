@@ -5,6 +5,7 @@ import { passwordPattern } from '../utils/constants';
 import Alert from '../components/Alert.svelte';
 import Breadcrumbs from '../components/Breadcrumbs.svelte';
 import Link from '../components/Link.svelte';
+import EncryptionInfo from '../components/EncryptionInfo.svelte';
 
 let currentPassword = '';
 let newPassword = '';
@@ -61,6 +62,7 @@ const handleSubmit = () => {
                 <button type="submit" disabled={!currentPasswordIsValid || !passwordIsValid} class="button">Reset Password</button>
             </div>
         </form>
+        <EncryptionInfo />
     {:else}
         <div class="spacing-bottom">
             <Alert message={serverMessage} />
