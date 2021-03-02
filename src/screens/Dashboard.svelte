@@ -12,6 +12,9 @@ const prefetched = getContext('prefetched') || window.__PREFETCHED__;
 if (prefetched?.subscriptions) {
     subscriptions.set(prefetched.subscriptions);
 }
+if (prefetched?.favorites) {
+    favorites.set(prefetched.favorites);
+}
 
 onMount(() => {
     if (prefetched?.subscriptions) {
@@ -22,9 +25,13 @@ onMount(() => {
         });
     }
 
-    getFavorites().then(data => {
-        favorites.set(data);
-    });
+    if (prefetched?.favorites) {
+        delete prefetched.favorites;
+    } else {
+        getFavorites().then(data => {
+            favorites.set(data);
+        });
+    }
 });
 
 const deleteFavorite = (deleteIndex) => () => {
