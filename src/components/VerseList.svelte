@@ -196,10 +196,7 @@ $: getIsFaint = (index) => {
 }
 
 .controls {
-    align-items: center;
     bottom: 0;
-    display: flex;
-    flex-direction: column;
     max-width: var(--maxwidth);
     position: fixed;
     width: 100%;
