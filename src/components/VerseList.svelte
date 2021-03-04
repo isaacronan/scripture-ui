@@ -1,4 +1,5 @@
 <script>
+import { fade } from 'svelte/transition'
 import { SCREENWIDTH } from '../utils/constants';
 import { createFavorite, createFeedback } from '../utils/http';
 import { ExpandableItem } from '../utils/misc';
@@ -12,6 +13,7 @@ let isFlagMode = false;
 let isFavoriteMode = false;
 let startIndex = null;
 let endIndex = null;
+let infoText = '';
 let successMessage = '';
 let container = null;
 let expandableVerses = [];
@@ -23,19 +25,13 @@ $: {
 
 $: isClickMode = isFlagMode || isFavoriteMode;
 
-$: infoText = (() => {
-    if (startIndex !== null) {
-        return `Confirm ${isFlagMode ? 'error' : 'favorites'} or cancel.`;
+$: if (isClickMode) {
+    if (startIndex === null) {
+        infoText = `Select verse to ${isFlagMode ? 'report an error' : 'add to favorites'}.`;
+    } else {
+        infoText = `Confirm ${isFlagMode ? 'error' : 'favorites'} or cancel.`;
     }
-
-    if (isFlagMode) {
-        return 'Select verse to report an error.'
-    }
-
-    if (isFavoriteMode) {
-        return 'Select verses to add to favorites.'
-    }
-})();
+}
 
 const toggleExpanded = (index) => (event) => {
     event.stopPropagation();
@@ -52,12 +48,10 @@ const handleWheel = (event) => {
 
 const startFlagMode = () => {
     isFlagMode = true;
-    successMessage = '';
 };
 
 const startFavoriteMode = () => {
     isFavoriteMode = true;
-    successMessage = '';
 };
 
 const handleVerseClick = (index) => () => {
@@ -104,7 +98,7 @@ const handleConfirmClick = () => {
         successMessage = 'Verses saved to favorites!'
     }
 
-    cancel();
+    setTimeout(cancel);
 };
 
 const cancel = () => {
@@ -112,6 +106,7 @@ const cancel = () => {
     isFlagMode = false;
     startIndex = null;
     endIndex = null;
+    successMessage = '';
 };
 
 $: getIsFaint = (index) => {
@@ -182,10 +177,12 @@ $: getIsFaint = (index) => {
             {/if}
         </div>
         {#if isClickMode}
-            <div class="control-info animate-heavy-pulse">{infoText}</div>
+            {#key infoText}
+                <div class="control-info animate-heavy-pulse">{infoText}</div>
+            {/key}
         {/if}
-        {#if successMessage}
-            <div class="control-info animate-fade-away">{successMessage}</div>
+        {#if successMessage && isClickMode}
+            <div out:fade={{ duration: 800, delay: 800 }} class="control-info">{successMessage}</div>
         {/if}
     </div>
 </div>
