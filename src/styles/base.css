@@ -125,3 +125,11 @@ li {
 .faint {
     opacity: 0.4;
 }
+
+.yellow {
+    color: var(--yellow);
+}
+
+.red {
+    color: var(--red);
+}

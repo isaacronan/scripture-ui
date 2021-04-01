@@ -123,6 +123,13 @@ $: getIsFaint = (index) => {
 
     return true;
 };
+
+$: getIsSelected = (index) => {
+    const isStartIndex = startIndex !== null && index === startIndex;
+    const isInRange = startIndex !== null && endIndex !== null && index >= startIndex && index <= endIndex;
+
+    return isStartIndex || isInRange;
+};
 </script>
 <div on:wheel={handleWheel} bind:this={container} class="container">
     <div class:click-mode={isClickMode} class="columns">
@@ -144,7 +151,12 @@ $: getIsFaint = (index) => {
                             </h3>
                         {/if}
                         <p on:click={isClickMode ? handleVerseClick(index) : null} class:faint={getIsFaint(index)}>
-                            <small>{item.versenumber}</small> {item.text}
+                            <small>
+                                {#if getIsSelected(index)}
+                                    <i class:yellow={isFavoriteMode} class:red={isFlagMode} class="fas fa-circle"/>
+                                {/if}
+                                <span>{item.versenumber}</span>
+                            </small> {item.text}
                             {#if item.notes}
                                 <button class="plain-button" on:click={toggleExpanded(index)}><small>{isExpanded ? 'Hide' : 'Notes'}</small></button>
                             {/if}
@@ -263,6 +275,22 @@ a {
 
 p button {
     color: var(--blue);
+}
+
+p small {
+    display: inline-flex;
+    position: relative;
+}
+
+p i {
+    font-size: 0.5rem;
+    position: absolute;
+    left: 0;
+    top: calc(50% - 0.25rem);
+}
+
+p i + span {
+    visibility: hidden;
 }
 
 .note {
