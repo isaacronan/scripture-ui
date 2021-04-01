@@ -41,9 +41,7 @@ const setExpandedAll = (isExpanded) => () => {
                 <button slot="left" class="icon icon-secondary" on:click={toggleExpanded(index)}>
                     <i class="fas fa-{isExpanded ? 'minus' : 'plus'}-circle"/>
                 </button>
-                <div slot="right">
-                    <Link><a class="icon icon-primary" href={getHref(item)}><i class="fas fa-arrow-right"/></a></Link>
-                </div>
+                <Link slot="right"><a class="icon icon-primary" href={getHref(item)}><i class="fas fa-arrow-right"/></a></Link>
             </ListItem>
         {/each}
     </ul>

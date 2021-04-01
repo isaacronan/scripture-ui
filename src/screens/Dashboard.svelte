@@ -54,20 +54,18 @@ const deleteFavorite = (deleteIndex) => () => {
                 <ul class="grid-list">
                     {#each $subscriptions as subscription}
                         <ListItem title={subscription.name}>
-                            <div slot="left">
-                                <Link>
-                                    <a class="icon icon-secondary" href={editSubscriptionHash(subscription.id)}>
-                                        <i class="fas fa-cog"/>
-                                    </a>
-                                </Link>
-                            </div>
-                            <div slot="right">
+                            <Link slot="left">
+                                <a class="icon icon-secondary" href={editSubscriptionHash(subscription.id)}>
+                                    <i class="fas fa-cog"/>
+                                </a>
+                            </Link>
+                            <svelte:fragment slot="right">
                                 {#if !subscription.currentIssue}
                                     <small class="icon-primary">Completed</small>
                                 {:else}
                                     <Link><a class="icon icon-primary" href={issueHash(subscription.id)}><i class="fas fa-arrow-right"/></a></Link>
                                 {/if}
-                            </div>
+                            </svelte:fragment>
                         </ListItem>
                     {/each}
                 </ul>
@@ -94,14 +92,10 @@ const deleteFavorite = (deleteIndex) => () => {
                             showDescription={true}
                             description={verses.map(({ text }) => text).join(' ')}
                         >
-                            <div slot="left">
-                                <button on:click={deleteFavorite(index)} class="icon icon-secondary">
-                                    <i class="fas fa-trash-alt"/>
-                                </button>
-                            </div>
-                            <div slot="right">
-                                <Link><a class="icon icon-primary" href={chapterHash(booknumber, chapternumber)}><i class="fas fa-arrow-right"/></a></Link>
-                            </div>
+                            <button slot="left" on:click={deleteFavorite(index)} class="icon icon-secondary">
+                                <i class="fas fa-trash-alt"/>
+                            </button>
+                            <Link slot="right"><a class="icon icon-primary" href={chapterHash(booknumber, chapternumber)}><i class="fas fa-arrow-right"/></a></Link>
                         </ListItem>
                     {/each}
                 </ul>

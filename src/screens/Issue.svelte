@@ -84,7 +84,7 @@ const handleIssueUpdate = () => {
     </PatientContainer>
     <PatientContainer isWaiting={!subscription}>
         <VerseList showChapterTitles={true} {verses}>
-            <div slot="actionButton">
+            <svelte:fragment slot="actionButton">
                 {#if !isCompleted}
                     <button on:click={handleIssueUpdate} class="button action bottom-spacing">Complete</button>
                 {:else}
@@ -96,7 +96,7 @@ const handleIssueUpdate = () => {
                         <small>{continuationLabel}</small>
                     {/if}
                 </button>
-            </div>
+            </svelte:fragment>
         </VerseList>
     </PatientContainer>
 </article>
